@@ -20,7 +20,6 @@ import { DefaultRoute, Routes } from './routes'
 // ** Layouts
 import BlankLayout from '@layouts/BlankLayout'
 import VerticalLayout from '@src/layouts/VerticalLayout'
-import HorizontalLayout from '@src/layouts/HorizontalLayout'
 
 const Router = () => {
   // ** Hooks
@@ -31,10 +30,10 @@ const Router = () => {
   const ability = useContext(AbilityContext)
 
   // ** Default Layout
-  const DefaultLayout = layout === 'horizontal' ? 'HorizontalLayout' : 'VerticalLayout'
+  const DefaultLayout = 'VerticalLayout'
 
   // ** All of the available layouts
-  const Layouts = { BlankLayout, VerticalLayout, HorizontalLayout }
+  const Layouts = { BlankLayout, VerticalLayout }
 
   // ** Current Active Item
   const currentActiveItem = null
