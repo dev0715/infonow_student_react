@@ -1,0 +1,21 @@
+// ** Icons Import
+import { Heart } from 'react-feather'
+
+const Footer = () => {
+  return (
+    <p className='clearfix mb-0'>
+      <span className='float-md-left d-block d-md-inline-block mt-25'>
+        COPYRIGHT © 2019-{new Date().getFullYear()}{' '}
+        <a href='https://infonow.ro' target='_blank' rel='noopener noreferrer'>
+          InfoNow
+        </a>
+        <span className='d-none d-sm-inline-block'>, All rights Reserved</span>
+      </span>
+      <span className='float-md-right d-none d-md-block'>
+        Powered by <a href='https://efsol.com.pk' target='_blank' rel='noopener noreferrer'>Efsol</a>
+      </span>
+    </p>
+  )
+}
+
+export default Footer
