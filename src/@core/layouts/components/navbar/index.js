@@ -1,6 +1,5 @@
 // ** React Imports
 import { Fragment } from 'react'
-import IntlDropdown from './IntlDropdown'
 
 // ** Custom Components
 import NavbarUser from './NavbarUser'
@@ -11,7 +10,7 @@ const ThemeNavbar = props => {
 
   return (
     <Fragment>
-      <NavbarUser skin={skin} setSkin={setSkin} />
+      <NavbarUser skin={skin} setSkin={setSkin} setMenuVisibility={setMenuVisibility} />
     </Fragment>
   )
 }

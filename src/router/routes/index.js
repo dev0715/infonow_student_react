@@ -1,31 +1,34 @@
-// ** Routes Imports
-import AppRoutes from './Apps'
-import FormRoutes from './Forms'
-import PagesRoutes from './Pages'
-import TablesRoutes from './Tables'
-import ChartMapsRoutes from './ChartsMaps'
-import DashboardRoutes from './Dashboards'
-import UiElementRoutes from './UiElements'
-import ExtensionsRoutes from './Extensions'
-import PageLayoutsRoutes from './PageLayouts'
+import { lazy } from 'react'
 
 // ** Document title
 const TemplateTitle = '%s - InfoNow React Admin Template'
 
 // ** Default Route
-const DefaultRoute = '/dashboard/ecommerce'
+const DefaultRoute = '/home'
 
 // ** Merge Routes
 const Routes = [
-  ...DashboardRoutes,
-  ...AppRoutes,
-  ...PagesRoutes,
-  ...UiElementRoutes,
-  ...ExtensionsRoutes,
-  ...PageLayoutsRoutes,
-  ...FormRoutes,
-  ...TablesRoutes,
-  ...ChartMapsRoutes
+  {
+    path: '/home',
+    component: lazy(() => import('../../views/Home'))
+  },
+  {
+    path: '/meetings',
+    component: lazy(() => import('../../pages/meetings/MeetingHome'))
+  },
+  {
+    path: '/login',
+    component: lazy(() => import('../../views/Login')),
+    layout: 'BlankLayout',
+    meta: {
+      authRoute: true
+    }
+  },
+  {
+    path: '/error',
+    component: lazy(() => import('../../views/Error')),
+    layout: 'BlankLayout'
+  }
 ]
 
 export { DefaultRoute, TemplateTitle, Routes }

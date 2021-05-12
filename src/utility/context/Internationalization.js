@@ -6,16 +6,22 @@ import { IntlProvider } from 'react-intl'
 
 // ** Core Language Data
 import messagesEn from '@assets/data/locales/en.json'
-import messagesRo from '@assets/data/locales/ro.json'
+import messagesDe from '@assets/data/locales/de.json'
+import messagesFr from '@assets/data/locales/fr.json'
+import messagesPt from '@assets/data/locales/pt.json'
 
 // ** User Language Data
 import userMessagesEn from '@src/assets/data/locales/en.json'
-import userMessagesRo from '@src/assets/data/locales/ro.json'
+import userMessagesDe from '@src/assets/data/locales/de.json'
+import userMessagesFr from '@src/assets/data/locales/fr.json'
+import userMessagesPt from '@src/assets/data/locales/pt.json'
 
 // ** Menu msg obj
 const menuMessages = {
   en: { ...messagesEn, ...userMessagesEn },
-  ro: { ...messagesRo, ...userMessagesRo }
+  de: { ...messagesDe, ...userMessagesDe },
+  fr: { ...messagesFr, ...userMessagesFr },
+  pt: { ...messagesPt, ...userMessagesPt }
 }
 
 // ** Create Context

@@ -7,6 +7,7 @@ import { Disc, X, Circle } from 'react-feather'
 
 // ** Config
 import themeConfig from '@configs/themeConfig'
+import BrandLogo from '../../../../../components/brand-logo'
 
 const VerticalMenuHeader = props => {
   // ** Props
@@ -45,9 +46,7 @@ const VerticalMenuHeader = props => {
       <ul className='nav navbar-nav flex-row'>
         <li className='nav-item mr-auto'>
           <NavLink to='/' className='navbar-brand'>
-            <span className='brand-logo'>
-              <img src={themeConfig.app.appLogoImage} alt='logo' />
-            </span>
+            <BrandLogo/>
             <h2 className='brand-text mb-0'>{themeConfig.app.appName}</h2>
           </NavLink>
         </li>

@@ -1,6 +1,5 @@
 {
-  "Dashboard": "Dashboards",
-  "Dashboard %s": "Dashboard %s",
+  "Dashboards": "Dashboards",
   "Analytics": "Analytics",
   "Apps": "Apps",
   "eCommerce": "eCommerce",
@@ -94,7 +93,7 @@
   "Input Mask": "Input Mask",
   "Form Layout": "Form Layout",
   "Form Wizard": "Form Wizard",
-  "React Hook Form": "React Hook Form",
+  "Formik": "Formik",
   "Form Validation": "Form Validation",
   "Pages": "Pages",
   "Authentication": "Authentication",

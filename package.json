@@ -1,6 +1,6 @@
 {
-  "name": "InfoNow-react-admin-dashboard",
-  "version": "6.4.0",
+  "name": "infonow-student",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@casl/ability": "5.2.2",
@@ -69,7 +69,7 @@
     "react-slidedown": "2.4.5",
     "react-sortablejs": "6.0.0",
     "react-toastify": "7.0.3",
-    "reactstrap": "8.6.0",
+    "reactstrap": "^8.6.0",
     "recharts": "2.0.4",
     "redux": "4.0.5",
     "redux-debounced": "0.5.0",
@@ -82,7 +82,6 @@
     "sweetalert2-react-content": "3.0.1",
     "swiper": "6.0.4",
     "uppy": "1.21.2",
-    "webpack": "4.43.0",
     "wnumb": "1.2.0",
     "xlsx": "0.16.2",
     "yarn": "1.21.1",
