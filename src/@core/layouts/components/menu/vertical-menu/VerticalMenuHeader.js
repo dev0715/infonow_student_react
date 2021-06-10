@@ -1,3 +1,4 @@
+import React from 'react';
 // ** React Imports
 import { useEffect } from 'react'
 import { NavLink } from 'react-router-dom'
@@ -10,6 +11,7 @@ import themeConfig from '@configs/themeConfig'
 import BrandLogo from '../../../../../components/brand-logo'
 
 const VerticalMenuHeader = props => {
+  console.log("PROPS", props);
   // ** Props
   const { menuCollapsed, setMenuCollapsed, setMenuVisibility, setGroupOpen, menuHover } = props
 
@@ -39,7 +41,7 @@ const VerticalMenuHeader = props => {
         />
       )
     }
-  }
+  };
 
   return (
     <div className='navbar-header'>

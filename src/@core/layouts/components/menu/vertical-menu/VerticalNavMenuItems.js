@@ -1,3 +1,4 @@
+import React from 'react';
 // ** Vertical Menu Components
 import VerticalNavMenuLink from './VerticalNavMenuLink'
 import VerticalNavMenuGroup from './VerticalNavMenuGroup'

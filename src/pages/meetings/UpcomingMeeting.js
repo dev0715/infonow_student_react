@@ -11,7 +11,7 @@ const UpcomingMeeting = (props) => {
     const [skin, setSkin] = useSkin();
 
     const illus = skin === 'dark' ? 'upcoming-meeting-dark.svg' : 'upcoming-meeting.svg'
-    const illustration = require(`@src/assets/images/illustrations/${illus}`).default    
+    const illustration = require(`@src/assets/images/illustrations/${illus}`) 
 
     return (
         <Card className='card-developer-meetup'>

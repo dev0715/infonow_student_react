@@ -1,10 +1,11 @@
+import React from 'react';
 // ** React Imports
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 // ** Store & Actions
 import { useSelector, useDispatch } from 'react-redux'
-import { handleMenuHidden, handleContentWidth } from '@store/actions/layout'
+import { handleMenuHidden, handleContentWidth } from '../../store/actions'
 
 // ** Third Party Components
 import classnames from 'classnames'
@@ -48,7 +49,7 @@ const HorizontalLayout = props => {
 
   // ** Store Vars
   const dispatch = useDispatch()
-  const layoutStore = useSelector(state => state.layout)
+  const layoutStore = useSelector(state => state.Layout)
 
   // ** Vars
   const contentWidth = layoutStore.contentWidth

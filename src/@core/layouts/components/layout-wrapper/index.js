@@ -1,3 +1,4 @@
+import React from 'react';
 // ** React Imports
 import { Fragment, useEffect } from 'react'
 
@@ -6,7 +7,7 @@ import classnames from 'classnames'
 
 // ** Store & Actions
 import { useSelector, useDispatch } from 'react-redux'
-import { handleContentWidth, handleMenuCollapsed, handleMenuHidden } from '@store/actions/layout'
+import { handleContentWidth, handleMenuCollapsed, handleMenuHidden } from '../../../../store/actions'
 
 // ** Styles
 import 'animate.css/animate.css'
@@ -18,8 +19,8 @@ const LayoutWrapper = props => {
   // ** Store Vars
   const dispatch = useDispatch()
   const store = useSelector(state => state)
-  const navbarStore = store.navbar
-  const contentWidth = store.layout.contentWidth
+  const navbarStore = store.Navbar
+  const contentWidth = store.Layout.contentWidth
 
   //** Vars
   const Tag = layout === 'HorizontalLayout' && !appLayout ? 'div' : Fragment

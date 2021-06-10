@@ -1,3 +1,4 @@
+import React from 'react';
 import { Mail, Home } from 'react-feather'
 
 export default [

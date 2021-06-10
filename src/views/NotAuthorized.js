@@ -1,3 +1,4 @@
+import React from 'react';
 import { Button } from 'reactstrap'
 import { Link } from 'react-router-dom'
 import notAuthImg from '@src/assets/images/pages/not-authorized.svg'

@@ -1,12 +1,7 @@
-import AvatarGroup from '@components/avatar-group';
-import react from '@src/assets/images/icons/react.svg';
-import vuejs from '@src/assets/images/icons/vuejs.svg';
-import angular from '@src/assets/images/icons/angular.svg';
-import bootstrap from '@src/assets/images/icons/bootstrap.svg';
+import React from 'react';
 import avatar1 from '@src/assets/images/portrait/small/avatar-s-5.jpg';
 import avatar2 from '@src/assets/images/portrait/small/avatar-s-6.jpg';
 import avatar3 from '@src/assets/images/portrait/small/avatar-s-7.jpg';
-import { MoreVertical, Edit, Trash } from 'react-feather';
 
 import {
     Card,
@@ -14,10 +9,6 @@ import {
     CardTitle,
 	Table,
 	Badge,
-	UncontrolledDropdown,
-	DropdownMenu,
-	DropdownItem,
-	DropdownToggle,
 } from 'reactstrap';
 
 const avatarGroupData1 = [
@@ -109,7 +100,7 @@ const MeetingList = () => {
 		<Card>
 			<CardBody>
 				<CardTitle>My Meeting</CardTitle>
-				<Table responsive>
+				<Table responsive hover >
 					<thead>
 						<tr>
 							<th>#</th>

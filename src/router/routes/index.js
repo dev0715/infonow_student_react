@@ -1,7 +1,7 @@
 import { lazy } from 'react'
 
 // ** Document title
-const TemplateTitle = '%s - InfoNow React Admin Template'
+const TemplateTitle = '%s - InfoNow'
 
 // ** Default Route
 const DefaultRoute = '/home'
@@ -17,8 +17,14 @@ const Routes = [
     component: lazy(() => import('../../pages/meetings/MeetingHome'))
   },
   {
+    appLayout: true,
+    className: 'chat-application',
+    path: '/chat',
+    component: lazy(() => import('../../pages/chat'))
+  },
+  {
     path: '/login',
-    component: lazy(() => import('../../views/Login')),
+    component: lazy(() => import('../../pages/auth/login')),
     layout: 'BlankLayout',
     meta: {
       authRoute: true

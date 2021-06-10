@@ -1,3 +1,4 @@
+import React from 'react';
 // ** React Imports
 import { Suspense, useContext, lazy } from 'react'
 

@@ -1,3 +1,4 @@
+import React from 'react';
 // ** React Imports
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -10,7 +11,7 @@ import { isUserLoggedIn } from '@utils'
 
 // ** Store & Actions
 import { useDispatch } from 'react-redux'
-import { handleLogout } from '@store/actions/auth'
+// import { handleLogout } from '@store/actions/auth'
 
 // ** Third Party Components
 import { UncontrolledDropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap'
@@ -20,6 +21,9 @@ import { User, Mail, CheckSquare, MessageSquare, Settings, CreditCard, HelpCircl
 import defaultAvatar from '@src/assets/images/portrait/small/avatar-s-11.jpg'
 
 const UserDropdown = () => {
+
+  const handleLogout = () => { }
+
   // ** Store Vars
   const dispatch = useDispatch()
 

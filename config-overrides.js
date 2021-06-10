@@ -12,7 +12,7 @@ module.exports = function override(config, env) {
     '@assets': path.resolve(__dirname, 'src/@core/assets'),
     '@components': path.resolve(__dirname, 'src/@core/components'),
     '@layouts': path.resolve(__dirname, 'src/@core/layouts'),
-    '@store': path.resolve(__dirname, 'src/redux'),
+    '@store': path.resolve(__dirname, 'src/store'),
     '@styles': path.resolve(__dirname, 'src/@core/scss'),
     '@configs': path.resolve(__dirname, 'src/configs'),
     '@utils': path.resolve(__dirname, 'src/utility/Utils'),

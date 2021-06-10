@@ -1,5 +1,4 @@
-import { Mail, Home } from 'react-feather'
-
+import React from 'react';
 export default [
   {
     header: ' '
@@ -20,7 +19,7 @@ export default [
     id: 'chat',
     title: 'Chat',
     icon: <i className="la la-comments"/>,
-    navLink: '/apps/chat'
+    navLink: '/chat'
   },
   {
     id: 'lessons',

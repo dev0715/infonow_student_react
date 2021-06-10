@@ -1,10 +1,11 @@
+import React from 'react';
 // ** React Imports
 import { Suspense, lazy } from 'react'
 import ReactDOM from 'react-dom'
 
 // ** Redux Imports
 import { Provider } from 'react-redux'
-import { store } from './redux/storeConfig/store'
+import store from './store'
 
 // ** Toast & ThemeColors Context
 import { ToastContainer } from 'react-toastify'

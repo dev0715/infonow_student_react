@@ -1,3 +1,4 @@
+import React from 'react';
 // !Do not remove the Layout import
 import Layout from '@layouts/HorizontalLayout'
 

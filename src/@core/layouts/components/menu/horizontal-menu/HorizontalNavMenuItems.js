@@ -1,3 +1,4 @@
+import React from 'react';
 // ** Menu Components Imports
 import HorizontalNavMenuLink from './HorizontalNavMenuLink'
 import HorizontalNavMenuGroup from './HorizontalNavMenuGroup'

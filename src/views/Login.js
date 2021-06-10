@@ -1,17 +1,18 @@
 import { useSkin } from '@hooks/useSkin'
-import { Link, Redirect } from 'react-router-dom'
-import { Facebook, Twitter, Mail, GitHub } from 'react-feather'
+import { Link, Redirect, useParams } from 'react-router-dom'
+import { Facebook, Twitter, Mail, GitHub, Key } from 'react-feather'
 import InputPasswordToggle from '@components/input-password-toggle'
 import { Row, Col, CardTitle, CardText, Form, FormGroup, Label, Input, CustomInput, Button } from 'reactstrap'
 import '@styles/base/pages/page-auth.scss'
 import BrandLogo from '../components/brand-logo'
+import { useState } from 'react'
 
 const Login = () => {
   const [skin, setSkin] = useSkin()
 
   const illustration = skin === 'dark' ? 'login-v2-dark.svg' : 'login-v2.svg',
     source = require(`@src/assets/images/pages/${illustration}`).default
-
+  
   return (
     <div className='auth-wrapper auth-v2'>
       <Row className='auth-inner m-0'>
@@ -21,7 +22,7 @@ const Login = () => {
         </Link>
         <Col className='d-none d-lg-flex align-items-center p-5' lg='8' sm='12'>
           <div className='w-100 d-lg-flex align-items-center justify-content-center px-5'>
-            <img className='img-fluid' src={source} alt='Login V2' />
+            <img className='img-fluid' src={source} alt='Login Illustration' />
           </div>
         </Col>
         <Col className='d-flex align-items-center auth-bg px-2 p-lg-5' lg='4' sm='12'>
@@ -50,20 +51,22 @@ const Login = () => {
               </FormGroup>
               <FormGroup>
                 <CustomInput type='checkbox' className='custom-control-Primary' id='remember-me' label='Remember Me' />
-              </FormGroup>
+              </FormGroup>              
               <Button.Ripple tag={Link} to='/' color='primary' block>
                 Sign in
               </Button.Ripple>
-            </Form>
+            </Form>            
             <p className='text-center mt-2'>
               <span className='mr-25'>New on our platform?</span>
               <Link to='/'>
                 <span>Create an account</span>
               </Link>
             </p>
+
             <div className='divider my-2'>
               <div className='divider-text'>or</div>
             </div>
+
             <div className='auth-footer-btn d-flex justify-content-center'>
               <Button.Ripple color='facebook'>
                 <Facebook size={14} />

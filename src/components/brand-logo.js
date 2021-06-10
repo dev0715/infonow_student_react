@@ -5,8 +5,8 @@ function BrandLogo() {
     const [skin, setSkin] = useSkin();
 
     const illustration = skin === 'dark' ? 'logo-light.png' : 'logo.png',
-    source = require(`@src/assets/images/logo/${illustration}`).default
-    
+        source = require(`@src/assets/images/logo/${illustration}`);
+
     return (
         <img src={source} style={{width: 30, height: 30}}/>
     )

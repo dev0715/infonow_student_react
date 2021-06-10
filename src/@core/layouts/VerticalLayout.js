@@ -1,10 +1,11 @@
+import React from 'react';
 // ** React Imports
 import { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 
 // ** Store & Actions
 import { useSelector, useDispatch } from 'react-redux'
-import { handleMenuCollapsed, handleContentWidth, handleMenuHidden } from '@store/actions/layout'
+import { handleMenuCollapsed, handleContentWidth, handleMenuHidden } from '../../store/actions'
 
 // ** Third Party Components
 import classnames from 'classnames'
@@ -50,7 +51,7 @@ const VerticalLayout = props => {
 
   // ** Store Vars
   const dispatch = useDispatch()
-  const layoutStore = useSelector(state => state.layout)
+  const layoutStore = useSelector(state => state.Layout)
 
   // ** Update Window Width
   const handleWindowWidth = () => {

@@ -54,7 +54,11 @@ const UpcomingMeetings = (props) => {
                     <UpcomingMeetingItem />
                     <UpcomingMeetingItem />
                 </div>
-                <Button className="btn-block btn-icon" color="primary"><Plus size={14}/> New Meeting</Button>
+                <Button.Ripple
+                    className="btn-block btn-icon"
+                    color="primary">
+                    <Plus size={14} /> New Meeting
+                </Button.Ripple>
 			</CardBody>
 		</Card>
 	);

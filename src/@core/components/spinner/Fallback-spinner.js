@@ -1,3 +1,4 @@
+import React from 'react';
 // ** Logo
 import logo from '@src/assets/images/logo/logo.png'
 
