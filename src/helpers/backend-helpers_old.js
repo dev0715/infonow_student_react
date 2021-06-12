@@ -1,5 +1,5 @@
 import { post, del, get, put, postForm } from "./api_helper"
-import * as  url from "./url_helper"
+import * as url from "./url_helper_old"
 
 // Gets the logged in user data from local session
 export const getLoggedInUser = () => {
@@ -16,10 +16,6 @@ export const getAuthentication = () => {
 export const isUserAuthenticated = () => {
   return getLoggedInUser() !== null
 }
-
-
-// Chats
-export const getChatContactsRequest         =  id => get(url.GET_CHATS_CONTACTS(id))
 
 /*********************************************************/
 /*********************  INSTITUTE ACTIONS ********************/

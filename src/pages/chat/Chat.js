@@ -8,7 +8,6 @@ import Avatar from '@components/avatar'
 
 // ** Store & Actions
 import { useDispatch } from 'react-redux'
-import { sendMsg } from './store/actions'
 
 // ** Third Party Components
 import classnames from 'classnames'
@@ -27,15 +26,20 @@ import {
   InputGroupText,
   Button
 } from 'reactstrap'
+import moment from 'moment';
+
+import { v4 } from "uuid"
+import { sendMessage } from './socket/events';
 
 const ChatLog = props => {
   // ** Props & Store
-  const { handleUser, handleUserSidebarRight, handleSidebar, store, userSidebarLeft } = props
-  const { userProfile, selectedUser } = store
+  const { handleUser, handleUserSidebarRight, handleSidebar,
+    userSidebarLeft, selectedChat, newMessage,
+    user, messages, socket } = props
+  // const { userProfile, selectedChat } = store
 
   // ** Refs & Dispatch
   const chatArea = useRef(null)
-  const dispatch = useDispatch()
 
   // ** State
   const [msg, setMsg] = useState('')
@@ -48,73 +52,36 @@ const ChatLog = props => {
 
   // ** If user chat is not empty scrollToBottom
   useEffect(() => {
-    const selectedUserLen = Object.keys(selectedUser).length
+    const selectedUserLen = Object.keys(selectedChat).length
 
     if (selectedUserLen) {
       scrollToBottom()
     }
-  }, [selectedUser])
+  }, [selectedChat])
 
-  // ** Formats chat data based on sender
-  const formattedChatData = () => {
-    let chatLog = []
-    if (selectedUser.chat) {
-      chatLog = selectedUser.chat.chat
-    }
-
-    const formattedChatLog = []
-    let chatMessageSenderId = chatLog[0] ? chatLog[0].senderId : undefined
-    let msgGroup = {
-      senderId: chatMessageSenderId,
-      messages: []
-    }
-    chatLog.forEach((msg, index) => {
-      if (chatMessageSenderId === msg.senderId) {
-        msgGroup.messages.push({
-          msg: msg.message,
-          time: msg.time
-        })
-      } else {
-        chatMessageSenderId = msg.senderId
-        formattedChatLog.push(msgGroup)
-        msgGroup = {
-          senderId: msg.senderId,
-          messages: [
-            {
-              msg: msg.message,
-              time: msg.time
-            }
-          ]
-        }
-      }
-      if (index === chatLog.length - 1) formattedChatLog.push(msgGroup)
-    })
-    return formattedChatLog
-  }
 
   // ** Renders user chat
   const renderChats = () => {
-    return formattedChatData().map((item, index) => {
+    return messages.map((item, index) => {
       return (
         <div
           key={index}
           className={classnames('chat', {
-            'chat-left': item.senderId !== 11
+            'chat-left': item.user.userId !== user.userId
           })}
         >
           <div className='chat-avatar'>
             <Avatar
               className='box-shadow-1 cursor-pointer'
-              img={item.senderId === 11 ? userProfile.avatar : selectedUser.contact.avatar}
+              img={item.user.userId !== user.userId ? item.user.profilePicture : user.profilePicture}
             />
           </div>
 
           <div className='chat-body'>
-            {item.messages.map(chat => (
-              <div key={chat.msg} className='chat-content'>
-                <p>{chat.msg}</p>
-              </div>
-            ))}
+            <div key={item.messageId} className='chat-content'>
+              <p>{item.content}</p>
+              <p>{moment(item.createdAt).format("d MMM YYYY, hh:mm:ss")}</p>
+            </div>
           </div>
         </div>
       )
@@ -129,7 +96,7 @@ const ChatLog = props => {
 
   // ** On mobile screen open left sidebar on Start Conversation Click
   const handleStartConversation = () => {
-    if (!Object.keys(selectedUser).length && !userSidebarLeft && window.innerWidth <= 1200) {
+    if (!Object.keys(selectedChat).length && !userSidebarLeft && window.innerWidth <= 1200) {
       handleSidebar()
     }
   }
@@ -138,17 +105,24 @@ const ChatLog = props => {
   const handleSendMsg = e => {
     e.preventDefault()
     if (msg.length) {
-      dispatch(sendMsg({ ...selectedUser, message: msg }))
+      let message = {
+        content: msg,
+        messageId: v4(),
+        createdAt: moment(),
+        user: user
+      }
+      sendMessage(socket, selectedChat.chatId, msg, message.messageId)
+      newMessage(message)
       setMsg('')
     }
   }
 
   // ** ChatWrapper tag based on chat's length
-  const ChatWrapper = Object.keys(selectedUser).length && selectedUser.chat ? PerfectScrollbar : 'div'
+  const ChatWrapper = Object.keys(selectedChat).length > 0 ? PerfectScrollbar : 'div'
 
   return (
     <div className='chat-app-window'>
-      <div className={classnames('start-chat-area', { 'd-none': Object.keys(selectedUser).length })}>
+      <div className={classnames('start-chat-area', { 'd-none': Object.keys(selectedChat).length })}>
         <div className='start-chat-icon mb-1'>
           <MessageSquare />
         </div>
@@ -156,8 +130,8 @@ const ChatLog = props => {
           Start Conversation
         </h4>
       </div>
-      {Object.keys(selectedUser).length ? (
-        <div className={classnames('active-chat', { 'd-none': selectedUser === null })}>
+      {Object.keys(selectedChat).length ? (
+        <div className={classnames('active-chat', { 'd-none': selectedChat === null })}>
           <div className='chat-navbar'>
             <header className='chat-header'>
               <div className='d-flex align-items-center'>
@@ -167,12 +141,16 @@ const ChatLog = props => {
                 <Avatar
                   imgHeight='36'
                   imgWidth='36'
-                  img={selectedUser.contact.avatar}
-                  status={selectedUser.contact.status}
+                  img={selectedChat.type == 'group'
+                    ? '' //TODO: Add group picture here
+                    : selectedChat.chatParticipants.find(u => u.user.userId != user.userId).user.profilePicture}
+                  // status={selectedChat.contact.status}
                   className='avatar-border user-profile-toggle m-0 mr-1'
-                  onClick={() => handleAvatarClick(selectedUser.contact)}
+                // onClick={() => handleAvatarClick(selectedChat.contact)}
                 />
-                <h6 className='mb-0'>{selectedUser.contact.fullName}</h6>
+                <h6 className='mb-0'>{selectedChat.type == 'group'
+                  ? selectedChat.groupName
+                  : selectedChat.chatParticipants.find(u => u.user.userId != user.userId).user.name}</h6>
               </div>
               <div className='d-flex align-items-center'>
                 {/* <PhoneCall size={18} className='cursor-pointer d-sm-block d-none mr-1' />
@@ -205,7 +183,7 @@ const ChatLog = props => {
           </div>
 
           <ChatWrapper ref={chatArea} className='user-chats' options={{ wheelPropagation: false }}>
-            {selectedUser.chat ? <div className='chats'>{renderChats()}</div> : null}
+            {Object.keys(selectedChat).length ? <div className='chats'>{renderChats()}</div> : null}
           </ChatWrapper>
 
           <Form className='chat-app-form' onSubmit={e => handleSendMsg(e)}>

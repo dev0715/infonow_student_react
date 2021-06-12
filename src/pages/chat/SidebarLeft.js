@@ -5,10 +5,6 @@ import { useState } from 'react'
 // ** Custom Components
 import Avatar from '@components/avatar'
 
-// ** Store & Actions
-import { useDispatch } from 'react-redux'
-import { selectChat } from './store/actions'
-
 // ** Utils
 import { formatDateToMonthShort } from '@utils'
 
@@ -18,13 +14,12 @@ import PerfectScrollbar from 'react-perfect-scrollbar'
 import { X, Search, CheckSquare, Bell, User, Trash } from 'react-feather'
 import { CardText, InputGroup, InputGroupAddon, Input, InputGroupText, Badge, CustomInput, Button } from 'reactstrap'
 
+import { getPreviousMessages } from './socket/events'
 const SidebarLeft = props => {
   // ** Props & Store
-  const { store, sidebar, handleSidebar, userSidebarLeft, handleUserSidebarLeft } = props
-  const { chats, contacts, userProfile } = store
-
-  // ** Dispatch
-  const dispatch = useDispatch()
+  const { sidebar, handleSidebar, userSidebarLeft,
+    handleUserSidebarLeft, selectChat,
+    user, chats, socket } = props
 
   // ** State
   const [about, setAbout] = useState('')
@@ -32,15 +27,11 @@ const SidebarLeft = props => {
   const [active, setActive] = useState({})
   const [status, setStatus] = useState('online')
   const [filteredChat, setFilteredChat] = useState([])
-  const [filteredContacts, setFilteredContacts] = useState([])
 
   // ** Handles User Chat Click
-  const handleUserClick = (type, id) => {
-    dispatch(selectChat(id))
-    setActive({ type, id })
-    if (sidebar === true) {
-      handleSidebar()
-    }
+  const handleUserClick = (chat, socket) => {
+    selectChat(chat)
+    getPreviousMessages(socket, chat.chatId)
   }
 
   // ** Renders Chat
@@ -56,30 +47,34 @@ const SidebarLeft = props => {
         const arrToMap = query.length && filteredChat.length ? filteredChat : chats
 
         return arrToMap.map(item => {
-          const time = formatDateToMonthShort(item.chat.lastMessage ? item.chat.lastMessage.time : new Date())
+          const time = formatDateToMonthShort(item.messages.length > 0 ? item.messages[0].createdAt : new Date())
 
           return (
             <li
               className={classnames({
                 active: active.type === 'chat' && active.id === item.id
               })}
-              key={item.id}
-              onClick={() => handleUserClick('chat', item.id)}
+              key={item.chatId}
+              onClick={() => handleUserClick(item, socket)}
             >
               <Avatar img={item.avatar} imgHeight='42' imgWidth='42' status={item.status} />
               <div className='chat-info flex-grow-1'>
-                <h5 className='mb-0'>{item.fullName}</h5>
+                <h5 className='mb-0'>
+                  {item.type == 'group'
+                    ? item.groupName
+                    : item.chatParticipants.find(u => u.user.userId != user.userId).user.name}
+                </h5>
                 <CardText className='text-truncate'>
-                  {item.chat.lastMessage ? item.chat.lastMessage.message : chats[chats.length - 1].message}
+                  {item.messages.length > 0 ? item.messages[0].content : ''}
                 </CardText>
               </div>
               <div className='chat-meta text-nowrap'>
                 <small className='float-right mb-25 chat-time ml-25'>{time}</small>
-                {item.chat.unseenMsgs >= 1 ? (
+                {/* {item.chat.unseenMsgs >= 1 ? (
                   <Badge className='float-right' color='danger' pill>
                     {item.chat.unseenMsgs}
                   </Badge>
-                ) : null}
+                ) : null} */}
               </div>
             </li>
           )
@@ -92,15 +87,17 @@ const SidebarLeft = props => {
 
   // ** Handles Filter
   const handleFilter = e => {
-    setQuery(e.target.value)
-    const searchFilterFunction = contact => contact.fullName.toLowerCase().includes(e.target.value.toLowerCase())
-    const filteredChatsArr = chats.filter(searchFilterFunction)
-    const filteredContactssArr = contacts.filter(searchFilterFunction)
-    setFilteredChat([...filteredChatsArr])
-    setFilteredContacts([...filteredContactssArr])
+    // setQuery(e.target.value)
+    // const searchFilterFunction = chats => chats.find(c =>
+    //   c.chatParticipants.name.toLowerCase().includes(e.target.value.toLowerCase()) ||
+    //   c.groupName.toLowerCase().includes(e.target.value.toLowerCase())
+    // )
+    // // contact.fullName.toLowerCase().includes(e.target.value.toLowerCase())
+    // const filteredChatsArr = chats.filter(searchFilterFunction)
+    // setFilteredChat([...filteredChatsArr])
   }
 
-  return store ? (
+  return chats.length ? (
     <div className='sidebar-left'>
       <div className='sidebar'>
         <div
@@ -113,9 +110,9 @@ const SidebarLeft = props => {
               <X size={14} />
             </div>
             <div className='header-profile-sidebar'>
-              <Avatar className='box-shadow-1 avatar-border' img={userProfile.avatar} status={status} size='xl' />
-              <h4 className='chat-user-name'>{userProfile.fullName}</h4>
-              <span className='user-post'>{userProfile.role}</span>
+              <Avatar className='box-shadow-1 avatar-border' img={user.profilePicture} status={status} size='xl' />
+              <h4 className='chat-user-name'>{user.name}</h4>
+              {/* <span className='user-post'>{user.role}</span> */}
             </div>
           </header>
           <PerfectScrollbar className='profile-sidebar-area' options={{ wheelPropagation: false }}>
@@ -123,7 +120,7 @@ const SidebarLeft = props => {
             <div className='about-user'>
               <Input
                 rows='5'
-                defaultValue={userProfile.about}
+                // defaultValue={user.about}
                 type='textarea'
                 onChange={e => setAbout(e.target.value)}
                 className={classnames('char-textarea', {
@@ -131,7 +128,7 @@ const SidebarLeft = props => {
                 })}
               />
               <small className='counter-value float-right'>
-                <span className='char-count'>{userProfile.about ? userProfile.about.length : 0}</span>/ 120
+                <span className='char-count'>{user.about ? user.about.length : 0}</span>/ 120
               </small>
             </div>
             <h6 className='section-label mb-1 mt-3'>Status</h6>
@@ -218,10 +215,10 @@ const SidebarLeft = props => {
           <div className='chat-fixed-search'>
             <div className='d-flex align-items-center w-100'>
               <div className='sidebar-profile-toggle' onClick={handleUserSidebarLeft}>
-                {Object.keys(userProfile).length ? (
+                {Object.keys(user).length ? (
                   <Avatar
                     className='avatar-border'
-                    img={userProfile.avatar}
+                    img={user.avatar}
                     status={status}
                     imgHeight='42'
                     imgWidth='42'
