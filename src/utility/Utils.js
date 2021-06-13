@@ -77,3 +77,7 @@ export const selectThemeColors = theme => ({
     neutral30: '#ededed' // for input hover border-color
   }
 })
+
+export const titleCase = text => {
+  return text.toLowerCase().replace(/\b(\w)/g, s => s.toUpperCase());
+}

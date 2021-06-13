@@ -9,6 +9,7 @@ module.exports = function override(config, env) {
 
   config = rewireAliases.aliasesOptions({
     '@src': path.resolve(__dirname, 'src'),
+    '@helpers': path.resolve(__dirname, 'src/helpers'),
     '@assets': path.resolve(__dirname, 'src/@core/assets'),
     '@components': path.resolve(__dirname, 'src/@core/components'),
     '@layouts': path.resolve(__dirname, 'src/@core/layouts'),

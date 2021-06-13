@@ -11,7 +11,7 @@ import themeConfig from '@configs/themeConfig'
 import BrandLogo from '../../../../../components/brand-logo'
 
 const VerticalMenuHeader = props => {
-  console.log("PROPS", props);
+  
   // ** Props
   const { menuCollapsed, setMenuCollapsed, setMenuVisibility, setGroupOpen, menuHover } = props
 

@@ -3,7 +3,7 @@ import React from 'react';
 import { Suspense, useContext, lazy } from 'react'
 
 // ** Utils
-import { isUserLoggedIn } from '@utils'
+import { isUserAuthenticated } from '@helpers/backend-helpers'
 import { useLayout } from '@hooks/useLayout'
 import { AbilityContext } from '@src/utility/context/Can'
 import { useRouterTransition } from '@hooks/useRouterTransition'
@@ -77,8 +77,8 @@ const Router = () => {
     }
 
     if (
-      (!isUserLoggedIn() && route.meta === undefined) ||
-      (!isUserLoggedIn() && route.meta && !route.meta.authRoute && !route.meta.publicRoute)
+      (!isUserAuthenticated() && route.meta === undefined) ||
+      (!isUserAuthenticated() && route.meta && !route.meta.authRoute && !route.meta.publicRoute)
     ) {
       /**
        ** If user is not Logged in & route meta is undefined
@@ -88,10 +88,10 @@ const Router = () => {
        */
 
       return <Redirect to='/login' />
-    } else if (route.meta && route.meta.authRoute && isUserLoggedIn()) {
+    } else if (route.meta && route.meta.authRoute && isUserAuthenticated()) {
       // ** If route has meta and authRole and user is Logged in then redirect user to home page (DefaultRoute)
       return <Redirect to='/' />
-    } else if (isUserLoggedIn() && !ability.can(action || 'read', resource)) {
+    } else if (isUserAuthenticated() && !ability.can(action || 'read', resource)) {
       // ** If user is Logged in and doesn't have ability to visit the page redirect the user to Not Authorized
       return <Redirect to='/misc/not-authorized' />
     } else {
@@ -186,21 +186,14 @@ const Router = () => {
   }
 
   return (
-    <AppRouter basename={process.env.REACT_APP_BASENAME}>
+    <AppRouter>
       <Switch>
         {/* If user is logged in Redirect user to DefaultRoute else to login */}
-        {/* <Route
-          exact
-          path='/'
-          render={() => {
-            return isUserLoggedIn() ? <Redirect to={DefaultRoute} /> : <Redirect to='/login' />
-          }}
-        /> */}
         <Route
           exact
           path='/'
           render={() => {
-            return <Redirect to={DefaultRoute} />
+            return isUserAuthenticated() ? <Redirect to={DefaultRoute} /> : <Redirect to='/login' />
           }}
         />
         {/* Not Auth Route */}
