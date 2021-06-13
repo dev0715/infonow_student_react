@@ -13,7 +13,8 @@ import {
   NEW_MESSAGE,
   NEW_MESSAGE_SUCCESS,
   NEW_MESSAGE_FAILURE,
-  UPDATE_CHAT_HEAD_MESSAGE
+  UPDATE_CHAT_HEAD_MESSAGE,
+  UPDATE_CHAT_PARTICIPANTS
 } from './actionTypes'
 
 
@@ -62,6 +63,7 @@ export const selectChat = (chat) => {
     payload: chat
   }
 }
+
 export const getPreviousMessages = (chatId, timeStamp) => {
   return {
     type: GET_PREVIOUS_MESSAGES,
@@ -82,7 +84,6 @@ export const getPreviousMessagesFailure = (error) => {
     payload: error
   }
 }
-
 
 export const apiError = error => {
   return {
@@ -113,9 +114,16 @@ export const newMessageFailure = (msgs) => {
 }
 
 
-export const updateChatHeadMessage = (chats) => {
+export const updateChatHeadMessage = ({ success, chatId, data }) => {
   return {
     type: UPDATE_CHAT_HEAD_MESSAGE,
-    payload: chats
+    payload: { success, chatId, data }
+  }
+}
+
+export const updateChatParticipants = ({ chatId, data }) => {
+  return {
+    type: UPDATE_CHAT_PARTICIPANTS,
+    payload: { chatId, data }
   }
 }

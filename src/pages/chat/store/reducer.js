@@ -11,7 +11,8 @@ import {
   NEW_MESSAGE,
   NEW_MESSAGE_SUCCESS,
   NEW_MESSAGE_FAILURE,
-  UPDATE_CHAT_HEAD_MESSAGE
+  UPDATE_CHAT_HEAD_MESSAGE,
+  UPDATE_CHAT_PARTICIPANTS
 } from './actionTypes'
 
 const initialState = {
@@ -33,7 +34,7 @@ const initialState = {
       "userId": "7afdfa56-817b-4367-b8db-a071b1253ad2",
       "name": "testTeacher",
       "email": "teacher@mail.com",
-      "profilePicture": null,
+      "profilePicture": 'http://192.168.10.102:3600/public/profile-pictures/test.jpeg',
       "createdAt": "2021-05-20T07:48:04.000Z",
       "updatedAt": "2021-05-20T07:48:04.000Z",
       "role": {
@@ -54,7 +55,7 @@ const initialState = {
               "userId": "87713236-cb37-4ec9-9107-9f463d930c29",
               "name": "testStudent",
               "email": "student@mail.com",
-              "profilePicture": null,
+              "profilePicture": 'http://192.168.10.102:3600/public/profile-pictures/test.jpeg',
               "createdAt": "2021-05-20T07:47:47.000Z",
               "updatedAt": "2021-05-20T07:47:47.000Z"
             }
@@ -67,7 +68,7 @@ const initialState = {
               "userId": "68633662-88bb-4dd0-99fa-1dc35d60842e",
               "name": "testStudentNew",
               "email": "student2@mail.com",
-              "profilePicture": null,
+              "profilePicture": 'http://192.168.10.102:3600/public/profile-pictures/test.jpeg',
               "createdAt": "2021-05-20T07:52:46.000Z",
               "updatedAt": "2021-05-20T07:52:46.000Z"
             }
@@ -94,9 +95,9 @@ const chatReducer = (state = initialState, action) => {
     case SET_ROOM_JOINED:
       return { ...state, isRoomsJoined: true }
     case SELECT_CHAT:
-      return { ...state, selectedChat: action.payload }
+      return { ...state, selectedChat: action.payload, messages: [] }
     case GET_PREVIOUS_MESSAGES_SUCCESS:
-      return { ...state, messages: action.payload }
+      return { ...state, messages: [...action.payload, ...state.messages] }
     case GET_PREVIOUS_MESSAGES_FAILURE:
       return { ...state, messagesError: action.payload }
     case NEW_MESSAGE:
@@ -106,7 +107,20 @@ const chatReducer = (state = initialState, action) => {
     case NEW_MESSAGE_FAILURE:
       return { ...state, messages: action.payload }
     case UPDATE_CHAT_HEAD_MESSAGE:
-      return { ...state, chats: action.payload }
+      let chat = state.chats.find(c => c.chatId === action.payload.chatId);
+      if (action.payload.success) {
+        chat.messages[0] = action.payload.data
+      }
+      else {
+        chat.messages[0].error = true
+      }
+      return { ...state, chats: state.chats }
+    case UPDATE_CHAT_PARTICIPANTS:
+      let chatHead = state.chats.find(c => c.chatId === action.payload.chatId);
+      if (chatHead) {
+        chatHead.chatParticipants = action.payload.data
+      }
+      return { ...state, chats: state.chats }
 
     default:
       return state

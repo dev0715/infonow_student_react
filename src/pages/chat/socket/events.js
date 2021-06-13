@@ -29,7 +29,6 @@ export function attachEvents(socket, props) {
 
     socket.on(IOEvents.JOIN_ROOM, (res) => {
         console.log(IOEvents.JOIN_ROOM, res);
-
     })
 
     socket.on(IOEvents.GET_PREVIOUS_MESSAGES, (res) => {
@@ -44,17 +43,7 @@ export function attachEvents(socket, props) {
 
     socket.on(IOEvents.NEW_MESSAGE, (res) => {
         console.log(IOEvents.NEW_MESSAGE, res);
-
-        //To Update chat head message
-        for (let chat in props.chats) {
-            if (res.success && res.chatId == chat.chatId) {
-                chat.messages[0] = res.data
-            }
-            else if (res.chatId == chat.chatId) {
-                chat.messages[0].error = true
-            }
-        }
-        props.updateChatHeadMessage(props.chats)
+        props.updateChatHeadMessage({ success: res.success, chatId: res.chatId, data: res.data })
 
         //Sent message fail
         if (!res.success &&
@@ -91,6 +80,20 @@ export function attachEvents(socket, props) {
             props.newMessage(res.data)
         }
     })
+
+    socket.on(IOEvents.MESSAGES_DELIVERED, (res) => {
+        console.log(IOEvents.MESSAGES_DELIVERED, res);
+        if (res.success) {
+            props.updateChatParticipants({ chatId: res.chatId, data: res.data })
+        }
+    })
+
+    socket.on(IOEvents.MESSAGES_SEEN, (res) => {
+        console.log(IOEvents.MESSAGES_SEEN, res);
+        if (res.success) {
+            props.updateChatParticipants({ chatId: res.chatId, data: res.data })
+        }
+    })
 }
 
 /**
@@ -100,7 +103,7 @@ export function attachEvents(socket, props) {
  * @param {Moment} timeStamp 
  */
 
-export function getPreviousMessages(socket, chatId, timeStamp = moment()) {
+export function getPreviousMessages(socket, chatId, timeStamp = moment().utc()) {
     socket.emit(IOEvents.GET_PREVIOUS_MESSAGES, { chatId: chatId, dateTime: timeStamp })
 }
 
