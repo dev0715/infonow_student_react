@@ -28,21 +28,22 @@ import {
 } from 'reactstrap'
 import moment from 'moment';
 
+
 import { v4 } from "uuid"
-import { sendMessage } from './socket/events';
+import { sendMessage, getPreviousMessages } from './socket/events';
 
 const ChatLog = props => {
   // ** Props & Store
   const { handleUser, handleUserSidebarRight, handleSidebar,
     userSidebarLeft, selectedChat, newMessage,
     user, messages, socket } = props
-  // const { userProfile, selectedChat } = store
 
   // ** Refs & Dispatch
   const chatArea = useRef(null)
 
   // ** State
   const [msg, setMsg] = useState('')
+  const [messageRefId, setMessageRefId] = useState(null)
 
   // ** Scroll to chat bottom
   const scrollToBottom = () => {
@@ -50,14 +51,42 @@ const ChatLog = props => {
     chatContainer.scrollTop = Number.MAX_SAFE_INTEGER
   }
 
+  const scrollToPosition = () => {
+    if (messageRefId) {
+      var topMsg = document.getElementById(messageRefId);
+      topMsg.scrollIntoView();
+    }
+  }
+
   // ** If user chat is not empty scrollToBottom
   useEffect(() => {
     const selectedUserLen = Object.keys(selectedChat).length
 
-    if (selectedUserLen) {
+    if (selectedUserLen && !messageRefId) {
+      console.log("SCROLL TO BOTTOM")
       scrollToBottom()
     }
-  }, [selectedChat])
+    if (messageRefId) {
+      console.log("SCROLL TO POSITION")
+      scrollToPosition()
+    }
+  }, [selectedChat, messages])
+
+
+  const handleScroll = event => {
+    const { scrollHeight, scrollTop, clientHeight, scrollToBottom } = event.target;
+    const bottom = scrollHeight - scrollTop - clientHeight
+
+    if (bottom > 0) {
+      // We are not at the bottom of the scroll content
+    }
+    if (scrollTop == 0) {
+      let time = messages[0] ? moment(messages[0].createdAt).utc() : moment().utc()
+      messages[0] ? setMessageRefId(messages[0].messageId) : setMessageRefId(null)
+      getPreviousMessages(socket, selectedChat.chatId, time)
+    }
+  }
+
 
 
   // ** Renders user chat
@@ -73,12 +102,12 @@ const ChatLog = props => {
           <div className='chat-avatar'>
             <Avatar
               className='box-shadow-1 cursor-pointer'
-              img={item.user.userId !== user.userId ? item.user.profilePicture : user.profilePicture}
+              img={item.user.profilePicture || 'http://192.168.10.102:3600/public/profile-pictures/default.png'}
             />
           </div>
 
           <div className='chat-body'>
-            <div key={item.messageId} className='chat-content'>
+            <div id={item.messageId} key={item.messageId} className='chat-content'>
               <p>{item.content}</p>
               <p>{moment(item.createdAt).format("d MMM YYYY, hh:mm:ss")}</p>
             </div>
@@ -142,11 +171,10 @@ const ChatLog = props => {
                   imgHeight='36'
                   imgWidth='36'
                   img={selectedChat.type == 'group'
-                    ? '' //TODO: Add group picture here
-                    : selectedChat.chatParticipants.find(u => u.user.userId != user.userId).user.profilePicture}
-                  // status={selectedChat.contact.status}
+                    ? selectedChat.groupPicture || 'http://192.168.10.102:3600/public/profile-pictures/default.png'
+                    : selectedChat.chatParticipants.find(u => u.user.userId != user.userId).user.profilePicture
+                    || 'http://192.168.10.102:3600/public/profile-pictures/default.png'}
                   className='avatar-border user-profile-toggle m-0 mr-1'
-                // onClick={() => handleAvatarClick(selectedChat.contact)}
                 />
                 <h6 className='mb-0'>{selectedChat.type == 'group'
                   ? selectedChat.groupName
@@ -182,7 +210,7 @@ const ChatLog = props => {
             </header>
           </div>
 
-          <ChatWrapper ref={chatArea} className='user-chats' options={{ wheelPropagation: false }}>
+          <ChatWrapper onScroll={e => handleScroll(e)} ref={chatArea} className='user-chats' options={{ wheelPropagation: false }}>
             {Object.keys(selectedChat).length ? <div className='chats'>{renderChats()}</div> : null}
           </ChatWrapper>
 

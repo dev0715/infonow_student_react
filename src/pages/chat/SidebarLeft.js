@@ -57,7 +57,8 @@ const SidebarLeft = props => {
               key={item.chatId}
               onClick={() => handleUserClick(item, socket)}
             >
-              <Avatar img={item.avatar} imgHeight='42' imgWidth='42' status={item.status} />
+              {/* <Avatar img={item.avatar} imgHeight='42' imgWidth='42' status={item.status} /> */}
+              <Avatar img={'http://192.168.10.102:3600/public/profile-pictures/default.png'} imgHeight='42' imgWidth='42' status={item.status} />
               <div className='chat-info flex-grow-1'>
                 <h5 className='mb-0'>
                   {item.type == 'group'

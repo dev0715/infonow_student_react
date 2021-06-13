@@ -20,7 +20,7 @@ import {
   setRoomJoined, selectChat,
   getPreviousMessagesSuccess, getPreviousMessagesFailure,
   newMessage, newMessageSuccess, newMessageFailure,
-  updateChatHeadMessage,
+  updateChatHeadMessage, updateChatParticipants
 } from './store/actions'
 
 import '@styles/base/pages/app-chat.scss'
@@ -149,6 +149,6 @@ export default withRouter(
     setRoomJoined, selectChat,
     getPreviousMessagesSuccess, getPreviousMessagesFailure,
     newMessage, newMessageSuccess, newMessageFailure,
-    updateChatHeadMessage
+    updateChatHeadMessage, updateChatParticipants
   })(AppChat)
 )
