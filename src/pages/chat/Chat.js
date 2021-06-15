@@ -32,6 +32,8 @@ import moment from 'moment';
 import { v4 } from "uuid"
 import { sendMessage, getPreviousMessages } from './socket/events';
 
+import { IMAGES_BASE_URL } from './../../helpers/url_helper';
+
 const ChatLog = props => {
   // ** Props & Store
   const { handleUser, handleUserSidebarRight, handleSidebar,
@@ -102,7 +104,7 @@ const ChatLog = props => {
           <div className='chat-avatar'>
             <Avatar
               className='box-shadow-1 cursor-pointer'
-              img={item.user.profilePicture || 'http://192.168.10.102:3600/public/profile-pictures/default.png'}
+              img={item.user.profilePicture || `${IMAGES_BASE_URL}profile-pictures/default.png`}
             />
           </div>
 
@@ -171,9 +173,9 @@ const ChatLog = props => {
                   imgHeight='36'
                   imgWidth='36'
                   img={selectedChat.type == 'group'
-                    ? selectedChat.groupPicture || 'http://192.168.10.102:3600/public/profile-pictures/default.png'
+                    ? selectedChat.groupPicture || `${IMAGES_BASE_URL}profile-pictures/default.png`
                     : selectedChat.chatParticipants.find(u => u.user.userId != user.userId).user.profilePicture
-                    || 'http://192.168.10.102:3600/public/profile-pictures/default.png'}
+                    || `${IMAGES_BASE_URL}profile-pictures/default.png`}
                   className='avatar-border user-profile-toggle m-0 mr-1'
                 />
                 <h6 className='mb-0'>{selectedChat.type == 'group'

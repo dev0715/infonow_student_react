@@ -19,6 +19,7 @@ export function attachEvents(socket, props) {
     socket.on(IOEvents.AUTHORIZATION, (res) => {
         console.log(IOEvents.AUTHORIZATION, res);
         if (res.success) {
+            console.log("CHECK USER", props.user.user);
             props.getChatContacts(props.user.user.userId)
             props.authorizedSuccess()
         }

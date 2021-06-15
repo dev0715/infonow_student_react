@@ -84,7 +84,6 @@ const AppChat = (props) => {
       <div className='content-right'>
         <div className='content-wrapper'>
           <div className='content-body'>
-            <p>{props.error}</p>
             <div
               className={classnames('body-content-overlay', {
                 show: userSidebarRight === true || sidebar === true || userSidebarLeft === true

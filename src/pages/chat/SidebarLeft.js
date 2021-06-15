@@ -12,7 +12,13 @@ import { formatDateToMonthShort } from '@utils'
 import classnames from 'classnames'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import { X, Search, CheckSquare, Bell, User, Trash } from 'react-feather'
-import { CardText, InputGroup, InputGroupAddon, Input, InputGroupText, Badge, CustomInput, Button } from 'reactstrap'
+import {
+  CardText, InputGroup, InputGroupAddon,
+  Input, InputGroupText, Badge,
+  CustomInput, Button
+} from 'reactstrap'
+
+import { IMAGES_BASE_URL } from './../../helpers/url_helper';
 
 import { getPreviousMessages } from './socket/events'
 const SidebarLeft = props => {
@@ -58,7 +64,7 @@ const SidebarLeft = props => {
               onClick={() => handleUserClick(item, socket)}
             >
               {/* <Avatar img={item.avatar} imgHeight='42' imgWidth='42' status={item.status} /> */}
-              <Avatar img={'http://192.168.10.102:3600/public/profile-pictures/default.png'} imgHeight='42' imgWidth='42' status={item.status} />
+              <Avatar img={`${IMAGES_BASE_URL}profile-pictures/default.png`} imgHeight='42' imgWidth='42' status={item.status} />
               <div className='chat-info flex-grow-1'>
                 <h5 className='mb-0'>
                   {item.type == 'group'
