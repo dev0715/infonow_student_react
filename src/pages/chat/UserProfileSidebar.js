@@ -50,7 +50,8 @@ const UserProfileSidebar = props => {
             <h6 className='section-label mb-1'>About</h6>
             <p>
               {
-                selectedChat.chatParticipants.find(cp => cp.user.userId != user.userId).user.about || "no about"
+                selectedChat.chatParticipants.find(cp => cp.user.userId != user.userId)
+                  .user.about || "These aren’t the droids you’re looking for!"
               }
             </p>
           </>
@@ -63,7 +64,7 @@ const UserProfileSidebar = props => {
               <ul className='list-unstyled'>
                 {
                   selectedChat.chatParticipants.filter(cp => cp.user.userId != user.userId).map(c =>
-                    <li className='mb-1'>
+                    <li className='mb-1' key={c.user.userId}>
                       <div>
                         <Avatar
                           img={getProfileImageUrl(c.user.profilePicture)}

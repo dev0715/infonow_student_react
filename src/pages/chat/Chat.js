@@ -41,6 +41,7 @@ const ChatLog = props => {
     // handleUser,
     handleUserSidebarRight, handleSidebar,
     userSidebarLeft, selectedChat, newMessage,
+    isEndOfMessages,
     user, messages, socket } = props
 
   // ** Refs & Dispatch
@@ -49,44 +50,40 @@ const ChatLog = props => {
   // ** State
   const [msg, setMsg] = useState('')
   const [messageRefId, setMessageRefId] = useState(null)
-
+  const [showScrollToBottom, setShowScrollToBottom] = useState(false)
   // ** Scroll to chat bottom
-  const scrollToBottom = () => {
+  const scrollToBottom = (animated = false) => {
     const chatContainer = ReactDOM.findDOMNode(chatArea.current)
-    chatContainer.scrollTop = Number.MAX_SAFE_INTEGER
+    chatContainer.scrollTo({ top: Number.MAX_SAFE_INTEGER, behavior: animated ? 'smooth' : 'auto' });
   }
 
   const scrollToPosition = () => {
     if (messageRefId) {
       let topMsg = document.getElementById(messageRefId);
-      if (topMsg)
-        topMsg.scrollIntoView();
+      if (topMsg) topMsg.scrollIntoView();
     }
   }
+
+  useEffect(() => {
+    setMessageRefId(null)
+  }, [selectedChat])
 
   // ** If user chat is not empty scrollToBottom
   useEffect(() => {
     const selectedUserLen = Object.keys(selectedChat).length
+    if (selectedUserLen > 0 && !messageRefId) scrollToBottom()
+    if (messageRefId) scrollToPosition()
+  }, [messages])
 
-    if (selectedUserLen && !messageRefId) {
-      console.log("SCROLL TO BOTTOM")
-      scrollToBottom()
-    }
-    if (messageRefId) {
-      console.log("SCROLL TO POSITION")
-      scrollToPosition()
-    }
-  }, [selectedChat, messages])
+
 
 
   const handleScroll = event => {
     const { scrollHeight, scrollTop, clientHeight, scrollToBottom } = event.target;
     const bottom = scrollHeight - scrollTop - clientHeight
 
-    if (bottom > 0) {
-      // We are not at the bottom of the scroll content
-    }
-    if (scrollTop == 0) {
+    setShowScrollToBottom(bottom > 200)
+    if (scrollTop == 0 && messages.length > 15 && !isEndOfMessages) {
       let time = messages[0] ? messages[0].createdAt : moment().utc()
       messages[0] ? setMessageRefId(messages[0].messageId) : setMessageRefId(null)
       if (selectedChat.chatId)
@@ -94,42 +91,41 @@ const ChatLog = props => {
     }
   }
 
-
-
   // ** Renders user chat
   const renderChats = () => {
-    return messages.map((item, index) => {
-      return (
-        <>
-          <div
-            key={index}
-            className={classnames('chat', {
-              'chat-left': item.user.userId !== user.userId
-            })}
-          >
-            <div className='chat-avatar'>
-              <Avatar
-                className='box-shadow-1 cursor-pointer'
-                img={getProfileImageUrl(item.user.profilePicture)}
-              />
-            </div>
-
-            <div className='chat-body'>
-              <div id={item.messageId} key={"msg_" + item.messageId} className='chat-content'>
-                <p>{item.content}</p>
-              </div>
-            </div>
-            <div className="msg-time" >
+    return messages.map((item, index) =>
+      <div
+        key={index}
+        className={classnames('chat', {
+          'chat-left': item.user.userId !== user.userId
+        })}
+      >
+        <div className='chat-avatar'>
+          <Avatar
+            className='box-shadow-1 cursor-pointer'
+            img={getProfileImageUrl(item.user.profilePicture)}
+          />
+        </div>
+        <div className='chat-body'>
+          <div id={item.messageId} key={"msg_" + item.messageId} className='chat-content'>
+            <p className="message-user-name">
               {
-                moment().isSame(item.createdAt, 'day') ?
-                  moment(item.createdAt).format("hh:mm a") :
-                  moment(item.createdAt).format("d MMM YYYY, hh:mm a")
+                selectedChat.type == "group"
+                && item.user.userId !== user.userId
+                && (item.user.name || "").split(" ")[0]
               }
-            </div>
+            </p>
+            <p>{item.content}</p>
           </div>
-        </>
-      )
-    })
+        </div>
+        <div className="msg-time" >
+          {
+            moment().isSame(item.createdAt, 'date') ?
+              moment(item.createdAt).format("hh:mm a") :
+              moment(item.createdAt).format("d MMM YYYY, hh:mm a")
+          }
+        </div>
+      </div>)
   }
 
   // ** Opens right sidebar & handles its data
@@ -187,9 +183,9 @@ const ChatLog = props => {
         <div className='start-chat-icon mb-1'>
           <MessageSquare />
         </div>
-        <h4 className='sidebar-toggle start-chat-text' onClick={handleStartConversation}>
+        {/* <h4 className='sidebar-toggle start-chat-text' onClick={handleStartConversation}>
           Start Conversation
-        </h4>
+        </h4> */}
       </div>
       {Object.keys(selectedChat).length ? (
         <div className={classnames('active-chat', { 'd-none': selectedChat === null })}>
@@ -281,8 +277,16 @@ const ChatLog = props => {
               </div>
             }
 
+
           </ChatWrapper>
 
+          <Button
+            onClick={() => scrollToBottom(true)}
+            color="gradient-primary"
+            hidden={!showScrollToBottom}
+            className="btn-icon round btn-sm btn-scroll-top-chat">
+            <i className="la la-arrow-down" />
+          </Button>
 
           {
             selectedChat.chatParticipants.find(u => u.user.userId == user.userId && !u.blockedAt)
@@ -297,7 +301,7 @@ const ChatLog = props => {
                   <InputGroupAddon addonType='append'>
                     <InputGroupText>
                       <Label className='attachment-icon mb-0' for='attach-doc'>
-                        <i className='cursor-pointer text-secondary la la-paperclip la-2x' />
+                        <i className='cursor-pointer text-secondary la la-paperclip chat-file' />
                         <input type='file' id='attach-doc' hidden />
                       </Label>
                     </InputGroupText>

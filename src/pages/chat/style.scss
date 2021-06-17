@@ -1,0 +1,37 @@
+.chat-app-window .user-chats .msg-delivery-status img {
+	border: 0px solid #fff !important;
+}
+
+.chat-app-window .user-chats .msg-delivery-status-container {
+	float: right;
+}
+
+.msg-time {
+	font-size: 11px;
+}
+
+.chat-app-window .chats .msg-time {
+	text-align: right;
+	margin-right: 50px;
+	margin-top: -6px;
+}
+
+.message-user-name {
+	font-size: 11px;
+	font-weight: bold;
+}
+
+.chat-app-window .chats .chat-left .msg-time {
+	text-align: left;
+	margin-left: 50px;
+}
+
+.chat-app-form .chat-file {
+	font-size: 20px;
+}
+
+.btn-scroll-top-chat {
+	right: 15px;
+	bottom: 72px;
+	position: absolute;
+}

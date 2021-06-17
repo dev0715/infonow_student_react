@@ -31,7 +31,8 @@ const initialState = {
   error: "",
   loading: false,
   user: {},
-  isNotification: false
+  isNotification: false,
+  isEndOfMessages: false
 }
 
 
@@ -88,6 +89,15 @@ const updateSelectChat = (state, action) => {
   return state.selectedChat
 }
 
+const getPreviousMessagesFailure = (state, action) => {
+  if (action.payload.length == 0) {
+    state.isEndOfMessages = true;
+  }
+  state.messages = [...action.payload, ...state.messages]
+  return state
+}
+
+
 const chatReducer = (state = initialState, action) => {
   switch (action.type) {
 
@@ -110,13 +120,13 @@ const chatReducer = (state = initialState, action) => {
       return { ...state, isRoomsJoined: true }
 
     case SELECT_CHAT:
-      return { ...state, selectedChat: action.payload, messages: [] }
+      return { ...state, selectedChat: action.payload, messages: [], isEndOfMessages: false }
 
     case UPDATE_SELECT_CHAT:
       return { ...state, selectedChat: updateSelectChat(state, action) }
 
     case GET_PREVIOUS_MESSAGES_SUCCESS:
-      return { ...state, messages: [...action.payload, ...state.messages] }
+      return getPreviousMessagesFailure(state, action)
 
     case GET_PREVIOUS_MESSAGES_FAILURE:
       return { ...state, messagesError: action.payload }
@@ -131,7 +141,6 @@ const chatReducer = (state = initialState, action) => {
       return updateChatHeadMessage(state, action.payload)
 
     case UPDATE_CHAT_PARTICIPANTS:
-
       return { ...state, chats: updateChatParticipants(state, action) }
 
     case DELETE_MESSAGES:

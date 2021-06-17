@@ -10,7 +10,7 @@ import Chat from './Chat'
 import Sidebar from './SidebarLeft'
 import UserProfileSidebar from './UserProfileSidebar'
 
-
+import './style.scss';
 // ** Third Party Components
 import classnames from 'classnames'
 
@@ -117,6 +117,7 @@ const AppChat = (props) => {
               selectedChat={props.selectedChat}
               selectedUser={props.selectedUser}
               user={props.user}
+              isEndOfMessages={props.isEndOfMessages}
               newMessage={props.newMessage}
               handleUser={handleUser}
               handleSidebar={handleSidebar}
@@ -159,7 +160,9 @@ const mapStateToProps = (state) => {
     selectedChat,
     selectedUser,
     messages,
-    isNotification
+    isNotification,
+    isEndOfMessages
+
   } = state.Chat;
   return {
     error,
@@ -172,7 +175,8 @@ const mapStateToProps = (state) => {
     selectedChat,
     selectedUser,
     messages,
-    isNotification
+    isNotification,
+    isEndOfMessages
   }
 }
 
