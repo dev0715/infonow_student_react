@@ -17,10 +17,31 @@ const Routes = [
     component: lazy(() => import('../../pages/meetings/MeetingHome'))
   },
   {
+    path: '/meetings/:id',
+    exact: true,
+    component: lazy(() => import('../../pages/blog/details')),
+    meta: {
+      navLink: '/meetings/:id'
+    }
+  },
+  {
     appLayout: true,
     className: 'chat-application',
     path: '/chat',
     component: lazy(() => import('../../pages/chat'))
+  },
+  {
+    path: '/blog',
+    exact: true,
+    component: lazy(() => import('../../pages/blog/list'))
+  },
+  {
+    path: '/blog/:id',
+    exact: true,
+    component: lazy(() => import('../../pages/blog/details')),
+    meta: {
+      navLink: '/blog/:id'
+    }
   },
   {
     path: '/login',
@@ -33,6 +54,11 @@ const Routes = [
   {
     path: '/error',
     component: lazy(() => import('../../views/Error')),
+    layout: 'BlankLayout'
+  },
+  {
+    path: '/unauthorized',
+    component: lazy(() => import('../../views/NotAuthorized')),
     layout: 'BlankLayout'
   }
 ]

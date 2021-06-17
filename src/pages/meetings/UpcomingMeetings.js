@@ -12,6 +12,9 @@ import {
 import Fade from 'reactstrap/lib/Fade';
 import { DateTime } from '../../components/date-time';
 import { upcomingMeetings } from './data';
+import CardReload from '@components/card-reload'
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 const UpcomingMeetingItem = ({meeting}) => {
 	return (
@@ -46,18 +49,22 @@ const UpcomingMeetingItem = ({meeting}) => {
 	);
 };
 
-const UpcomingMeetings = (props) => {
+const UpcomingMeetings = props => {
+
 	return (
 		<>
             {
-                props.upcomingMeetings
-                && props.upcomingMeetings.length > 0
-                && (
-				<Card className='card-developer-meetup card-upcoming-meetings'>
+                props.meetings
+                && props.meetings.length > 0
+				&& (
+					<CardReload
+						title="Upcoming Meetings"
+						className='card-developer-meetup card-upcoming-meetings'
+						isReloading={props.meetingsLoading}
+					>
 					<CardBody>
-						<CardTitle>Upcoming Meetings</CardTitle>
-                            <div className='upcoming-meeting-list'>
-                                {props.upcomingMeetings.map(meeting => <UpcomingMeetingItem key={meeting.meetingId} meeting={meeting}/>)}
+                        <div className='upcoming-meeting-list'>
+                            {props.upcomingMeetings.map(meeting => <UpcomingMeetingItem key={meeting.meetingId} meeting={meeting}/>)}
 						</div>
 						<Button.Ripple
 							className='btn-block btn-icon'
@@ -66,10 +73,16 @@ const UpcomingMeetings = (props) => {
 							<Plus size={14} /> New Meeting
 						</Button.Ripple>
 					</CardBody>
-				</Card>
+				</CardReload>
 			)}
 		</>
 	);
 };
 
-export default UpcomingMeetings;
+
+const mapStateToProps = state => {
+	const { meetings, meetingsLoading } = state.Meetings;
+	return { meetings, meetingsLoading }
+}
+
+export default withRouter(connect(mapStateToProps)(UpcomingMeetings))

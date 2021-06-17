@@ -43,7 +43,7 @@ export default [
     id: 'blog',
     title: 'Blog',
     icon: <i className="la la-newspaper"/>,
-    navLink: '/apps/calendar'
+    navLink: '/blog'
   },
   {
     id: 'feedback',
