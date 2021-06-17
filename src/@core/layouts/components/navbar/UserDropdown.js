@@ -20,6 +20,7 @@ import { User, Mail, CheckSquare, MessageSquare, Settings, CreditCard, HelpCircl
 
 // ** Default Avatar Image
 import defaultAvatar from '@src/assets/images/portrait/small/avatar-default.jpg'
+import { getProfileImageUrl } from '../../../../helpers/url_helper';
 
 const UserDropdown = (props) => {
 
@@ -38,7 +39,7 @@ const UserDropdown = (props) => {
   }, [])
 
   //** Vars
-  const userAvatar = (userData && userData.profilePicture) || defaultAvatar
+  const userAvatar = (userData && getProfileImageUrl(userData.profilePicture)) || defaultAvatar
 
   return (
     <UncontrolledDropdown tag='li' className='dropdown-user nav-item'>
