@@ -60,7 +60,6 @@ axiosApi.interceptors.response.use(
 
 export function resetAPIAuthToken() {
 	axiosApi.defaults.headers.common['Authorization'] = authHeader()['Authorization'];
-	// console.log(authHeader()['Authorization']);
 }
 
 export async function get(url, config = {}) {

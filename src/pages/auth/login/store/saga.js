@@ -27,11 +27,11 @@ function* loginUser({ payload: { user, history } }) {
 
 function* logoutUser({ payload: { history } }) {
     try {
-       
+
         localStorage.removeItem("authUser")
         localStorage.removeItem("adminUser")
-        resetAPIAuthToken();
-        history.push("/login")
+        history.push("/login");
+        window.location.reload();
     } catch (error) {
         yield put(loginError(error))
     }
