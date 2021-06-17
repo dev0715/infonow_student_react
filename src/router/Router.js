@@ -143,6 +143,8 @@ const Router = () => {
                         meta: route.meta
                       })
 
+                      if (!isUserAuthenticated() && route.path!='/unauthorized' && route.path!='/login') return <Redirect to='/unauthorized' />;
+
                       return (
                         <Suspense fallback={null}>
                           {/* Layout Wrapper to add classes based on route's layout, appLayout and className */}

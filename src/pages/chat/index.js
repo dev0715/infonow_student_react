@@ -10,6 +10,7 @@ import Chat from './Chat'
 import Sidebar from './SidebarLeft'
 import UserProfileSidebar from './UserProfileSidebar'
 
+
 // ** Third Party Components
 import classnames from 'classnames'
 
@@ -32,14 +33,14 @@ import '@styles/base/pages/app-chat-list.scss'
 import { withRouter } from 'react-router';
 import { IOEvents } from './socket/eventTypes.js';
 import { attachEvents } from './socket/events';
-import { getLoggedInUser } from '../../helpers/backend-helpers'
+import { getLoggedInUser } from './../../helpers/backend-helpers';
+import { authHeader } from './../../helpers/jwt-token-access/auth-token-header';
 
 const notificationSound = require("./sounds/notification.mp3")
 
 const AppChat = (props) => {
   // ** Store Vars
   const store = useSelector(state => state.Chat)
-
 
   // ** States
   const [user, setUser] = useState({})

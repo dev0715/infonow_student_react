@@ -1,17 +1,33 @@
 import React from 'react';
 
 import {
-    Card,
     CardBody,
     CardTitle,
 	Table,
 	Badge,
 } from 'reactstrap';
 
+import CardReload from '../../@core/components/card-reload';
+
 import { titleCase } from '@utils';
 import { DateTime } from '../../components/date-time';
+import { useState, useEffect } from 'react';
+import { getAllMeetings } from '@store/actions';
+import { withRouter } from 'react-router-dom';
+import { connect, useDispatch } from 'react-redux';
 
 const MeetingList = (props) => {
+
+	const fetchMeetings = () => {
+		props.getAllMeetings();
+	}
+
+	useEffect(() => {
+		fetchMeetings();
+    }, []);
+
+
+	
 
 	const getMeetingStatusColor = (meetingStatus) => {
 		switch (meetingStatus) {
@@ -25,9 +41,13 @@ const MeetingList = (props) => {
 	}
 
 	return (
-		<Card>
+
+		<CardReload
+			title='My Meetings'
+			onReload={fetchMeetings}
+			isReloading={props.meetingsLoading}
+		>
 			<CardBody>
-				<CardTitle>My Meeting</CardTitle>
 				<Table responsive hover >
 					<thead>
 						<tr>
@@ -39,7 +59,7 @@ const MeetingList = (props) => {
 						</tr>
 					</thead>
 					<tbody>
-						{props.Meetings && props.Meetings.map(m =>
+						{props.meetings && props.meetings.map(m =>
 							<tr key={m.meetingId}>
                             <td>1</td>
 							<td>
@@ -63,9 +83,17 @@ const MeetingList = (props) => {
 					</tbody>
 				</Table>
 			</CardBody>
-		</Card>
+		</CardReload>
 	);
 };
 
 
-export default MeetingList
+const mapStateToProps = (state) =>{
+    const { meetings, meetingsError, meetingsLoading } = state.Meetings;
+    return { meetings, meetingsError, meetingsLoading };
+};
+
+export default withRouter(
+    connect(mapStateToProps, {getAllMeetings})(MeetingList)
+)
+

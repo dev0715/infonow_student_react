@@ -1,7 +1,7 @@
 import React from 'react';
 // ** React Imports
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory, withRouter } from 'react-router-dom'
 
 // ** Custom Components
 import Avatar from '@components/avatar'
@@ -11,7 +11,7 @@ import { isUserAuthenticated, getLoggedInUser } from '@helpers/backend-helpers'
 
 
 // ** Store & Actions
-import { useDispatch } from 'react-redux'
+import { connect, useDispatch } from 'react-redux'
 import { logoutUser } from '@store/actions'
 
 // ** Third Party Components
@@ -22,12 +22,11 @@ import { User, Mail, CheckSquare, MessageSquare, Settings, CreditCard, HelpCircl
 import defaultAvatar from '@src/assets/images/portrait/small/avatar-default.jpg'
 import { getProfileImageUrl } from '../../../../helpers/url_helper';
 
-const UserDropdown = () => {
+const UserDropdown = (props) => {
 
-  const handleLogout = () => { }
-
-  // ** Store Vars
-  const dispatch = useDispatch()
+  
+  
+  const history = useHistory()
 
   // ** State
   const [userData, setUserData] = useState(null)
@@ -68,7 +67,7 @@ const UserDropdown = () => {
           <MessageSquare size={14} className='mr-75' />
           <span className='align-middle'>Chats</span>
         </DropdownItem>
-        <DropdownItem tag={Link} to='/login' onClick={() => logoutUser()}>
+        <DropdownItem tag={Link} to='#' onClick={() => props.logoutUser(history)}>
           <Power size={14} className='mr-75' />
           <span className='align-middle'>Logout</span>
         </DropdownItem>
@@ -77,4 +76,12 @@ const UserDropdown = () => {
   )
 }
 
-export default UserDropdown
+
+const mapStateToProps = (state) => {
+  const {  } = state.Login;
+  return {  }
+}
+
+export default withRouter(connect(mapStateToProps, {logoutUser})(UserDropdown));
+
+

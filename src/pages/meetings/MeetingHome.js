@@ -11,9 +11,7 @@ import moment from 'moment';
 
 function MeetingHome(props) {
 
-    useEffect(() => {
-        props.getAllMeetings();
-    }, []);
+    
 
     const getUpcomingMeetings = ()=>{
         const meetingList = props.meetings || [];
@@ -28,10 +26,10 @@ function MeetingHome(props) {
                 <UpcomingMeeting meeting={ upcomingMeetings && upcomingMeetings[0]}/>
 			</Col>
 			<Col lg={5} style={{ maxWidth: 500 }}>
-				<UpcomingMeetings upcomingMeetings={upcomingMeetings}/>
+				<UpcomingMeetings />
 			</Col>
 			<Col lg={12}>
-                <MeetingList Meetings={props.meetings}/>
+                <MeetingList />
 			</Col>
 		</Row>
 	);

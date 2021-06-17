@@ -21,7 +21,7 @@ import {
     }
   }
   
-  export const logoutUser = history => {
+export const logoutUser = history => {
     return {
       type: LOGOUT_USER,
       payload: { history },
