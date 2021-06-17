@@ -21,7 +21,6 @@ import { getChatContactsRequest } from "../../../helpers/backend-helpers"
 function* getChatContacts({ payload: { userId } }) {
   try {
     const response = yield call(getChatContactsRequest, userId);
-    console.log("response ==>", response);
     if (response) {
       yield put(getChatContactsSuccess(response))
       return;

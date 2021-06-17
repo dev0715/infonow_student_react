@@ -16,5 +16,6 @@ export const POST_STUDENT_LOGIN = `${BASE_URL}/authenticate/student`
 export const GET_ALL_MEETINGS = id => `${MEETING_API_URL}/users/${id}/meetings`
 
 
+export const getProfileImageUrl = url => url ? IMAGES_BASE_URL + url : IMAGES_BASE_URL + "profile-pictures/default.png"
 
 

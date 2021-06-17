@@ -18,13 +18,13 @@ import {
   CustomInput, Button
 } from 'reactstrap'
 
-import { IMAGES_BASE_URL } from './../../helpers/url_helper';
+import { getProfileImageUrl, IMAGES_BASE_URL } from './../../helpers/url_helper';
 
 import { getPreviousMessages } from './socket/events'
 const SidebarLeft = props => {
   // ** Props & Store
   const { sidebar, handleSidebar, userSidebarLeft,
-    handleUserSidebarLeft, selectChat,
+    handleUserSidebarLeft, selectChat, selectedChat,
     user, chats, socket } = props
 
   // ** State
@@ -57,14 +57,16 @@ const SidebarLeft = props => {
 
           return (
             <li
-              className={classnames({
-                active: active.type === 'chat' && active.id === item.id
-              })}
+              className={item.chatId == selectedChat.chatId ? "active" : ""}
               key={item.chatId}
               onClick={() => handleUserClick(item, socket)}
             >
-              {/* <Avatar img={item.avatar} imgHeight='42' imgWidth='42' status={item.status} /> */}
-              <Avatar img={`${IMAGES_BASE_URL}profile-pictures/default.png`} imgHeight='42' imgWidth='42' status={item.status} />
+              <Avatar
+                img={getProfileImageUrl(item.type == 'group'
+                  ? item.groupPicture || null
+                  : item.chatParticipants.find(u => u.user.userId != user.userId).user.profilePicture)
+                }
+                imgHeight='42' imgWidth='42' status={item.status} />
               <div className='chat-info flex-grow-1'>
                 <h5 className='mb-0'>
                   {item.type == 'group'
@@ -117,7 +119,7 @@ const SidebarLeft = props => {
               <X size={14} />
             </div>
             <div className='header-profile-sidebar'>
-              <Avatar className='box-shadow-1 avatar-border' img={user.profilePicture} status={status} size='xl' />
+              <Avatar className='box-shadow-1 avatar-border' img={getProfileImageUrl(user.profilePicture)} status={status} size='xl' />
               <h4 className='chat-user-name'>{user.name}</h4>
               {/* <span className='user-post'>{user.role}</span> */}
             </div>
@@ -225,7 +227,7 @@ const SidebarLeft = props => {
                 {Object.keys(user).length ? (
                   <Avatar
                     className='avatar-border'
-                    img={user.avatar}
+                    img={getProfileImageUrl(user.profilePicture)}
                     status={status}
                     imgHeight='42'
                     imgWidth='42'

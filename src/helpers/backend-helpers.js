@@ -1,6 +1,9 @@
 import { post, del, get, put, postForm } from "./api_helper"
 import * as  url from "./url_helper"
 
+
+
+
 // Gets the logged in user data from local session
 export const getLoggedInUser = () => {
   const user = getAuthentication()
@@ -19,9 +22,9 @@ export const isUserAuthenticated = () => {
 
 
 // Chats
-export const getChatContactsRequest   =  id => get(url.GET_CHATS_CONTACTS(id))
+export const getChatContactsRequest = id => get(url.GET_CHATS_CONTACTS(id))
 
 // Student Actions
-export const postStudentLogin         = data => post(url.POST_STUDENT_LOGIN, data);
+export const postStudentLogin = data => post(url.POST_STUDENT_LOGIN, data);
 
 export const getStudentAllMeetings = userId => get(url.GET_ALL_MEETINGS(userId));

@@ -16,11 +16,13 @@ import classnames from 'classnames'
 // ** Store & Actions
 import { connect, useSelector } from 'react-redux'
 import {
+  setLoggedUser,
   getChatContacts, authorizedSuccess, authorizedFailure,
-  setRoomJoined, selectChat,
+  setRoomJoined, selectChat, updateSelectChat,
   getPreviousMessagesSuccess, getPreviousMessagesFailure,
-  newMessage, newMessageSuccess, newMessageFailure,
-  updateChatHeadMessage, updateChatParticipants
+  newMessage, saveNewMessage,
+  updateChatHeadMessage, updateChatParticipants,
+  deleteMessages
 } from './store/actions'
 
 import '@styles/base/pages/app-chat.scss'
@@ -28,6 +30,7 @@ import '@styles/base/pages/app-chat-list.scss'
 import { withRouter } from 'react-router';
 import { IOEvents } from './socket/eventTypes.js';
 import { attachEvents } from './socket/events';
+import { getLoggedInUser } from '../../helpers/backend-helpers'
 
 const AppChat = (props) => {
   // ** Store Vars
@@ -54,14 +57,17 @@ const AppChat = (props) => {
   const handleUser = obj => setUser(obj)
 
   // ** Get data on Mount
+
+
+
   useEffect(() => {
+    props.setLoggedUser(getLoggedInUser() || {})
     attachEvents(socket, props)
   }, [])
 
   useEffect(() => {
     if (!props.isRoomJoined) {
       for (var chat of props.chats) {
-        console.log("CHAT loop==>", chat);
         socket.emit(IOEvents.JOIN_ROOM, { chatId: chat.chatId })
       }
       props.setRoomJoined()
@@ -73,8 +79,9 @@ const AppChat = (props) => {
     <Fragment>
       <Sidebar
         socket={socket}
-        user={props.user.user}
+        user={props.user}
         chats={props.chats}
+        selectedChat={props.selectedChat}
         selectChat={props.selectChat}
         sidebar={sidebar}
         handleSidebar={handleSidebar}
@@ -95,7 +102,7 @@ const AppChat = (props) => {
               messages={props.messages}
               selectedChat={props.selectedChat}
               selectedUser={props.selectedUser}
-              user={props.user.user}
+              user={props.user}
               newMessage={props.newMessage}
               handleUser={handleUser}
               handleSidebar={handleSidebar}
@@ -115,7 +122,7 @@ const AppChat = (props) => {
 }
 
 const mapStateToProps = (state) => {
-  console.log(state, "state");
+
   const {
     error,
     user,
@@ -144,10 +151,12 @@ const mapStateToProps = (state) => {
 
 export default withRouter(
   connect(mapStateToProps, {
-    getChatContacts, authorizedSuccess, authorizedFailure,
-    setRoomJoined, selectChat,
+    setLoggedUser,
+    getChatContacts, authorizedSuccess, authorizedFailure, saveNewMessage,
+    setRoomJoined, selectChat, updateSelectChat,
     getPreviousMessagesSuccess, getPreviousMessagesFailure,
-    newMessage, newMessageSuccess, newMessageFailure,
-    updateChatHeadMessage, updateChatParticipants
+    newMessage,
+    updateChatHeadMessage, updateChatParticipants,
+    deleteMessages
   })(AppChat)
 )

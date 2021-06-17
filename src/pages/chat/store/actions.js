@@ -1,4 +1,5 @@
 import {
+  SET_USER,
   GET_CHAT_CONTACTS,
   GET_CHAT_CONTACTS_SUCCESS,
   GET_CHAT_CONTACTS_FAILURE,
@@ -7,16 +8,24 @@ import {
   API_ERROR,
   SET_ROOM_JOINED,
   SELECT_CHAT,
+  UPDATE_SELECT_CHAT,
   GET_PREVIOUS_MESSAGES,
   GET_PREVIOUS_MESSAGES_SUCCESS,
   GET_PREVIOUS_MESSAGES_FAILURE,
   NEW_MESSAGE,
-  NEW_MESSAGE_SUCCESS,
-  NEW_MESSAGE_FAILURE,
+  SAVE_NEW_MESSAGE,
   UPDATE_CHAT_HEAD_MESSAGE,
-  UPDATE_CHAT_PARTICIPANTS
+  UPDATE_CHAT_PARTICIPANTS,
+  DELETE_MESSAGES
 } from './actionTypes'
 
+
+export const setLoggedUser = (user) => {
+  return {
+    type: SET_USER,
+    payload: user
+  }
+}
 
 export const getChatContacts = (userId) => {
   return {
@@ -64,6 +73,13 @@ export const selectChat = (chat) => {
   }
 }
 
+export const updateSelectChat = (data) => {
+  return {
+    type: UPDATE_SELECT_CHAT,
+    payload: data
+  }
+}
+
 export const getPreviousMessages = (chatId, timeStamp) => {
   return {
     type: GET_PREVIOUS_MESSAGES,
@@ -99,17 +115,10 @@ export const newMessage = (msg) => {
   }
 }
 
-export const newMessageSuccess = (msgs) => {
+export const saveNewMessage = (res) => {
   return {
-    type: NEW_MESSAGE_SUCCESS,
-    payload: msgs
-  }
-}
-
-export const newMessageFailure = (msgs) => {
-  return {
-    type: NEW_MESSAGE_FAILURE,
-    payload: msgs
+    type: SAVE_NEW_MESSAGE,
+    payload: res
   }
 }
 
@@ -121,9 +130,17 @@ export const updateChatHeadMessage = ({ success, chatId, data }) => {
   }
 }
 
-export const updateChatParticipants = ({ chatId, data }) => {
+export const updateChatParticipants = (data) => {
   return {
     type: UPDATE_CHAT_PARTICIPANTS,
-    payload: { chatId, data }
+    payload: data
   }
 }
+
+export const deleteMessages = (data) => {
+  return {
+    type: DELETE_MESSAGES,
+    payload: data
+  }
+}
+
