@@ -18,7 +18,7 @@ import {
   CustomInput, Button
 } from 'reactstrap'
 
-import { getProfileImageUrl, IMAGES_BASE_URL } from './../../helpers/url_helper';
+import { getProfileImageUrl } from './../../helpers/url_helper';
 
 import { getPreviousMessages } from './socket/events'
 const SidebarLeft = props => {
@@ -96,14 +96,13 @@ const SidebarLeft = props => {
 
   // ** Handles Filter
   const handleFilter = e => {
-    // setQuery(e.target.value)
-    // const searchFilterFunction = chats => chats.find(c =>
-    //   c.chatParticipants.name.toLowerCase().includes(e.target.value.toLowerCase()) ||
-    //   c.groupName.toLowerCase().includes(e.target.value.toLowerCase())
-    // )
-    // // contact.fullName.toLowerCase().includes(e.target.value.toLowerCase())
-    // const filteredChatsArr = chats.filter(searchFilterFunction)
-    // setFilteredChat([...filteredChatsArr])
+    setQuery(e.target.value)
+    let val = e.target.value || "";
+    const searchFilterFunction = chat => chat.chatParticipants.find(p => p.user.name.toLowerCase().includes(val.toLowerCase())) ||
+      (chat.groupName || "").toLowerCase().includes(val.toLowerCase())
+
+    const filteredChatsArr = chats.filter(searchFilterFunction)
+    setFilteredChat([...filteredChatsArr])
   }
 
   return chats.length ? (
@@ -119,7 +118,10 @@ const SidebarLeft = props => {
               <X size={14} />
             </div>
             <div className='header-profile-sidebar'>
-              <Avatar className='box-shadow-1 avatar-border' img={getProfileImageUrl(user.profilePicture)} status={status} size='xl' />
+              <Avatar className='box-shadow-1 avatar-border'
+                img={getProfileImageUrl(user.profilePicture)}
+                status={status}
+                size='xl' />
               <h4 className='chat-user-name'>{user.name}</h4>
               {/* <span className='user-post'>{user.role}</span> */}
             </div>
@@ -187,30 +189,12 @@ const SidebarLeft = props => {
             <ul className='list-unstyled'>
               <li className='d-flex justify-content-between align-items-center mb-1'>
                 <div className='d-flex align-items-center'>
-                  <CheckSquare className='mr-75' size='18' />
-                  <span className='align-middle'>Two-step Verification</span>
-                </div>
-                <CustomInput type='switch' id='verification' name='verification' label='' defaultChecked />
-              </li>
-              <li className='d-flex justify-content-between align-items-center mb-1'>
-                <div className='d-flex align-items-center'>
                   <Bell className='mr-75' size='18' />
                   <span className='align-middle'>Notification</span>
                 </div>
                 <CustomInput type='switch' id='notifications' name='notifications' label='' />
               </li>
-              <li className='d-flex align-items-center cursor-pointer mb-1'>
-                <User className='mr-75' size='18' />
-                <span className='align-middle'>Invite Friends</span>
-              </li>
-              <li className='d-flex align-items-center cursor-pointer'>
-                <Trash className='mr-75' size='18' />
-                <span className='align-middle'>Delete Account</span>
-              </li>
             </ul>
-            <div className='mt-3'>
-              <Button color='primary'>Logout</Button>
-            </div>
           </PerfectScrollbar>
         </div>
         <div

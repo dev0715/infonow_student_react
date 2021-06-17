@@ -16,7 +16,9 @@ import {
   SAVE_NEW_MESSAGE,
   UPDATE_CHAT_HEAD_MESSAGE,
   UPDATE_CHAT_PARTICIPANTS,
-  DELETE_MESSAGES
+  DELETE_MESSAGES,
+  PLAY_NOTIFICATION_SOUND,
+  STOP_NOTIFICATION_SOUND
 } from './actionTypes'
 
 
@@ -143,4 +145,14 @@ export const deleteMessages = (data) => {
     payload: data
   }
 }
+
+export const playNotificationSound = (data) => {
+  return {
+    type: PLAY_NOTIFICATION_SOUND,
+    payload: data
+  }
+}
+
+
+
 

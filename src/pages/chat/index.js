@@ -13,6 +13,8 @@ import UserProfileSidebar from './UserProfileSidebar'
 // ** Third Party Components
 import classnames from 'classnames'
 
+
+
 // ** Store & Actions
 import { connect, useSelector } from 'react-redux'
 import {
@@ -22,7 +24,7 @@ import {
   getPreviousMessagesSuccess, getPreviousMessagesFailure,
   newMessage, saveNewMessage,
   updateChatHeadMessage, updateChatParticipants,
-  deleteMessages
+  deleteMessages, playNotificationSound,
 } from './store/actions'
 
 import '@styles/base/pages/app-chat.scss'
@@ -31,6 +33,8 @@ import { withRouter } from 'react-router';
 import { IOEvents } from './socket/eventTypes.js';
 import { attachEvents } from './socket/events';
 import { getLoggedInUser } from '../../helpers/backend-helpers'
+
+const notificationSound = require("./sounds/notification.mp3")
 
 const AppChat = (props) => {
   // ** Store Vars
@@ -75,6 +79,15 @@ const AppChat = (props) => {
   }, [props.chats])
 
 
+  useEffect(() => {
+    if (props.isNotification) {
+      setTimeout(() => {
+        props.playNotificationSound(false)
+      }, 1000);
+    }
+  }, [props.isNotification])
+
+
   return (
     <Fragment>
       <Sidebar
@@ -110,13 +123,24 @@ const AppChat = (props) => {
               handleUserSidebarRight={handleUserSidebarRight}
             />
             <UserProfileSidebar
-              user={user}
+              user={props.user}
+              selectedChat={props.selectedChat}
               userSidebarRight={userSidebarRight}
               handleUserSidebarRight={handleUserSidebarRight}
             />
           </div>
         </div>
       </div>
+      {
+        props.isNotification &&
+        <audio
+          src={notificationSound}
+          autoPlay
+          style={{
+            visibility: 'hidden'
+          }}
+        />
+      }
     </Fragment>
   )
 }
@@ -133,7 +157,8 @@ const mapStateToProps = (state) => {
     isRoomJoined,
     selectedChat,
     selectedUser,
-    messages
+    messages,
+    isNotification
   } = state.Chat;
   return {
     error,
@@ -145,7 +170,8 @@ const mapStateToProps = (state) => {
     isRoomJoined,
     selectedChat,
     selectedUser,
-    messages
+    messages,
+    isNotification
   }
 }
 
@@ -157,6 +183,6 @@ export default withRouter(
     getPreviousMessagesSuccess, getPreviousMessagesFailure,
     newMessage,
     updateChatHeadMessage, updateChatParticipants,
-    deleteMessages
+    deleteMessages, playNotificationSound,
   })(AppChat)
 )

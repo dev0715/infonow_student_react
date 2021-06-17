@@ -8,12 +8,11 @@ import Avatar from '@components/avatar'
 import AvatarGroup from '@components/avatar-group'
 
 // ** Store & Actions
-import { useDispatch } from 'react-redux'
 
 // ** Third Party Components
 import classnames from 'classnames'
 import PerfectScrollbar from 'react-perfect-scrollbar'
-import { MessageSquare, Menu, PhoneCall, Video, Search, MoreVertical, Mic, Image, Send } from 'react-feather'
+import { MessageSquare, Menu, Search, MoreVertical, Send } from 'react-feather'
 import {
   UncontrolledDropdown,
   DropdownToggle,
@@ -34,7 +33,6 @@ import { v4 } from "uuid"
 import { sendMessage, getPreviousMessages, deleteMessages, userBlockChat, userUnBlockChat } from './socket/events';
 
 import { getProfileImageUrl, IMAGES_BASE_URL } from './../../helpers/url_helper';
-import { DateTime, DateTimeFunction } from '../../components/date-time';
 
 const ChatLog = props => {
   // ** Props & Store
@@ -112,15 +110,21 @@ const ChatLog = props => {
             <div className='chat-avatar'>
               <Avatar
                 className='box-shadow-1 cursor-pointer'
-                img={IMAGES_BASE_URL + item.user.profilePicture || `${IMAGES_BASE_URL}profile-pictures/default.png`}
+                img={getProfileImageUrl(item.user.profilePicture)}
               />
             </div>
 
             <div className='chat-body'>
-              <div id={item.messageId} key={item.messageId} className='chat-content'>
+              <div id={item.messageId} key={"msg_" + item.messageId} className='chat-content'>
                 <p>{item.content}</p>
-                <p>{moment(item.createdAt).format("d MMM YYYY, hh:mm:ss")}</p>
               </div>
+            </div>
+            <div className="msg-time" >
+              {
+                moment().isSame(item.createdAt, 'day') ?
+                  moment(item.createdAt).format("hh:mm a") :
+                  moment(item.createdAt).format("d MMM YYYY, hh:mm a")
+              }
             </div>
           </div>
         </>
@@ -203,10 +207,15 @@ const ChatLog = props => {
                     : selectedChat.chatParticipants.find(u => u.user.userId != user.userId).user.profilePicture)
                   }
                   className='avatar-border user-profile-toggle m-0 mr-1'
+                  onClick={handleUserSidebarRight}
                 />
-                <h6 className='mb-0'>{selectedChat.type == 'group'
-                  ? selectedChat.groupName
-                  : selectedChat.chatParticipants.find(u => u.user.userId != user.userId).user.name}</h6>
+                <h6 className='mb-0' onClick={handleUserSidebarRight}>
+                  {
+                    selectedChat.type == 'group'
+                      ? selectedChat.groupName
+                      : selectedChat.chatParticipants.find(u => u.user.userId != user.userId).user.name
+                  }
+                </h6>
               </div>
               <div className='d-flex align-items-center'>
                 {/* <PhoneCall size={18} className='cursor-pointer d-sm-block d-none mr-1' />
@@ -217,7 +226,10 @@ const ChatLog = props => {
                     <MoreVertical size='18' />
                   </DropdownToggle>
                   <DropdownMenu right>
-                    <DropdownItem href='/' onClick={e => e.preventDefault()}>
+                    <DropdownItem href='/' onClick={e => {
+                      e.preventDefault()
+                      handleUserSidebarRight()
+                    }}>
                       View Contact
                     </DropdownItem>
                     <DropdownItem href='/' onClick={e => e.preventDefault()}>

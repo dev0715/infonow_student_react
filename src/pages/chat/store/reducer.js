@@ -14,7 +14,8 @@ import {
   SAVE_NEW_MESSAGE,
   UPDATE_CHAT_HEAD_MESSAGE,
   UPDATE_CHAT_PARTICIPANTS,
-  DELETE_MESSAGES
+  DELETE_MESSAGES,
+  PLAY_NOTIFICATION_SOUND,
 } from './actionTypes'
 
 const initialState = {
@@ -29,7 +30,8 @@ const initialState = {
   selectedUser: {},
   error: "",
   loading: false,
-  user: {}
+  user: {},
+  isNotification: false
 }
 
 
@@ -134,6 +136,9 @@ const chatReducer = (state = initialState, action) => {
 
     case DELETE_MESSAGES:
       return { ...state, messages: action.payload }
+
+    case PLAY_NOTIFICATION_SOUND:
+      return { ...state, isNotification: action.payload }
 
     default:
       return state

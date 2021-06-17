@@ -42,6 +42,9 @@ const UpDateChatsAndSelectedChat = (event, res, props) => {
  */
 const StoreNewMessage = (event, res, props) => {
     console.log(event, res);
+    if (res.success) {
+        props.playNotificationSound(true)
+    }
     props.saveNewMessage(res)
 }
 
