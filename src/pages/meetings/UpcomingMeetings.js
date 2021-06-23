@@ -64,7 +64,7 @@ const UpcomingMeetings = props => {
 					>
 					<CardBody>
                         <div className='upcoming-meeting-list'>
-                            {props.upcomingMeetings.map(meeting => <UpcomingMeetingItem key={meeting.meetingId} meeting={meeting}/>)}
+                            {props.meetings.map(meeting => <UpcomingMeetingItem key={meeting.meetingId} meeting={meeting}/>)}
 						</div>
 						<Button.Ripple
 							className='btn-block btn-icon'
