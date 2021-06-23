@@ -16,21 +16,21 @@ import CardReload from '@components/card-reload'
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-const UpcomingMeetingItem = ({meeting}) => {
+const UpcomingMeetingItem = ({ meeting }) => {
 	return (
 		<Row className='upcoming-meeting-item'>
 			<Col xs={10}>
 				<div className='meetup-header d-flex align-items-center'>
 					<div className='meetup-day'>
-                        <h6 className='mb-0'><DateTime dateTime={meeting.scheduledAt} format="ddd"/></h6>
-						<h3 className='mb-0'><DateTime dateTime={meeting.scheduledAt} format="DD"/></h3>
+						<h6 className='mb-0'><DateTime dateTime={meeting.scheduledAt} format="ddd" /></h6>
+						<h3 className='mb-0'><DateTime dateTime={meeting.scheduledAt} format="DD" /></h3>
 					</div>
 					<div className='my-auto'>
 						<CardTitle tag='h4' className='mb-25'>
 							{meeting.agenda}
 						</CardTitle>
-                        <CardText className='mb-0'>
-                            <DateTime dateTime={meeting.scheduledAt} format="ddd DD MMM, YYYY"/>
+						<CardText className='mb-0'>
+							<DateTime dateTime={meeting.scheduledAt} format="ddd DD MMM, YYYY" />
 						</CardText>
 					</div>
 				</div>
@@ -53,28 +53,28 @@ const UpcomingMeetings = props => {
 
 	return (
 		<>
-            {
-                props.meetings
-                && props.meetings.length > 0
+			{
+				props.meetings
+				&& props.meetings.length > 0
 				&& (
 					<CardReload
 						title="Upcoming Meetings"
 						className='card-developer-meetup card-upcoming-meetings'
 						isReloading={props.meetingsLoading}
 					>
-					<CardBody>
-                        <div className='upcoming-meeting-list'>
-                            {props.upcomingMeetings.map(meeting => <UpcomingMeetingItem key={meeting.meetingId} meeting={meeting}/>)}
-						</div>
-						<Button.Ripple
-							className='btn-block btn-icon'
-							color='primary'
-						>
-							<Plus size={14} /> New Meeting
-						</Button.Ripple>
-					</CardBody>
-				</CardReload>
-			)}
+						<CardBody>
+							<div className='upcoming-meeting-list'>
+								{props.meetings.map(meeting => <UpcomingMeetingItem key={meeting.meetingId} meeting={meeting} />)}
+							</div>
+							<Button.Ripple
+								className='btn-block btn-icon'
+								color='primary'
+							>
+								<Plus size={14} /> New Meeting
+							</Button.Ripple>
+						</CardBody>
+					</CardReload>
+				)}
 		</>
 	);
 };

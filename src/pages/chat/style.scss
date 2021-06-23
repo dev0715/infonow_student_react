@@ -8,6 +8,8 @@
 
 .msg-time {
 	font-size: 11px;
+	margin-top: 4px !important;
+	margin-bottom: 16px;
 }
 
 .chat-app-window .chats .msg-time {
@@ -20,6 +22,44 @@
 	font-size: 11px;
 	font-weight: bold;
 }
+.chat-body {
+	margin: 0px !important;
+	margin-bottom: 3px !important;
+}
+
+.chat-content {
+	margin-bottom: 0px !important;
+}
+
+.chat-content .preview {
+	margin-top: 4px;
+	width: 300px;
+}
+
+.preview img {
+	width: inherit;
+}
+
+.preview video {
+	width: inherit;
+}
+
+.preview {
+	audio {
+		width: inherit;
+		height: 30px;
+		margin-top: 50px;
+	}
+	audio::-webkit-media-controls-enclosure {
+		border-radius: 5px;
+		padding: 0px;
+	}
+}
+// .dark-layout .chat-content .preview {
+// 	audio::-webkit-media-controls-enclosure {
+// 		background-color: #283046af;
+// 	}
+// }
 
 .chat-app-window .chats .chat-left .msg-time {
 	text-align: left;
@@ -34,4 +74,66 @@
 	right: 15px;
 	bottom: 72px;
 	position: absolute;
+	z-index: 5;
+}
+
+.chat-selected-files-container {
+	display: flex;
+	padding-top: 10px;
+	position: absolute;
+	bottom: 50px;
+}
+
+.chat-selected-files-area {
+	width: -webkit-fill-available;
+}
+
+.chat-selected-files-area .selected-file {
+	justify-content: center;
+	align-items: center;
+	padding: 6px;
+}
+
+.selected-file .progress {
+	height: 4px;
+	margin-bottom: 2px;
+}
+
+.chat-selected-files-area button {
+	background-color: inherit;
+	border: none;
+	display: inline;
+	color: inherit;
+	padding: 4px;
+	width: 24px;
+	height: 24px;
+	outline: none;
+	float: right;
+}
+
+@media only screen and (max-width: 320px) {
+	.chat-content {
+		max-width: 100% !important;
+	}
+	.chat-content .preview {
+		width: 180px !important;
+	}
+}
+
+@media (min-width: 321px) and (max-width: 375px) {
+	.chat-content {
+		max-width: 100% !important;
+	}
+	.chat-content .preview {
+		width: 200px !important;
+	}
+}
+
+@media (min-width: 376px) and (max-width: 600px) {
+	.chat-content {
+		max-width: 95% !important;
+	}
+	.chat-content .preview {
+		width: 245px !important;
+	}
 }

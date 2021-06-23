@@ -23,18 +23,32 @@ import {
   getChatContacts, authorizedSuccess, authorizedFailure,
   setRoomJoined, selectChat, updateSelectChat,
   getPreviousMessagesSuccess, getPreviousMessagesFailure,
-  newMessage, saveNewMessage,
+  newMessage, saveNewMessage, deleteMessages,
   updateChatHeadMessage, updateChatParticipants,
-  deleteMessages, playNotificationSound,
+  playNotificationSound, stopNotificationSound, setNotificationEnabled,
+  setNotificationIds, muteChatNotification, unmuteChatNotification,
+  uploadDocument,
+  addDocumentToQueue,
+  cancelDocumentUpload,
+  updateDocumentProgress,
+  removeDocument,
+  getSelectChatDocuments,
+  getSelectChatDocumentsSuccess,
+  getSelectChatDocumentsFailure,
+  updateAbout,
+  updateAboutSuccess,
+  updateAboutFailure,
+  setPreviousMessagesLoading
+
 } from './store/actions'
 
 import '@styles/base/pages/app-chat.scss'
 import '@styles/base/pages/app-chat-list.scss'
 import { withRouter } from 'react-router';
 import { IOEvents } from './socket/eventTypes.js';
-import { attachEvents } from './socket/events';
+import { attachEvents, sendMessage } from './socket/events';
 import { getLoggedInUser } from './../../helpers/backend-helpers';
-import { authHeader } from './../../helpers/jwt-token-access/auth-token-header';
+import { getChatNotificationIds } from './utility';
 
 const notificationSound = require("./sounds/notification.mp3")
 
@@ -68,6 +82,7 @@ const AppChat = (props) => {
   useEffect(() => {
     props.setLoggedUser(getLoggedInUser() || {})
     attachEvents(socket, props)
+    props.setNotificationIds(getChatNotificationIds())
   }, [])
 
   useEffect(() => {
@@ -83,20 +98,32 @@ const AppChat = (props) => {
   useEffect(() => {
     if (props.isNotification) {
       setTimeout(() => {
-        props.playNotificationSound(false)
+        props.stopNotificationSound()
       }, 1000);
     }
   }, [props.isNotification])
+
+
+  useEffect(() => {
+    for (const doc of props.uploadedDocuments) {
+      if (doc.data) {
+        props.removeDocument({ documentId: doc.documentId })
+        sendMessage({
+          socket,
+          message: doc.name,
+          chatId: doc.chatId,
+          documentId: doc.data.documentId
+        })
+      }
+    }
+  }, [props.uploadedDocuments])
 
 
   return (
     <Fragment>
       <Sidebar
         socket={socket}
-        user={props.user}
-        chats={props.chats}
-        selectedChat={props.selectedChat}
-        selectChat={props.selectChat}
+        store={props}
         sidebar={sidebar}
         handleSidebar={handleSidebar}
         userSidebarLeft={userSidebarLeft}
@@ -113,20 +140,14 @@ const AppChat = (props) => {
             ></div>
             <Chat
               socket={socket}
-              messages={props.messages}
-              selectedChat={props.selectedChat}
-              selectedUser={props.selectedUser}
-              user={props.user}
-              isEndOfMessages={props.isEndOfMessages}
-              newMessage={props.newMessage}
+              store={props}
               handleUser={handleUser}
               handleSidebar={handleSidebar}
               userSidebarLeft={userSidebarLeft}
               handleUserSidebarRight={handleUserSidebarRight}
             />
             <UserProfileSidebar
-              user={props.user}
-              selectedChat={props.selectedChat}
+              store={props}
               userSidebarRight={userSidebarRight}
               handleUserSidebarRight={handleUserSidebarRight}
             />
@@ -161,7 +182,16 @@ const mapStateToProps = (state) => {
     selectedUser,
     messages,
     isNotification,
-    isEndOfMessages
+    isEndOfMessages,
+    mutedNotificationIds,
+    isNotificationEnabled,
+    documentList,
+    uploadedDocuments,
+    chatDocuments,
+    chatDocumentsLoading,
+    chatLoading,
+    aboutUpdating,
+    messagesLoading
 
   } = state.Chat;
   return {
@@ -176,7 +206,16 @@ const mapStateToProps = (state) => {
     selectedUser,
     messages,
     isNotification,
-    isEndOfMessages
+    isEndOfMessages,
+    mutedNotificationIds,
+    isNotificationEnabled,
+    documentList,
+    uploadedDocuments,
+    chatDocuments,
+    chatDocumentsLoading,
+    chatLoading,
+    aboutUpdating,
+    messagesLoading
   }
 }
 
@@ -188,6 +227,20 @@ export default withRouter(
     getPreviousMessagesSuccess, getPreviousMessagesFailure,
     newMessage,
     updateChatHeadMessage, updateChatParticipants,
-    deleteMessages, playNotificationSound,
+    deleteMessages,
+    playNotificationSound, stopNotificationSound, setNotificationEnabled,
+    setNotificationIds, muteChatNotification, unmuteChatNotification,
+    uploadDocument,
+    addDocumentToQueue,
+    cancelDocumentUpload,
+    updateDocumentProgress,
+    removeDocument,
+    getSelectChatDocuments,
+    getSelectChatDocumentsSuccess,
+    getSelectChatDocumentsFailure,
+    updateAbout,
+    updateAboutSuccess,
+    updateAboutFailure,
+    setPreviousMessagesLoading
   })(AppChat)
 )

@@ -1,20 +1,44 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 // ** Custom Components
 import Avatar from '@components/avatar'
+
+import {
+  UncontrolledTooltip
+} from 'reactstrap'
 
 // ** Third Party Components
 import classnames from 'classnames'
 import PerfectScrollbar from 'react-perfect-scrollbar'
-import { X, Mail, PhoneCall, Clock, Tag, Star, Image, Trash, Slash } from 'react-feather'
-import { getProfileImageUrl } from '../../helpers/url_helper';
+import { X } from 'react-feather'
+import { GET_DOCUMENT_URL, GET_IMAGE_URL } from '../../helpers/url_helper';
+
+
+import { getShortNameForDocument } from '@utils';
+import { getFileIcon } from './utility';
+import UILoader from '../../@core/components/ui-loader';
+
+
 
 const UserProfileSidebar = props => {
   // ** Props
-  const { user, selectedChat, handleUserSidebarRight, userSidebarRight } = props
+  const { handleUserSidebarRight, userSidebarRight, store } = props
+
+  const { user, selectedChat, chatDocuments, chatDocumentsLoading, getSelectChatDocuments } = store
+
+  useEffect(() => {
+    if (userSidebarRight && selectedChat.chatId)
+      getSelectChatDocuments({ chatId: selectedChat.chatId })
+  }, [userSidebarRight])
+
+  const openDocument = (link) => {
+    if (link)
+      window.open(GET_DOCUMENT_URL(link), '_blank')
+  }
 
   return (
     Object.keys(selectedChat).length > 0
     &&
+
     < div className={classnames('user-profile-sidebar', {
       show: userSidebarRight === true
     })}>
@@ -27,7 +51,7 @@ const UserProfileSidebar = props => {
             className='box-shadow-1 avatar-border'
             size='xl'
             // status={user.status}
-            img={getProfileImageUrl(selectedChat.type == 'group'
+            img={GET_IMAGE_URL(selectedChat.type == 'group'
               ? selectedChat.groupPicture || null
               : selectedChat.chatParticipants.find(u => u.user.userId != user.userId).user.profilePicture)
             }
@@ -67,7 +91,7 @@ const UserProfileSidebar = props => {
                     <li className='mb-1' key={c.user.userId}>
                       <div>
                         <Avatar
-                          img={getProfileImageUrl(c.user.profilePicture)}
+                          img={GET_IMAGE_URL(c.user.profilePicture)}
                           imgHeight='14'
                           imgWidth='14'
                         />
@@ -83,19 +107,44 @@ const UserProfileSidebar = props => {
               </ul>
             </>
           }
-
         </div>
         <div className='more-options'>
           <h6 className='section-label mb-1 mt-3'>Shared Media</h6>
-          <ul className='list-unstyled'>
-            <li className='cursor-pointer mb-1'>
-              <Star className='mr-50' size={17} />
-              <span className='align-middle'> Important Contact</span>
-            </li>
-          </ul>
+          <UILoader blocking={!!chatDocumentsLoading}>
+            <ul className='list-unstyled'>
+              {
+                chatDocuments.length == 0 && !chatDocumentsLoading &&
+                <li className='cursor-pointer mb-1'>
+                  No Media found
+                </li>
+              }
+              {
+                chatDocuments.length > 0 &&
+                chatDocuments.map((d, index) =>
+                  <li
+                    key={"doc_list_" + index}
+                    className='cursor-pointer mb-1'
+                    onClick={() => openDocument(d.name)}
+                  >
+                    {
+                      getFileIcon(d.fileType)
+                    }
+                    <span id={`chat-media-${d.documentId}`} className="ml-1">
+                      {
+                        getShortNameForDocument(d.fileName)
+                      }
+                    </span>
+                    <UncontrolledTooltip placement='top' target={`chat-media-${d.documentId}`}>
+                      {d.fileName}
+                    </UncontrolledTooltip>
+                  </li>)
+              }
+            </ul>
+          </UILoader>
         </div>
       </PerfectScrollbar>
     </div >
+
   )
 }
 

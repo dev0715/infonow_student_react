@@ -19,6 +19,12 @@ const isToday = date => {
   )
 }
 
+// ** Ellipse the text ** //
+export const getShortNameForDocument = (name) => {
+  if (name.length < 30) return name
+  return name.substring(0, 8) + "..." + name.substring(name.length - 8);
+}
+
 /**
  ** Format and return date in Humanize format
  ** Intl docs: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/format

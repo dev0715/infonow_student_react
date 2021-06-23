@@ -21,7 +21,7 @@ const UILoader = props => {
           <div
             className='overlay' /*eslint-disable */
             {...(blocking && overlayColor ? { style: { backgroundColor: overlayColor } } : {})}
-            /*eslint-enable */
+          /*eslint-enable */
           ></div>
           <div className='loader'>{loader}</div>
         </Fragment>

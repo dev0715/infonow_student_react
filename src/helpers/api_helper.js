@@ -78,7 +78,7 @@ export async function post(url, data, config = {}) {
 
 export async function postForm(url, data, config = {}) {
 	return await axiosApi
-		.post(url, data, { 'Content-Type': 'multipart/form-data' })
+		.post(url, data, { 'Content-Type': 'multipart/form-data', ...config })
 		.then((response) => response.data);
 }
 
