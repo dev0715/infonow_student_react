@@ -2,7 +2,8 @@ import React from 'react'
 import { File, Image, Music, Archive, FileText, Code, Film } from 'react-feather'
 import Linkify from 'linkifyjs/react';
 import { GET_DOCUMENT_URL } from '../../../helpers/url_helper';
-
+import AudioPlayer from 'react-h5-audio-player';
+import 'react-h5-audio-player/lib/styles.css';
 
 
 let videoFiles = ["webm", "mpg", "mp2", "mpeg", "mpe", "mpv", "ogg",
@@ -84,11 +85,13 @@ export const getFilePreview = (url, ex) => {
     if (audioFiles.find(a => a == ex))
         return (
             <div className="preview">
-                <audio
-                    controls
-                >
-                    <source src={GET_DOCUMENT_URL(url)} type={`audio/${ex}`} />
-                </audio>
+                <AudioPlayer
+                    src={GET_DOCUMENT_URL(url)}
+                    showJumpControls={false}
+                    layout={'horizontal-reverse'}
+                    customVolumeControls={[]}
+                    loop={false}
+                />
             </div>
         )
 

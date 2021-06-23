@@ -42,7 +42,7 @@ import { sendMessage, getPreviousMessages, deleteMessages, userBlockChat, userUn
 
 import { GET_DOCUMENT_URL, GET_IMAGE_URL, DOCUMENT_BASE_URL } from './../../helpers/url_helper';
 import { detectLinkInMessage, getFileIcon, getFilePreview } from './utility';
-
+import Picker, { SKIN_TONE_NEUTRAL } from "emoji-picker-react";
 
 const ChatLog = props => {
   // ** Props & Store
@@ -64,7 +64,7 @@ const ChatLog = props => {
   const [msg, setMsg] = useState('')
   const [messageRefId, setMessageRefId] = useState(null)
   const [showScrollToBottom, setShowScrollToBottom] = useState(false)
-  const [skin, setSkin] = useSkin();
+  const [emojiSelectorShowing, setEmojiSelectorShowing] = useState(false)
 
 
   // ** Scroll to chat bottom
@@ -220,7 +220,6 @@ const ChatLog = props => {
   // ** Opens right sidebar & handles its data
   const handleAvatarClick = obj => {
     handleUserSidebarRight()
-    // handleUser(obj)
   }
 
   // ** On mobile screen open left sidebar on Start Conversation Click
@@ -229,6 +228,11 @@ const ChatLog = props => {
       handleSidebar()
     }
   }
+
+  const onEmojiClick = (e, selectedEmoji) => {
+    setMsg(`${msg}${selectedEmoji.emoji}`);
+  }
+
 
   const clearChat = (e) => {
     e.preventDefault()
@@ -261,6 +265,7 @@ const ChatLog = props => {
 
   // ** Sends New Msg
   const handleSendMsg = e => {
+    if (emojiSelectorShowing) setEmojiSelectorShowing(false);
     e.preventDefault()
     if (msg.length) {
       let message = {
@@ -385,13 +390,28 @@ const ChatLog = props => {
             </header>
           </div>
 
+          {
+            emojiSelectorShowing &&
+            <div className="emoji-picker-custom d-none d-md-block">
+              <Picker
+                groupVisibility={false}
+              onEmojiClick={onEmojiClick}
+              disableAutoFocus={false}
+              native
+              />
+            </div>
+            
+          }
+          
           <ChatWrapper onScroll={e => handleScroll(e)} ref={chatArea} className='user-chats' options={{ wheelPropagation: false }}>
             {
               Object.keys(selectedChat).length > 0 &&
               <div className='chats'>
                 {renderChats()}
               </div>
+            
             }
+
             {
               messages.length > 0 && messages[messages.length - 1].user.userId === user.userId &&
               <div className="text-right p-1 msg-delivery-status-container">
@@ -452,6 +472,7 @@ const ChatLog = props => {
               </Card>
             </div>
           }
+          
           {
             selectedChat.chatParticipants.find(u => u.user.userId == user.userId && !u.blockedAt)
               ?
@@ -467,6 +488,11 @@ const ChatLog = props => {
                       <Label className='attachment-icon mb-0' for='attach-doc'>
                         <i className='cursor-pointer text-secondary la la-paperclip chat-file' />
                         <input type='file' id='attach-doc' multiple={true} hidden onChange={onFileSelectChange} />
+                      </Label>
+                    </InputGroupText>
+                    <InputGroupText className="pl-0 d-none d-md-block" onClick={()=>setEmojiSelectorShowing(emojiSelectorShowing=>!emojiSelectorShowing)}>
+                      <Label className='emoji-icon mb-0'>
+                        <i className='cursor-pointer text-secondary la la-grin-alt chat-file' />
                       </Label>
                     </InputGroupText>
                   </InputGroupAddon>

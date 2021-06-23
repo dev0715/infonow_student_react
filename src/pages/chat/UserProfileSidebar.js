@@ -92,8 +92,6 @@ const UserProfileSidebar = props => {
                       <div>
                         <Avatar
                           img={GET_IMAGE_URL(c.user.profilePicture)}
-                          imgHeight='14'
-                          imgWidth='14'
                         />
                         <span className="pl-1">
                           {
