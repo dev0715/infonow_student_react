@@ -15,6 +15,7 @@ const rootReducer = combineReducers({
   Navbar,
   Chat,
   Meetings
-})
+});
 
-export default rootReducer
+export default rootReducer;
+

@@ -20,12 +20,12 @@ import { User, Mail, CheckSquare, MessageSquare, Settings, CreditCard, HelpCircl
 
 // ** Default Avatar Image
 import defaultAvatar from '@src/assets/images/portrait/small/avatar-default.jpg'
-import { getProfileImageUrl } from '../../../../helpers/url_helper';
+import { GET_IMAGE_URL } from '../../../../helpers/url_helper';
 
 const UserDropdown = (props) => {
 
-  
-  
+
+
   const history = useHistory()
 
   // ** State
@@ -39,13 +39,17 @@ const UserDropdown = (props) => {
   }, [])
 
   //** Vars
-  const userAvatar = (userData && getProfileImageUrl(userData.profilePicture)) || defaultAvatar
+  const userAvatar = (userData && GET_IMAGE_URL(userData.profilePicture)) || defaultAvatar
 
   return (
     <UncontrolledDropdown tag='li' className='dropdown-user nav-item'>
       <DropdownToggle href='/' tag='a' className='nav-link dropdown-user-link' onClick={e => e.preventDefault()}>
         <div className='user-nav d-sm-flex d-none'>
-          <span className='user-name font-weight-bold'>{(userData && userData['name']) || ''}</span>
+          <span className='user-name font-weight-bold'>
+            {
+              (userData && (userData.name || "").split(" ")[0]) || ''
+            }
+          </span>
           <span className='user-status'>{(userData && userData.role && userData.role.roleName) || ''}</span>
         </div>
         <Avatar img={userAvatar} imgHeight='40' imgWidth='40' status='online' />
@@ -78,10 +82,10 @@ const UserDropdown = (props) => {
 
 
 const mapStateToProps = (state) => {
-  const {  } = state.Login;
-  return {  }
+  const { } = state.Login;
+  return {}
 }
 
-export default withRouter(connect(mapStateToProps, {logoutUser})(UserDropdown));
+export default withRouter(connect(mapStateToProps, { logoutUser })(UserDropdown));
 
 

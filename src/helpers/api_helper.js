@@ -60,7 +60,6 @@ axiosApi.interceptors.response.use(
 
 export function resetAPIAuthToken() {
 	axiosApi.defaults.headers.common['Authorization'] = authHeader()['Authorization'];
-	// console.log(authHeader()['Authorization']);
 }
 
 export async function get(url, config = {}) {
@@ -79,7 +78,7 @@ export async function post(url, data, config = {}) {
 
 export async function postForm(url, data, config = {}) {
 	return await axiosApi
-		.post(url, data, { 'Content-Type': 'multipart/form-data' })
+		.post(url, data, { 'Content-Type': 'multipart/form-data', ...config })
 		.then((response) => response.data);
 }
 
