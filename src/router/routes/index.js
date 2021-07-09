@@ -31,6 +31,11 @@ const Routes = [
     component: lazy(() => import('../../pages/chat'))
   },
   {
+    appLayout: true,
+    path: '/documents',
+    component: lazy(() => import('../../pages/documents'))
+  },
+  {
     path: '/blog',
     exact: true,
     component: lazy(() => import('../../pages/blog/list'))

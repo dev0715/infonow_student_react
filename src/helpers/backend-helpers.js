@@ -30,8 +30,20 @@ export const getChatContactsRequest = id => get(url.GET_CHATS_CONTACTS(id))
 export const getChatDocuments = id => get(url.GET_CHAT_DOCUMENTS(id))
 export const updateUser = (id, data) => put(url.UPDATE_USER(id), data)
 
+//Documents
+export const getUserDocuments = () => get(url.GET_USER_DOCUMENTS)
+export const deleteUserDocument = (id) => del(url.DELETE_USER_DOCUMENTS(id))
+
+//Blogs 
+export const getBlogList = () => get(url.GET_BLOG_LIST)
+export const getBlog = (id) => get(url.GET_BLOG(id))
+export const getBlogCategories = () => get(url.GET_BLOG_CATEGORIES)
+export const postCommentOnBlog = (data) => post(url.COMMENT_ON_BLOG, data)
+
+
 // Student Actions
 export const postStudentLogin = data => post(url.POST_STUDENT_LOGIN, data);
 
 export const getStudentAllMeetings = userId => get(url.GET_ALL_MEETINGS(userId));
 export const uploadDocument = (data, options) => postForm(url.UPLOAD_DOCUMENT_URL, data, options);
+

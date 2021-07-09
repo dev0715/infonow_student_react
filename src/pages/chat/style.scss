@@ -6,6 +6,14 @@
 	float: right;
 }
 
+.shared-media-item .download-btn {
+	display: none;
+}
+
+.shared-media-item:hover .download-btn {
+	display: unset;
+}
+
 .msg-time {
 	font-size: 11px;
 	margin-top: 4px !important;
@@ -14,7 +22,7 @@
 
 .chat-app-window .chats .msg-time {
 	text-align: right;
-	margin-right: 50px;
+	margin-right: 20px;
 	margin-top: -6px;
 }
 
@@ -22,8 +30,6 @@
 	font-size: 11px;
 	font-weight: bold;
 }
-
-
 
 .chat-body {
 	margin: 0px !important;
@@ -34,9 +40,27 @@
 	margin-bottom: 0px !important;
 }
 
+.chat-content.file {
+	max-width: 350px !important;
+}
+
+.chat-app-window .chats .chat-avatar {
+	float: right;
+	position: absolute;
+	right: 7px;
+	margin-top: -20px;
+}
+
+.chat-app-window .chats .chat-left .chat-avatar {
+	float: left;
+	position: absolute;
+	right: unset;
+	left: 7px;
+}
+
 .chat-content .preview {
 	margin-top: 4px;
-	width: 300px;
+	width: 100%;
 }
 
 .preview img {
@@ -47,38 +71,34 @@
 	width: inherit;
 }
 
-
-
 .chat .preview {
-	
 	.rhap_container {
-		width: inherit;
+		width: 200px;
 		border-radius: 5px;
 		margin-top: 12px;
 		padding: 0px 12px 0px 0px;
 		background: transparent;
 		box-shadow: none;
 
-		.rhap_main-controls button{
+		.rhap_main-controls button {
 			color: #fff;
 		}
 
-		.rhap_progress-section{
-			.rhap_progress-bar{
+		.rhap_progress-section {
+			.rhap_progress-bar {
 				background: #4f4f4f;
 
-				.rhap_download-progress{
+				.rhap_download-progress {
 					background: #ababab;
 				}
 
-				.rhap_progress-filled{
+				.rhap_progress-filled {
 					background: #fff;
 				}
 
-				.rhap_progress-indicator{
+				.rhap_progress-indicator {
 					background: #fff;
 				}
-
 			}
 		}
 
@@ -99,11 +119,11 @@
 			display: none;
 		}
 
-		.rhap_play-pause-button{
+		.rhap_play-pause-button {
 			width: 32px;
 			height: 32px;
 			margin-bottom: 6px;
-			svg{
+			svg {
 				width: 100%;
 				height: 100%;
 			}
@@ -123,47 +143,80 @@
 			top: -4px;
 		}
 	}
-
 }
 
 .chat-left .preview {
 	.rhap_container {
-		.rhap_main-controls button{
+		.rhap_main-controls button {
 			color: inherit;
 		}
 
-		.rhap_progress-section{
-			.rhap_progress-bar{
+		.rhap_progress-section {
+			.rhap_progress-bar {
 				background: #4f4f4f;
 
-				.rhap_download-progress{
+				.rhap_download-progress {
 					background: #ababab;
 				}
 
-				.rhap_progress-filled{
+				.rhap_progress-filled {
 					background: inherit;
 				}
 
-				.rhap_progress-indicator{
+				.rhap_progress-indicator {
 					background: inherit;
 				}
-
 			}
 		}
 	}
 }
 
+@keyframes anim-float {
+	0% {
+		margin-bottom: 16px;
+		transform: scale(1.1);
+	}
+	50% {
+		margin-bottom: 0px;
+		transform: scale(1);
+	}
+	100% {
+		margin-bottom: 16px;
+		transform: scale(1.1);
+	}
+}
+
+.chat-dropzone .icon {
+	animation: anim-float 1s infinite ease-in-out;
+}
+
+.chat-dropzone {
+	width: 100%;
+	height: 100%;
+	display: none;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	z-index: 10000;
+	color: rgb(255, 255, 255);
+}
+
+.chat-dropzone * {
+	pointer-events: none;
+}
+
+.chat-dropzone.visible {
+	display: flex;
+}
 
 .dark-layout {
-
-	.emoji-picker-custom .emoji-picker-react{
+	.emoji-picker-custom .emoji-picker-react {
 		background: #161d31;
-		box-shadow: 0 5px 10px rgba(0, 0, 0, 0.399);	
-		border: 1px solid #161d31;	
+		box-shadow: 0 5px 10px rgba(0, 0, 0, 0.399);
+		border: 1px solid #161d31;
 	}
-	
 
-	.chat-left .preview{
+	.chat-left .preview {
 		.rhap_time {
 			color: rgb(211, 211, 211);
 		}
@@ -171,14 +224,14 @@
 
 	.chat .preview {
 		.rhap_container {
-			.rhap_main-controls button{
+			.rhap_main-controls button {
 				color: #e5e5e5;
 			}
-	
-			.rhap_progress-section{
-				.rhap_progress-bar{
+
+			.rhap_progress-section {
+				.rhap_progress-bar {
 					background: #e5e5e5;
-					.rhap_download-progress{
+					.rhap_download-progress {
 						background: #ababab;
 					}
 				}
@@ -199,78 +252,78 @@
 
 .chat-app-window .chats .chat-left .msg-time {
 	text-align: left;
-	margin-left: 50px;
+	margin-left: 20px;
 }
 
 .chat-app-form .chat-file {
 	font-size: 20px;
 }
 
-.emoji-picker-custom .emoji-picker-react{
+.emoji-picker-custom .emoji-picker-react {
 	width: 320px;
-    bottom: 70px;
-    right: 8px;
-    z-index: 8;
-    position: absolute;
+	bottom: 70px;
+	right: 8px;
+	z-index: 8;
+	position: absolute;
 
 	.emoji-categories {
-		button{
+		button {
 			background-image: none;
 			opacity: 1;
 			font-size: 1.1rem;
 		}
 
-		.icn-smileys_people::before{
-			content:'😃'
+		.icn-smileys_people::before {
+			content: "😃";
 		}
 
-		.icn-animals_nature::before{
-			content:'🐼'
+		.icn-animals_nature::before {
+			content: "🐼";
 		}
 
-		.icn-food_drink::before{
-			content: '🍔'
+		.icn-food_drink::before {
+			content: "🍔";
 		}
 
-		.icn-travel_places::before{
-			content: '🏠'
+		.icn-travel_places::before {
+			content: "🏠";
 		}
 
-		.icn-activities::before{
-			content: '⚽️'
+		.icn-activities::before {
+			content: "⚽️";
 		}
 
-		.icn-objects::before{
-			content: '⏰'
+		.icn-objects::before {
+			content: "⏰";
 		}
 
-		.icn-symbols::before{ 
-			content:'❤️'
+		.icn-symbols::before {
+			content: "❤️";
 		}
 
-		.icn-flags::before{ 
-			content:'🚩'
+		.icn-flags::before {
+			content: "🚩";
 		}
 	}
 
-	.emoji-search{
+	.emoji-search {
 		margin-bottom: 6px;
-    	padding: 4px 12px;
+		padding: 4px 12px;
 	}
 
-	.skin-tones-list{
+	.skin-tones-list {
 		position: absolute;
-    	top: 7px;
-		label{
+		top: 7px;
+		label {
 			width: 14px;
 		}
 	}
 
-	.content-wrapper:before{
+	.content-wrapper:before {
 		display: none;
 	}
 
-	.emoji-group:before{
+	.emoji-group:before {
 		display: none;
 	}
 }
@@ -279,7 +332,6 @@
 	right: 15px;
 	bottom: 72px;
 	position: absolute;
-	z-index: 5;
 }
 
 .chat-selected-files-container {
@@ -320,9 +372,10 @@
 	.chat-content {
 		max-width: 100% !important;
 	}
-
-	.chat-content .preview {
-		width: 180px !important;
+	.chat .preview {
+		.rhap_container {
+			width: 180px;
+		}
 	}
 }
 
@@ -330,18 +383,10 @@
 	.chat-content {
 		max-width: 100% !important;
 	}
-
-	.chat-content .preview {
-		width: 200px !important;
-	}
 }
 
 @media (min-width: 376px) and (max-width: 600px) {
 	.chat-content {
 		max-width: 95% !important;
-	}
-
-	.chat-content .preview {
-		width: 245px !important;
 	}
 }

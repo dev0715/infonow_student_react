@@ -5,28 +5,7 @@ import { GET_DOCUMENT_URL } from '../../../helpers/url_helper';
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 
-
-let videoFiles = ["webm", "mpg", "mp2", "mpeg", "mpe", "mpv", "ogg",
-    "mp4", , "m4p", 'm4v', 'avi', 'wmv', 'mov', 'qt', "flv", 'swf', 'avchd']
-
-let imageFiles = ["jpg", "jpeg", "jpe", "jif", "jfif", "jfi",
-    "png", "gif", "webp", "tiff", "tif", "bmp", "dib",
-    "jp2", "j2k", "jpf", "jpx", "jpm", "mj2", "svg", "svgz"]
-
-let audioFiles = ["wav", "wave", "aiff", "aif", "aifc", "pcm", "au", "l16", "flac", "m4a", "caf",
-    "wma", "wmv", "mp3", "ogg", "oga", "mogg", "aac", "3gp", "m4r"]
-
-let zipFiles = [
-    "zip", "zipx", "tar", "gz", "z", "cab", "rar", "bz2", "lzh", "7z", "img", "iso", "xz", "vhd", "vmdk"
-]
-
-let documentFiles = [
-    "doc", "docx", "odt", "pdf", "xls", "xlsx", "ods", "ppt", "pptx", "txt", "csv", "tsv", "pages", "numbers",
-]
-
-let codeFiles = ["html", "htm", "php", "aspx", "asp", "jsp",
-    "js", "jsx", "ts", "json", "c", "cgi", "pl", "class", "cpp",
-    "cs", "h", "java", "php", "py", "sh", "swift", "vb"]
+import { videoFiles, audioFiles, imageFiles, codeFiles, zipFiles, documentFiles } from '../../../utility/Utils'
 
 
 

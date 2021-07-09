@@ -3,13 +3,14 @@ import React, { useEffect } from 'react';
 import Avatar from '@components/avatar'
 
 import {
-  UncontrolledTooltip
+  UncontrolledTooltip,
+  Row, Col
 } from 'reactstrap'
 
 // ** Third Party Components
 import classnames from 'classnames'
 import PerfectScrollbar from 'react-perfect-scrollbar'
-import { X } from 'react-feather'
+import { Download, X } from 'react-feather'
 import { GET_DOCUMENT_URL, GET_IMAGE_URL } from '../../helpers/url_helper';
 
 
@@ -17,7 +18,7 @@ import { getShortNameForDocument } from '@utils';
 import { getFileIcon } from './utility';
 import UILoader from '../../@core/components/ui-loader';
 
-
+import { saveAs } from 'file-saver';
 
 const UserProfileSidebar = props => {
   // ** Props
@@ -122,19 +123,30 @@ const UserProfileSidebar = props => {
                   <li
                     key={"doc_list_" + index}
                     className='cursor-pointer mb-1'
-                    onClick={() => openDocument(d.name)}
                   >
-                    {
-                      getFileIcon(d.fileType)
-                    }
-                    <span id={`chat-media-${d.documentId}`} className="ml-1">
-                      {
-                        getShortNameForDocument(d.fileName)
-                      }
-                    </span>
-                    <UncontrolledTooltip placement='top' target={`chat-media-${d.documentId}`}>
-                      {d.fileName}
-                    </UncontrolledTooltip>
+                    <Row className="shared-media-item">
+                      <Col lg='1'>
+                        {
+                          getFileIcon(d.fileType)
+                        }
+                      </Col>
+                      <Col lg='9'>
+                        <span id={`chat-media-${d.documentId}`} className="ml-1">
+                          {
+                            getShortNameForDocument(d.fileName)
+                          }
+                        </span>
+                        <UncontrolledTooltip placement='top' target={`chat-media-${d.documentId}`}>
+                          {d.fileName}
+                        </UncontrolledTooltip>
+                      </Col>
+                      <Col lg='1' className="download-btn">
+                        <Download
+                          size={16}
+                          onClick={() => saveAs(GET_DOCUMENT_URL(d.name), d.fileName)}
+                        />
+                      </Col>
+                    </Row>
                   </li>)
               }
             </ul>

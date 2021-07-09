@@ -5,6 +5,8 @@ import AccountSaga from "./auth/register/saga"
 import AuthSaga from "./../pages/auth/login/store/saga"
 import ChatSaga from "./../pages/chat/store/saga"
 import MeetingsSaga from "./../pages/meetings/store/saga"
+import DocumentSaga from "./../pages/documents/store/saga"
+import BlogSaga from "./../pages/blog/store/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -12,5 +14,7 @@ export default function* rootSaga() {
     AuthSaga(),
     ChatSaga(),
     MeetingsSaga(),
+    DocumentSaga(),
+    BlogSaga()
   ])
 }

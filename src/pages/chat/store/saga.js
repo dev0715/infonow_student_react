@@ -10,7 +10,7 @@ import {
 import { v4 } from 'uuid';
 import axios from 'axios';
 
-import { addDocumentToQueue, apiError, cancelDocumentUpload, getChatContactsSuccess, getSelectChatDocumentsFailure, getSelectChatDocumentsSuccess, updateAboutFailure, updateAboutSuccess, updateDocumentProgress, } from "./actions"
+import { addDocumentToQueue, apiError, cancelDocumentUpload, getChatContactsFailure, getChatContactsSuccess, getSelectChatDocumentsFailure, getSelectChatDocumentsSuccess, updateAboutFailure, updateAboutSuccess, updateDocumentProgress, } from "./actions"
 
 //Include Both Helper File with needed methods
 import { getChatContactsRequest, getChatDocuments, getLoggedInUser, updateUser, uploadDocument } from "../../../helpers/backend-helpers"
@@ -26,7 +26,7 @@ function* getChatContacts({ payload: { userId } }) {
 
 
   } catch (error) {
-    yield put(apiError(error))
+    yield put(getChatContactsFailure(error))
   }
 }
 
@@ -46,7 +46,7 @@ function* uploadDoc({ payload: { chatId, file, callback } }) {
       onUploadProgress: (progressEvent) => {
         const { loaded, total } = progressEvent;
         let percent = Math.floor((loaded * 100) / total)
-        // console.log(`${loaded}kb of ${total}kb | ${percent}%`);
+        console.log(`${loaded}kb of ${total}kb | ${percent}%`);
         callback({ documentId: document.documentId, progress: percent })
       },
       cancelToken: document.request.token
@@ -84,7 +84,6 @@ function* getDoc({ payload: { chatId } }) {
     yield put(getSelectChatDocumentsFailure(error))
   }
 }
-
 
 function* updateAbout({ payload: { about } }) {
   try {

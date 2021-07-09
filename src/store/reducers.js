@@ -7,6 +7,8 @@ import Layout from "./layout/reducer"
 import Navbar from "./navbar/reducer"
 import Chat from "./../pages/chat/store/reducer"
 import Meetings from "./../pages/meetings/store/reducer"
+import Documents from "./../pages/documents/store/reducer"
+import Blogs from "./../pages/blog/store/reducer"
 
 const rootReducer = combineReducers({
   Register,
@@ -14,7 +16,9 @@ const rootReducer = combineReducers({
   Layout,
   Navbar,
   Chat,
-  Meetings
+  Meetings,
+  Documents,
+  Blogs
 });
 
 export default rootReducer;

@@ -12,3 +12,9 @@ export * from "./../pages/chat/store/actions"
 
 // Meetings
 export * from "./../pages/meetings/store/actions"
+
+//Documents 
+export * from './../pages/documents/store/actions'
+
+//Blogs
+export * from './../pages/blog/store/actions'

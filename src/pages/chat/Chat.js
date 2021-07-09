@@ -13,7 +13,7 @@ import { getShortNameForDocument } from '@utils';
 // ** Third Party Components
 import classnames from 'classnames'
 import PerfectScrollbar from 'react-perfect-scrollbar'
-import { MessageSquare, Menu, Search, MoreVertical, Send, Calendar } from 'react-feather'
+import { MessageSquare, Menu, Search, MoreVertical, Send, Calendar, FileText, X, } from 'react-feather'
 import {
   UncontrolledDropdown,
   DropdownToggle,
@@ -35,7 +35,7 @@ import {
 } from 'reactstrap'
 
 import moment from 'moment';
-import { useSkin } from '@hooks/useSkin';
+
 
 import { v4 } from "uuid"
 import { sendMessage, getPreviousMessages, deleteMessages, userBlockChat, userUnBlockChat } from './socket/events';
@@ -43,6 +43,8 @@ import { sendMessage, getPreviousMessages, deleteMessages, userBlockChat, userUn
 import { GET_DOCUMENT_URL, GET_IMAGE_URL, DOCUMENT_BASE_URL } from './../../helpers/url_helper';
 import { detectLinkInMessage, getFileIcon, getFilePreview } from './utility';
 import Picker, { SKIN_TONE_NEUTRAL } from "emoji-picker-react";
+
+import { useDropzone } from 'react-dropzone'
 
 const ChatLog = props => {
   // ** Props & Store
@@ -60,11 +62,15 @@ const ChatLog = props => {
   // ** Refs & Dispatch
   const chatArea = useRef(null)
 
+
+
   // ** State
   const [msg, setMsg] = useState('')
   const [messageRefId, setMessageRefId] = useState(null)
   const [showScrollToBottom, setShowScrollToBottom] = useState(false)
   const [emojiSelectorShowing, setEmojiSelectorShowing] = useState(false)
+  const [dropZoneVisible, setDropZoneVisible] = useState(false)
+  const [query, setQuery] = useState("")
 
 
   // ** Scroll to chat bottom
@@ -114,8 +120,14 @@ const ChatLog = props => {
       window.open(GET_DOCUMENT_URL(link), '_blank')
   }
 
+  const getFilterMessages = () => {
+    if (!query) return messages;
+    return messages.filter(m => m.content.toLowerCase().includes(query.toLowerCase()));
+  }
+
   // ** Renders user chat
   const renderChats = () => {
+    let msgs = getFilterMessages();
     return <>
       {
         messagesLoading &&
@@ -123,7 +135,7 @@ const ChatLog = props => {
           <Spinner size="lg" color={'primary'} />
         </div>
       }
-      {messages.map((item, index) =>
+      {msgs.map((item, index) =>
         <div
           key={index}
           className={classnames('chat', {
@@ -131,7 +143,7 @@ const ChatLog = props => {
           })}
         >
           {
-            !(index > 0 && index < messages.length && moment(messages[index - 1].createdAt).isSame(item.createdAt, 'date')) &&
+            !(index > 0 && index < msgs.length && moment(msgs[index - 1].createdAt).isSame(item.createdAt, 'date')) &&
             <div
               className="text-center m-2"
               style={{ display: "flex", justifyContent: "center", alignItems: 'center' }}
@@ -150,9 +162,9 @@ const ChatLog = props => {
                 className='box-shadow-1 cursor-pointer'
                 img={GET_IMAGE_URL(item.user.profilePicture)}
                 style={{
-                  visibility: index < messages.length && index > 0 ?
-                    (item.user.userId == messages[index - 1].user.userId
-                      && moment(messages[index - 1].createdAt)
+                  visibility: index < msgs.length && index > 0 ?
+                    (item.user.userId == msgs[index - 1].user.userId
+                      && moment(msgs[index - 1].createdAt)
                         .isSame(item.createdAt, 'minute') ? "hidden" : "visible"
                     )
                     : "visible"
@@ -162,13 +174,13 @@ const ChatLog = props => {
             <div
               className="chat-body"
             >
-              <div id={item.messageId} key={"msg_" + item.messageId} className='chat-content'>
+              <div id={item.messageId} key={"msg_" + item.messageId} className={`chat-content ${item.document ? 'file' : ''}`}>
                 <p
                   className="message-user-name"
                   style={{
-                    display: index < messages.length && index > 0 ?
-                      (item.user.userId == messages[index - 1].user.userId
-                        && moment(messages[index - 1].createdAt)
+                    display: index < msgs.length && index > 0 ?
+                      (item.user.userId == msgs[index - 1].user.userId
+                        && moment(msgs[index - 1].createdAt)
                           .isSame(item.createdAt, 'minute') ? "none" : "block"
                       )
                       : "block"
@@ -189,7 +201,7 @@ const ChatLog = props => {
                   }
                   {
                     item.document ?
-                      <span className="font-weight-bold">{item.content}</span>
+                      <span className="font-weight-bold ">{item.content}</span>
                       : detectLinkInMessage(item.content)
                   }
                 </p>
@@ -199,11 +211,11 @@ const ChatLog = props => {
               </div>
             </div>
             {
-              index < messages.length - 1 && index > -1 ?
+              index < msgs.length - 1 && index > -1 ?
                 <>
                   {
-                    item.user.userId == messages[index + 1].user.userId
-                      && moment(messages[index + 1].createdAt).isSame(item.createdAt, 'minute') ?
+                    item.user.userId == msgs[index + 1].user.userId
+                      && moment(msgs[index + 1].createdAt).isSame(item.createdAt, 'minute') ?
                       ""
                       : <div className="msg-time" > {moment(item.createdAt).format("hh:mm a")}</div>
                   }
@@ -285,16 +297,35 @@ const ChatLog = props => {
   // ** ChatWrapper tag based on chat's length
   const ChatWrapper = Object.keys(selectedChat).length > 0 ? PerfectScrollbar : 'div'
 
+  const uploadFile = (file) => {
+    uploadDocument({
+      chatId: selectedChat.chatId,
+      file: file,
+      callback: ({ progress, documentId }) => updateDocumentProgress({ progress, documentId })
+    })
+  }
+
+  const onDrop = files => {
+    // Do something with the files
+    setDropZoneVisible(false)
+
+    let count = 0;
+    files.forEach(file => {
+      console.log("DROPZONE FILE", file)
+      if (count < 5) uploadFile(file)
+      count++
+    });
+
+  }
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
+
   const onFileSelectChange = (e) => {
-    console.log("FILES", e.target.files)
     let count = 0;
     for (let key in e.target.files) {
       if (e.target.files.hasOwnProperty(key)) {
-        uploadDocument({
-          chatId: selectedChat.chatId,
-          file: e.target.files[key],
-          callback: ({ progress, documentId }) => updateDocumentProgress({ progress, documentId })
-        })
+        console.log("SELECTED FILE ", e.target.files[key])
+        uploadFile(e.target.files[key])
         if (count == 5) {
           break;
         }
@@ -304,6 +335,18 @@ const ChatLog = props => {
     document.getElementById('attach-doc').value = null;
   }
 
+
+  const captureDragOver = (e) => {
+    console.log("DRAG", e)
+    setDropZoneVisible(true)
+
+  }
+  const captureDragLeave = (e) => {
+    console.log("RELEASE", e)
+    setDropZoneVisible(false)
+
+  }
+
   return (
     <div className='chat-app-window'>
       <div className={classnames('start-chat-area', { 'd-none': Object.keys(selectedChat).length })}>
@@ -311,8 +354,24 @@ const ChatLog = props => {
           <MessageSquare />
         </div>
       </div>
-      {Object.keys(selectedChat).length ? (
-        <div className={classnames('active-chat', { 'd-none': selectedChat === null })}>
+
+      <div className={
+        `bg-gradient-primary ${dropZoneVisible ? "chat-dropzone visible" : "chat-dropzone"}`
+      }
+
+        {...getRootProps({
+          onClick: event => event.stopPropagation()
+        })}
+        onDragLeave={e => captureDragLeave(e)}
+      >
+        <input {...getInputProps()} />
+        <FileText className="icon" width={50} height={50} />
+      </div>
+      {Object.keys(selectedChat).length &&
+        <div
+          className={classnames('active-chat', { 'd-none': selectedChat === null })}
+          onDragEnter={e => captureDragOver(e)}
+        >
           <div className='chat-navbar'>
             <header className='chat-header'>
               <div className='d-flex align-items-center'>
@@ -340,7 +399,25 @@ const ChatLog = props => {
               <div className='d-flex align-items-center'>
                 {/* <PhoneCall size={18} className='cursor-pointer d-sm-block d-none mr-1' />
                 <Video size={18} className='cursor-pointer d-sm-block d-none mr-1' /> */}
-                <Search size={18} className='cursor-pointer d-sm-block d-none' />
+                <div className="d-none d-md-block">
+                  <InputGroup className='input-group-merge '>
+                    <Input placeholder='Search here'
+                      value={query} onChange={e => setQuery(e.target.value)}
+                    />
+                    <InputGroupAddon addonType='append'>
+                      <InputGroupText>
+                        {
+                          !query &&
+                          <Search size={14} />
+                        }
+                        {
+                          query &&
+                          <X size={14} onClick={() => setQuery("")} />
+                        }
+                      </InputGroupText>
+                    </InputGroupAddon>
+                  </InputGroup>
+                </div>
                 <UncontrolledDropdown>
                   <DropdownToggle className='btn-icon' color='transparent' size='sm'>
                     <MoreVertical size='18' />
@@ -395,21 +472,21 @@ const ChatLog = props => {
             <div className="emoji-picker-custom d-none d-md-block">
               <Picker
                 groupVisibility={false}
-              onEmojiClick={onEmojiClick}
-              disableAutoFocus={false}
-              native
+                onEmojiClick={onEmojiClick}
+                disableAutoFocus={false}
+                native
               />
             </div>
-            
+
           }
-          
+
           <ChatWrapper onScroll={e => handleScroll(e)} ref={chatArea} className='user-chats' options={{ wheelPropagation: false }}>
             {
               Object.keys(selectedChat).length > 0 &&
               <div className='chats'>
                 {renderChats()}
               </div>
-            
+
             }
 
             {
@@ -472,7 +549,7 @@ const ChatLog = props => {
               </Card>
             </div>
           }
-          
+
           {
             selectedChat.chatParticipants.find(u => u.user.userId == user.userId && !u.blockedAt)
               ?
@@ -490,7 +567,7 @@ const ChatLog = props => {
                         <input type='file' id='attach-doc' multiple={true} hidden onChange={onFileSelectChange} />
                       </Label>
                     </InputGroupText>
-                    <InputGroupText className="pl-0 d-none d-md-block" onClick={()=>setEmojiSelectorShowing(emojiSelectorShowing=>!emojiSelectorShowing)}>
+                    <InputGroupText className="pl-0 d-none d-md-block" onClick={() => setEmojiSelectorShowing(emojiSelectorShowing => !emojiSelectorShowing)}>
                       <Label className='emoji-icon mb-0'>
                         <i className='cursor-pointer text-secondary la la-grin-alt chat-file' />
                       </Label>
@@ -512,8 +589,8 @@ const ChatLog = props => {
               </div>
           }
         </div>
-      ) : null
       }
+
     </div >
   )
 }

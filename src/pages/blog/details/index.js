@@ -2,10 +2,29 @@ import React from 'react'
 import { Fragment, useState, useEffect } from 'react'
 import axios from 'axios'
 import classnames from 'classnames'
-import Sidebar from '../BlogSidebar'
 import Avatar from '@components/avatar'
 import cmtImg from '@src/assets/images/portrait/small/avatar-s-6.jpg'
 import { kFormatter } from '@utils'
+
+
+import { withRouter } from 'react-router';
+
+// ** Store & Actions
+import { connect, useSelector } from 'react-redux'
+import {
+  getBlogList,
+  getBlogListSuccess,
+  getBlogListFailure,
+  getBlog,
+  getBlogSuccess,
+  getBlogFailure,
+  commentOnBlog,
+  commentOnBlogSuccess,
+  commentOnBlogFailure,
+
+} from '../store/actions'
+
+
 import {
   Share2,
   MessageSquare,
@@ -18,6 +37,14 @@ import {
   CornerUpLeft
 } from 'react-feather'
 import Breadcrumbs from '@components/breadcrumbs'
+
+
+import UILoader from '../../../@core/components/ui-loader';
+
+import {
+  useParams
+} from "react-router-dom";
+
 import {
   Row,
   Col,
@@ -40,213 +67,199 @@ import {
 } from 'reactstrap'
 
 import '@styles/base/pages/page-blog.scss'
+import '../style.scss'
 
-const BlogDetails = () => {
-  const [data, setData] = useState(null)
+import { GET_BLOG_IMAGE_URL, GET_IMAGE_URL } from '../../../helpers/url_helper';
+import moment from 'moment'
+
+import ReactMarkdown from 'react-markdown'
+import { render } from 'react-dom'
+import { getCategoryBadgeColor } from '../util'
+
+
+const BlogDetails = (props) => {
+
+  let { id } = useParams();
+  const { selectedBlog } = props
+
+  const [comment, setComment] = useState("")
 
   useEffect(() => {
-    axios.get('/blog/list/data/detail').then(res => setData(res.data))
+    props.getBlog(id);
   }, [])
 
-  const badgeColorsArr = {
-    Quote: 'light-info',
-    Fashion: 'light-primary',
-    Gaming: 'light-danger',
-    Video: 'light-warning',
-    Food: 'light-success'
-  }
+  useEffect(() => {
 
-  const renderTags = () => {
-    return data.blog.tags.map((tag, index) => {
-      return (
-        <a key={index} href='/' onClick={e => e.preventDefault()}>
-          <Badge
-            className={classnames({
-              'mr-50': index !== data.blog.tags.length - 1
-            })}
-            color={badgeColorsArr[tag]}
-            pill
-          >
-            {tag}
-          </Badge>
-        </a>
-      )
-    })
-  }
+
+    if (selectedBlog.id) {
+      let uploadPath = "http://192.168.10.102:1337/uploads/";
+      let markdown = String(selectedBlog.Content).replaceAll("/uploads/", uploadPath);
+
+      render(<ReactMarkdown>{markdown}</ReactMarkdown>, document.getElementById("blog-content-container"))
+    }
+
+  }, [selectedBlog])
+
+
 
   const renderComments = () => {
-    return data.comments.map(comment => {
-      return (
-        <Card className='mb-3' key={comment.userFullName}>
-          <CardBody>
-            <Media>
-              <Avatar className='mr-75' img={comment.avatar} width='38' height='38' />
-              <Media body>
-                <h6 className='font-weight-bolder mb-25'>{comment.userFullName}</h6>
-                <CardText>{comment.commentedAt}</CardText>
-                <CardText>{comment.commentText}</CardText>
-                <a href='/' onClick={e => e.preventDefault()}>
-                  <div className='d-inline-flex align-items-center'>
-                    <CornerUpLeft size={18} className='mr-50' />
-                    <span>Reply</span>
-                  </div>
-                </a>
-              </Media>
-            </Media>
-          </CardBody>
-        </Card>
-      )
-    })
+    return selectedBlog.comments.map((comment, index) =>
+      <Media className='mb-1' key={'comment' + index}>
+        <Avatar className='mr-75' img={GET_IMAGE_URL()} width='38' height='38' />
+        <Media body>
+          <h6 className='font-weight-bolder mb-25'>{"Username"}</h6>
+          <CardText>{moment(comment.created_at).format("hh:mm a MMM DD,YYYY ")}</CardText>
+          <CardText>{comment.text}</CardText>
+        </Media>
+      </Media>)
+  }
+
+  const postComment = (e) => {
+    e.preventDefault()
+    console.log("COMMENT ==> ", comment)
+    props.commentOnBlog({ id: props.selectedBlog.id, comment: comment })
+    setComment("");
+
   }
 
   return (
     <Fragment>
-      <Breadcrumbs
-        breadCrumbTitle='Blog Details'
-        breadCrumbParent='Pages'
-        breadCrumbParent2='Blog'
-        breadCrumbActive='Details'
-      />
-      <div className='blog-wrapper'>
-        <div className='content-detached content-left'>
-          <div className='content-body'>
-            {data !== null ? (
-              <Row>
-                <Col sm='12'>
-                  <Card className='mb-3'>
-                    <CardImg src={data.blog.img} className='img-fluid' top />
-                    <CardBody>
-                      <CardTitle tag='h4'>{data.blog.title}</CardTitle>
-                      <Media>
-                        <Avatar className='mr-50' img={data.blog.avatar} imgHeight='24' imgWidth='24' />
-                        <Media body>
-                          <small className='text-muted mr-25'>by</small>
-                          <small>
-                            <a className='text-body' href='/' onClick={e => e.preventDefault()}>
-                              {data.blog.userFullName}
-                            </a>
-                          </small>
-                          <span className='text-muted ml-50 mr-25'>|</span>
-                          <small className='text-muted'>{data.blog.createdTime}</small>
-                        </Media>
-                      </Media>
-                      <div className='my-1 py-25'>{renderTags()}</div>
+      <UILoader blocking={props.selectedBlogLoading}>
+        <div className='blog-wrapper'>
+          <div className='content-detached'>
+            <div className='content-body'>
+              {Object.keys(selectedBlog).length > 0 &&
+                (<Row>
+                  <Col sm='12'>
+                    <Card className='mb-3'>
                       <div
-                        dangerouslySetInnerHTML={{
-                          __html: data.blog.content
-                        }}
-                      ></div>
-                      <Media>
-                        <Avatar img={cmtImg} className='mr-2' imgHeight={60} imgWidth={60} />
-                        <Media body>
-                          <h6 className='font-weight-bolder'>Willie Clark</h6>
-                          <CardText className='mb-0'>
-                            Based in London, Uncode is a blog by Willie Clark. His posts explore modern design trends
-                            through photos and quotes by influential creatives and web designer around the world.
-                          </CardText>
-                        </Media>
-                      </Media>
-                      <hr className='my-2' />
-                      <div className='d-flex align-items-center justify-content-between'>
-                        <div className='d-flex align-items-center'>
-                          <div className='d-flex align-items-center mr-1'>
-                            <a className='mr-50' href='/' onClick={e => e.preventDefault()}>
-                              <MessageSquare size={21} className='text-body align-middle' />
-                            </a>
-                            <a href='/' onClick={e => e.preventDefault()}>
-                              <div className='text-body align-middle'>{kFormatter(data.blog.comments)}</div>
-                            </a>
-                          </div>
-                          <div className='d-flex align-items-cente'>
-                            <a className='mr-50' href='/' onClick={e => e.preventDefault()}>
-                              <Bookmark size={21} className='text-body align-middle' />
-                            </a>
-                            <a href='/' onClick={e => e.preventDefault()}>
-                              <div className='text-body align-middle'>{data.blog.bookmarked}</div>
-                            </a>
-                          </div>
-                        </div>
-                        <UncontrolledDropdown className='dropdown-icon-wrapper'>
-                          <DropdownToggle tag='span'>
-                            <Share2 size={21} className='text-body cursor-pointer' />
-                          </DropdownToggle>
-                          <DropdownMenu right>
-                            <DropdownItem className='py-50 px-1'>
-                              <GitHub size={18} />
-                            </DropdownItem>
-                            <DropdownItem className='py-50 px-1'>
-                              <Gitlab size={18} />
-                            </DropdownItem>
-                            <DropdownItem className='py-50 px-1'>
-                              <Facebook size={18} />
-                            </DropdownItem>
-                            <DropdownItem className='py-50 px-1'>
-                              <Twitter size={18} />
-                            </DropdownItem>
-                            <DropdownItem className='py-50 px-1'>
-                              <Linkedin size={18} />
-                            </DropdownItem>
-                          </DropdownMenu>
-                        </UncontrolledDropdown>
+                        className="blog-detail-banner-container"
+                        style={
+                          {
+                            backgroundImage: `url(${GET_BLOG_IMAGE_URL(selectedBlog.MainImage.formats.large ? selectedBlog.MainImage.formats.large.url : selectedBlog.MainImage.formats.medium.url)})`,
+                          }
+                        }
+                      >
+                        <span className="pl-3 pr-3 pb-1">{selectedBlog.Title}</span>
+                        <div className="blog-banner-gradient"></div>
                       </div>
-                    </CardBody>
-                  </Card>
-                </Col>
-                <Col sm='12'>
-                  <h6 className='section-label'>Comment</h6>
-                  {renderComments()}
-                </Col>
-                <Col sm='12'>
-                  <h6 className='section-label'>Leave a Comment</h6>
-                  <Card>
-                    <CardBody>
-                      <Form className='form' onSubmit={e => e.preventDefault()}>
-                        <Row>
-                          <Col sm='6'>
-                            <FormGroup className='mb-2'>
-                              <Input placeholder='Name' />
-                            </FormGroup>
-                          </Col>
-                          <Col sm='6'>
-                            <FormGroup className='mb-2'>
-                              <Input type='email' placeholder='Email' />
-                            </FormGroup>
-                          </Col>
-                          <Col sm='6'>
-                            <FormGroup className='mb-2'>
-                              <Input type='url' placeholder='Website' />
-                            </FormGroup>
-                          </Col>
-                          <Col sm='12'>
-                            <FormGroup className='mb-2'>
-                              <Input className='mb-2' type='textarea' rows='4' placeholder='Comment' />
-                            </FormGroup>
-                          </Col>
-                          <Col sm='12'>
-                            <CustomInput
-                              className='mb-2'
-                              type='checkbox'
-                              id='exampleCustomCheckbox4'
-                              label='Save my name, email, and website in this browser for the next time I comment.'
-                              htmlFor='exampleCustomCheckbox4'
-                            />
-                          </Col>
-                          <Col sm='12'>
-                            <Button.Ripple color='primary'>Post Comment</Button.Ripple>
-                          </Col>
-                        </Row>
-                      </Form>
-                    </CardBody>
-                  </Card>
-                </Col>
-              </Row>
-            ) : null}
+                      <CardBody className="p-3">
+                        <Media className="mb-2">
+                          <Avatar className='mr-50' img={GET_IMAGE_URL(selectedBlog.user.profilePicture)} imgHeight='24' imgWidth='24' />
+                          <Media body>
+                            <small className='text-muted mr-25'>by</small>
+                            <small>
+                              <a className='text-body' href='/' onClick={e => e.preventDefault()}>
+                                {selectedBlog.user.name}
+                              </a>
+                            </small>
+                            <span className='text-muted ml-50 mr-25'>|</span>
+                            <small className='text-muted'>{moment(selectedBlog.Published_date).format('MMM DD, YYYY')}</small>
+                          </Media>
+                        </Media>
+                        <div className='my-1 py-25'>
+                          {
+                            selectedBlog.category_ids.map((category, index) =>
+                              <span key={selectedBlog.id + "category_selected" + index}>
+                                <Badge
+                                  color={getCategoryBadgeColor(index)}
+                                  pill
+                                >
+                                  {category.Name}
+                                </Badge>
+                                &nbsp;
+                              </span>
+                            )
+                          }
+                        </div>
+                        <div id="blog-content-container">
+                        </div>
+                      </CardBody>
+                    </Card>
+                  </Col>
+                  {
+                    selectedBlog.comments.length > 0 &&
+                    <Col sm='12'>
+                      <h6 className='section-label'>Comment</h6>
+                      <Card>
+                        <CardBody>
+                          {renderComments()}
+                        </CardBody>
+                      </Card>
+                    </Col>
+                  }
+                  <Col sm='12'>
+                    <h6 className='section-label'>Leave a Comment</h6>
+                    <Card>
+                      <CardBody>
+                        <Form className='form' onSubmit={e => postComment(e)}>
+                          <Row>
+                            <Col sm='12'>
+                              <FormGroup className='mb-2'>
+                                <Input
+                                  className='mb-2'
+                                  type='textarea'
+                                  rows='4'
+                                  placeholder='Comment'
+                                  value={comment}
+                                  onChange={e => setComment(e.target.value)}
+                                  required
+                                />
+                              </FormGroup>
+                            </Col>
+                            <Col sm='12'>
+                              <Button.Ripple type="submit" color='primary'>Post Comment</Button.Ripple>
+                            </Col>
+                          </Row>
+                        </Form>
+                      </CardBody>
+                    </Card>
+                  </Col>
+                </Row>
+                )}
+            </div>
           </div>
         </div>
-        <Sidebar />
-      </div>
+      </UILoader>
     </Fragment>
   )
 }
 
-export default BlogDetails
+
+const mapStateToProps = (state) => {
+
+  const {
+    blogList,
+    blogListError,
+    blogListLoading,
+    selectedBlog,
+    selectedBlogError,
+    selectedBlogLoading,
+    commentProcessing
+  } = state.Blogs;
+  return {
+    blogList,
+    blogListError,
+    blogListLoading,
+    selectedBlog,
+    selectedBlogError,
+    selectedBlogLoading,
+    commentProcessing
+  }
+}
+
+export default withRouter(
+  connect(mapStateToProps, {
+    getBlogList,
+    getBlogListSuccess,
+    getBlogListFailure,
+    getBlog,
+    getBlogSuccess,
+    getBlogFailure,
+    commentOnBlog,
+    commentOnBlogSuccess,
+    commentOnBlogFailure,
+
+  })(BlogDetails)
+)
+
