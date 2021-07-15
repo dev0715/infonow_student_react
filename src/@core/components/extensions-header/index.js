@@ -1,4 +1,6 @@
 // ** React Imports
+import React from 'react'
+
 import Proptypes from 'prop-types'
 import { Row, Col } from 'reactstrap'
 

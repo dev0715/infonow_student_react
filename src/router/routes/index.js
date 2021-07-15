@@ -49,6 +49,12 @@ const Routes = [
     }
   },
   {
+    path: '/lessons',
+    exact: true,
+    className: 'lesson-application',
+    component: lazy(() => import('../../pages/lessons'))
+  },
+  {
     path: '/login',
     component: lazy(() => import('../../pages/auth/login')),
     layout: 'BlankLayout',

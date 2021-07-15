@@ -84,7 +84,11 @@ const DataTableWithButtons = (props) => {
         input.select();
         let result = document.execCommand('copy');
         document.body.removeChild(input);
-        // return result;
+    }
+    const bytesToSize = (bytes, decimals = 2) => {
+        let SIZES = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+        for (var i = 0, r = bytes, b = 1024; r > b; i++) r /= b;
+        return `${parseFloat(r.toFixed(decimals))} ${SIZES[i]}`;
     }
 
     const downloadDocument = (e, doc) => {
@@ -99,10 +103,19 @@ const DataTableWithButtons = (props) => {
             minWidth: '250px'
         },
         {
-            name: 'Type',
-            selector: 'fileType',
-            sortable: true,
-            minWidth: '100px'
+            name: 'Size',
+            selector: 'fileSize',
+            sortable: false,
+            minWidth: '100px',
+            cell: row => {
+                return (
+                    <>
+                        {
+                            bytesToSize(row.fileSize)
+                        }
+                    </>
+                )
+            }
         },
         {
             name: 'Last Modified',

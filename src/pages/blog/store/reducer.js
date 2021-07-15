@@ -16,6 +16,9 @@ import {
   GET_BLOG_CATEGORIES,
   GET_BLOG_CATEGORIES_SUCCESS,
   GET_BLOG_CATEGORIES_FAILURE,
+  GET_BLOG_COMMENTS,
+  GET_BLOG_COMMENTS_SUCCESS,
+  GET_BLOG_COMMENTS_FAILURE,
 
 } from './actionTypes'
 
@@ -30,6 +33,9 @@ const initialState = {
   blogCategories: [],
   blogCategoriesLoading: false,
   blogCategoriesError: null,
+  blogComments: [],
+  blogCommentsLoading: false,
+  blogCommentsError: null,
 
 }
 
@@ -59,7 +65,8 @@ const blogReducer = (state = initialState, action) => {
       return { ...state, commentProcessing: true }
 
     case COMMENT_ON_BLOG_SUCCESS:
-      state.selectedBlog.comments.push(action.payload)
+      if (state.selectedBlog.id == action.payload.blogId)
+        state.blogComments.push(action.payload)
       return { ...state, commentProcessing: false }
 
     case COMMENT_ON_BLOG_FAILURE:
@@ -74,6 +81,14 @@ const blogReducer = (state = initialState, action) => {
     case GET_BLOG_CATEGORIES_FAILURE:
       return { ...state, blogCategories: [], blogCategoriesLoading: false, blogCategoriesError: action.payload }
 
+    case GET_BLOG_COMMENTS:
+      return { ...state, blogCommentsLoading: true, blogCommentsError: null, blogComments: [] }
+
+    case GET_BLOG_COMMENTS_SUCCESS:
+      return { ...state, blogComments: action.payload, blogCommentsLoading: false }
+
+    case GET_BLOG_COMMENTS_FAILURE:
+      return { ...state, blogComments: [], blogCommentsLoading: false, blogCommentsError: action.payload }
 
     default:
       return state

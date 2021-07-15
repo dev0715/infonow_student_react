@@ -11,6 +11,9 @@ import {
   GET_BLOG_CATEGORIES,
   GET_BLOG_CATEGORIES_SUCCESS,
   GET_BLOG_CATEGORIES_FAILURE,
+  GET_BLOG_COMMENTS,
+  GET_BLOG_COMMENTS_SUCCESS,
+  GET_BLOG_COMMENTS_FAILURE,
 
 } from './actionTypes'
 
@@ -57,10 +60,10 @@ export const getBlogFailure = (data) => {
   }
 }
 
-export const commentOnBlog = ({ id, comment }) => {
+export const commentOnBlog = ({ blogId, text }) => {
   return {
     type: COMMENT_ON_BLOG,
-    payload: { id, comment }
+    payload: { blogId, text }
   }
 }
 
@@ -97,3 +100,25 @@ export const getBlogCategoriesFailure = (error) => {
     payload: error
   }
 }
+
+export const getBlogComments = (id) => {
+  return {
+    type: GET_BLOG_COMMENTS,
+    payload: id
+  }
+}
+
+export const getBlogCommentsSuccess = (data) => {
+  return {
+    type: GET_BLOG_COMMENTS_SUCCESS,
+    payload: data
+  }
+}
+
+export const getBlogCommentsFailure = (error) => {
+  return {
+    type: GET_BLOG_COMMENTS_FAILURE,
+    payload: error
+  }
+}
+

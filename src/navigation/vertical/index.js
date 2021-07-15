@@ -25,7 +25,7 @@ export default [
     id: 'lessons',
     title: 'Lessons',
     icon: <i className="la la-book" />,
-    navLink: '/apps/todo'
+    navLink: '/lessons'
   },
   {
     id: 'tests',

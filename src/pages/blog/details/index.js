@@ -21,6 +21,7 @@ import {
   commentOnBlog,
   commentOnBlogSuccess,
   commentOnBlogFailure,
+  getBlogComments,
 
 } from '../store/actions'
 
@@ -86,6 +87,7 @@ const BlogDetails = (props) => {
 
   useEffect(() => {
     props.getBlog(id);
+    props.getBlogComments(id);
   }, [])
 
   useEffect(() => {
@@ -93,7 +95,7 @@ const BlogDetails = (props) => {
 
     if (selectedBlog.id) {
       let uploadPath = "http://192.168.10.102:1337/uploads/";
-      let markdown = String(selectedBlog.Content).replaceAll("/uploads/", uploadPath);
+      let markdown = String(selectedBlog.content).replaceAll("/uploads/", uploadPath);
 
       render(<ReactMarkdown>{markdown}</ReactMarkdown>, document.getElementById("blog-content-container"))
     }
@@ -103,13 +105,13 @@ const BlogDetails = (props) => {
 
 
   const renderComments = () => {
-    return selectedBlog.comments.map((comment, index) =>
-      <Media className='mb-1' key={'comment' + index}>
-        <Avatar className='mr-75' img={GET_IMAGE_URL()} width='38' height='38' />
+    return props.blogComments.map((comment, index) =>
+      <Media className='mb-2' key={'comment' + index}>
+        <Avatar className='mr-75' img={GET_IMAGE_URL(comment.infonowUser.profilePicture)} width='38' height='38' />
         <Media body>
-          <h6 className='font-weight-bolder mb-25'>{"Username"}</h6>
-          <CardText>{moment(comment.created_at).format("hh:mm a MMM DD,YYYY ")}</CardText>
-          <CardText>{comment.text}</CardText>
+          <h6 className='font-weight-bolder mb-25'>{comment.infonowUser.name}</h6>
+          <div className="pb-0 mb-0 text-muted">{moment(comment.created_at).format("MMM DD,YYYY hh:mm a")}</div>
+          <div>{comment.text}</div>
         </Media>
       </Media>)
   }
@@ -117,7 +119,7 @@ const BlogDetails = (props) => {
   const postComment = (e) => {
     e.preventDefault()
     console.log("COMMENT ==> ", comment)
-    props.commentOnBlog({ id: props.selectedBlog.id, comment: comment })
+    props.commentOnBlog({ blogId: props.selectedBlog.id, text: comment })
     setComment("");
 
   }
@@ -136,36 +138,36 @@ const BlogDetails = (props) => {
                         className="blog-detail-banner-container"
                         style={
                           {
-                            backgroundImage: `url(${GET_BLOG_IMAGE_URL(selectedBlog.MainImage.formats.large ? selectedBlog.MainImage.formats.large.url : selectedBlog.MainImage.formats.medium.url)})`,
+                            backgroundImage: `url(${GET_BLOG_IMAGE_URL(selectedBlog.mainImage.formats.large ? selectedBlog.mainImage.formats.large.url : selectedBlog.mainImage.formats.medium.url)})`,
                           }
                         }
                       >
-                        <span className="pl-3 pr-3 pb-1">{selectedBlog.Title}</span>
+                        <span className="pl-3 pr-3 pb-1">{selectedBlog.title}</span>
                         <div className="blog-banner-gradient"></div>
                       </div>
                       <CardBody className="p-3">
                         <Media className="mb-2">
-                          <Avatar className='mr-50' img={GET_IMAGE_URL(selectedBlog.user.profilePicture)} imgHeight='24' imgWidth='24' />
+                          <Avatar className='mr-50' img={GET_IMAGE_URL(selectedBlog.infonowUser.profilePicture)} imgHeight='24' imgWidth='24' />
                           <Media body>
                             <small className='text-muted mr-25'>by</small>
                             <small>
                               <a className='text-body' href='/' onClick={e => e.preventDefault()}>
-                                {selectedBlog.user.name}
+                                {selectedBlog.infonowUser.name}
                               </a>
                             </small>
                             <span className='text-muted ml-50 mr-25'>|</span>
-                            <small className='text-muted'>{moment(selectedBlog.Published_date).format('MMM DD, YYYY')}</small>
+                            <small className='text-muted'>{moment(selectedBlog.publishedDate).format('MMM DD, YYYY')}</small>
                           </Media>
                         </Media>
                         <div className='my-1 py-25'>
                           {
-                            selectedBlog.category_ids.map((category, index) =>
+                            selectedBlog.categoryIds.map((category, index) =>
                               <span key={selectedBlog.id + "category_selected" + index}>
                                 <Badge
                                   color={getCategoryBadgeColor(index)}
                                   pill
                                 >
-                                  {category.Name}
+                                  {category.name}
                                 </Badge>
                                 &nbsp;
                               </span>
@@ -178,7 +180,7 @@ const BlogDetails = (props) => {
                     </Card>
                   </Col>
                   {
-                    selectedBlog.comments.length > 0 &&
+                    props.blogComments.length > 0 &&
                     <Col sm='12'>
                       <h6 className='section-label'>Comment</h6>
                       <Card>
@@ -235,7 +237,10 @@ const mapStateToProps = (state) => {
     selectedBlog,
     selectedBlogError,
     selectedBlogLoading,
-    commentProcessing
+    commentProcessing,
+    blogComments,
+    blogCommentsLoading,
+    blogCommentsError,
   } = state.Blogs;
   return {
     blogList,
@@ -244,7 +249,10 @@ const mapStateToProps = (state) => {
     selectedBlog,
     selectedBlogError,
     selectedBlogLoading,
-    commentProcessing
+    commentProcessing,
+    blogComments,
+    blogCommentsLoading,
+    blogCommentsError,
   }
 }
 
@@ -259,6 +267,7 @@ export default withRouter(
     commentOnBlog,
     commentOnBlogSuccess,
     commentOnBlogFailure,
+    getBlogComments
 
   })(BlogDetails)
 )

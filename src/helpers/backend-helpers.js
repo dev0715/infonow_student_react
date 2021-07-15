@@ -33,17 +33,26 @@ export const updateUser = (id, data) => put(url.UPDATE_USER(id), data)
 //Documents
 export const getUserDocuments = () => get(url.GET_USER_DOCUMENTS)
 export const deleteUserDocument = (id) => del(url.DELETE_USER_DOCUMENTS(id))
+export const uploadDocument = (data, options) => postForm(url.UPLOAD_DOCUMENT_URL, data, options);
 
 //Blogs 
 export const getBlogList = () => get(url.GET_BLOG_LIST)
 export const getBlog = (id) => get(url.GET_BLOG(id))
 export const getBlogCategories = () => get(url.GET_BLOG_CATEGORIES)
+export const getBlogComments = (id) => get(url.GET_BLOG_COMMENTS(id))
 export const postCommentOnBlog = (data) => post(url.COMMENT_ON_BLOG, data)
 
 
 // Student Actions
 export const postStudentLogin = data => post(url.POST_STUDENT_LOGIN, data);
 
+//Meeting
+export const newMeeting = data => post(url.NEW_MEETING, data);
 export const getStudentAllMeetings = userId => get(url.GET_ALL_MEETINGS(userId));
-export const uploadDocument = (data, options) => postForm(url.UPLOAD_DOCUMENT_URL, data, options);
+export const getMeetingDates = userId => get(url.GET_MEETING_DATES(userId));
+export const updateMeeting = (id, action, data) => put(url.UPDATE_MEETING(id, action), data);
 
+//Lessons
+
+export const getTopics = () => get(url.GET_TOPICS);
+export const getTopicLessons = id => get(url.GET_TOPIC_LESSONS(id));

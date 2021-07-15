@@ -68,8 +68,7 @@ const BlogList = (props) => {
   }, [])
 
   useEffect(() => {
-    let cat = props.blogCategories.find(c => "#" + c.Name == query);
-    console.log("CAT Query ", cat)
+    let cat = props.blogCategories.find(c => "#" + c.name == query);
     cat ? setActiveCategory(cat.id) : setActiveCategory(null)
   }, [query])
 
@@ -77,7 +76,7 @@ const BlogList = (props) => {
     if (!query) return props.blogList;
     let blogs = [];
     props.blogList.forEach(b => {
-      if (b.Title.toLowerCase().includes(query.toLowerCase()) || b.category_ids.find(c => ('#' + c.Name) == query))
+      if (b.title.toLowerCase().includes(query.toLowerCase()) || b.categoryIds.find(c => ('#' + c.name) == query))
         blogs.push(b);
     });
     return blogs
@@ -91,41 +90,45 @@ const BlogList = (props) => {
         <Col key={'blog-item' + item.id} md='6' lg='4'>
           <Card>
             <Link to={`/blog/${item.id}`}>
-              <CardImg className='img-fluid' src={GET_BLOG_IMAGE_URL(item.MainImage.formats.medium.url)} alt={item.title} top />
+              {
+                item.mainImage
+                &&
+                <CardImg className='img-fluid' src={GET_BLOG_IMAGE_URL(item.mainImage.formats.medium.url)} alt={item.title} top />
+              }
             </Link>
             <CardBody>
               <CardTitle tag='h4'>
                 <Link className='blog-title-truncate text-body-heading' to={`/blog/${item.id}`}>
-                  {item.Title}
+                  {item.title}
                 </Link>
               </CardTitle>
               <div className='my-1 py-25'>
                 {
-                  item.category_ids.map((category, index) =>
+                  item.categoryIds.map((category, index) =>
                     <span key={item.id + "category" + index}>
                       <Badge
                         color={getCategoryBadgeColor(index)}
                         pill
                       >
-                        {category.Name}
+                        {category.name}
                       </Badge>
                       &nbsp;
                     </span>
                   )
                 }
               </div>
-              <CardText className='blog-content-truncate'>{item.Description}</CardText>
+              <CardText className='blog-content-truncate'>{item.description}</CardText>
               <Media>
-                <Avatar className='mr-50' img={GET_IMAGE_URL(item.user.profilePicture)} imgHeight='24' imgWidth='24' />
+                <Avatar className='mr-50' img={GET_IMAGE_URL(item.infonowUser.profilePicture)} imgHeight='24' imgWidth='24' />
                 <Media body>
                   <small className='text-muted mr-25'>by</small>
                   <small>
                     <a className='text-body' href='/' onClick={e => e.preventDefault()}>
-                      {item.user.name}
+                      {item.infonowUser.name}
                     </a>
                   </small>
                   <span className='text-muted ml-50 mr-25'>|</span>
-                  <small className='text-muted'>{moment(item.Published_date).format('MMM DD, YYYY')}</small>
+                  <small className='text-muted'>{moment(item.publishedDate).format('MMM DD, YYYY')}</small>
                 </Media>
               </Media>
             </CardBody>
@@ -140,7 +143,7 @@ const BlogList = (props) => {
 
 
   const selectCategory = (id) => {
-    setQuery("#" + props.blogCategories.find(c => c.id == id).Name)
+    setQuery("#" + props.blogCategories.find(c => c.id == id).name)
     setActiveCategory(id)
 
   }
@@ -182,7 +185,7 @@ const BlogList = (props) => {
                     color={cat.id == activeCategory ? 'primary' : 'success'}
                     pill
                     onClick={() => selectCategory(cat.id)}>
-                    {cat.Name}
+                    {cat.name}
                   </Badge>
                 )
               }

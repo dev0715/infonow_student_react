@@ -6,7 +6,8 @@ import {
   GET_BLOG_LIST,
   GET_BLOG,
   COMMENT_ON_BLOG,
-  GET_BLOG_CATEGORIES
+  GET_BLOG_CATEGORIES,
+  GET_BLOG_COMMENTS
 } from "./actionTypes"
 
 
@@ -18,11 +19,13 @@ import {
   commentOnBlogSuccess,
   commentOnBlogFailure,
   getBlogCategoriesFailure,
-  getBlogCategoriesSuccess
+  getBlogCategoriesSuccess,
+  getBlogCommentsSuccess,
+  getBlogCommentsFailure
 } from "./actions"
 
 //Include Both Helper File with needed methods
-import { getBlog, getBlogCategories, getBlogList, postCommentOnBlog } from "../../../helpers/backend-helpers"
+import { getBlog, getBlogCategories, getBlogList, postCommentOnBlog, getBlogComments } from "../../../helpers/backend-helpers"
 
 function* getBlogs() {
   try {
@@ -87,11 +90,28 @@ function* getCategories() {
 }
 
 
+function* getComments({ payload }) {
+  try {
+
+    const response = yield call(getBlogComments, payload);
+    if (response) {
+      yield put(getBlogCommentsSuccess(response))
+      return;
+    }
+    throw "Unknown response received from Server";
+
+  } catch (error) {
+    yield put(getBlogCommentsFailure(error))
+  }
+}
+
+
 function* blogSaga() {
   yield takeEvery(GET_BLOG_LIST, getBlogs)
   yield takeEvery(GET_BLOG, getSingleBlog)
   yield takeEvery(COMMENT_ON_BLOG, addComment)
   yield takeEvery(GET_BLOG_CATEGORIES, getCategories)
+  yield takeEvery(GET_BLOG_COMMENTS, getComments)
 }
 
 export default blogSaga

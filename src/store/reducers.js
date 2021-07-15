@@ -9,6 +9,7 @@ import Chat from "./../pages/chat/store/reducer"
 import Meetings from "./../pages/meetings/store/reducer"
 import Documents from "./../pages/documents/store/reducer"
 import Blogs from "./../pages/blog/store/reducer"
+import Lessons from "./../pages/lessons/store/reducer"
 
 const rootReducer = combineReducers({
   Register,
@@ -18,7 +19,8 @@ const rootReducer = combineReducers({
   Chat,
   Meetings,
   Documents,
-  Blogs
+  Blogs,
+  Lessons
 });
 
 export default rootReducer;

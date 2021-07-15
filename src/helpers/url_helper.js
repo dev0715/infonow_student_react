@@ -25,10 +25,14 @@ export const POST_STUDENT_LOGIN = `${BASE_URL}/authenticate/student`
 
 
 // Meetings
+export const NEW_MEETING = `${MEETING_API_URL}/meetings`
+export const UPDATE_MEETING = (id, action) => `${MEETING_API_URL}/meetings/${id}/${action}`
 export const GET_ALL_MEETINGS = id => `${MEETING_API_URL}/users/${id}/meetings`
-export const UPLOAD_DOCUMENT_URL = `${BASE_URL}/documents`;
+export const GET_MEETING_DATES = id => `${MEETING_API_URL}/meetings/check-dates/${id}`
 
 //Document
+
+export const UPLOAD_DOCUMENT_URL = `${BASE_URL}/documents`;
 export const GET_USER_DOCUMENTS = `${BASE_URL}/documents`
 export const DELETE_USER_DOCUMENTS = id => `${BASE_URL}/documents/${id}`
 
@@ -36,4 +40,10 @@ export const DELETE_USER_DOCUMENTS = id => `${BASE_URL}/documents/${id}`
 export const GET_BLOG_LIST = `${BASE_URL}/api/v1/strapi/blogs`
 export const GET_BLOG = id => `${BASE_URL}/api/v1/strapi/blogs/${id}`
 export const GET_BLOG_CATEGORIES = `${BASE_URL}/api/v1/strapi/categories`
-export const COMMENT_ON_BLOG = `${BASE_URL}/api/v1/strapi/blogs/`
+export const GET_BLOG_COMMENTS = id => `${BASE_URL}/api/v1/strapi/blogs/${id}/comments`
+export const COMMENT_ON_BLOG = `${BASE_URL}/api/v1/strapi/comments`
+
+//Lessons
+
+export const GET_TOPICS = `${BASE_URL}/api/v1/strapi/topics`
+export const GET_TOPIC_LESSONS = id => `${BASE_URL}/api/v1/strapi/topics/${id}/lessons`
