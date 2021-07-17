@@ -34,7 +34,7 @@ function* getDocs() {
     throw "Unknown response received from Server";
 
   } catch (error) {
-    yield put(getUserDocumentsFailure(error))
+    yield put(getUserDocumentsFailure(error.message ? error.message : error))
   }
 }
 

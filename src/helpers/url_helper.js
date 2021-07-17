@@ -47,3 +47,8 @@ export const COMMENT_ON_BLOG = `${BASE_URL}/api/v1/strapi/comments`
 
 export const GET_TOPICS = `${BASE_URL}/api/v1/strapi/topics`
 export const GET_TOPIC_LESSONS = id => `${BASE_URL}/api/v1/strapi/topics/${id}/lessons`
+
+//Tests 
+
+export const GET_TESTS = `${BASE_URL}/api/v1/tests`
+export const POST_TEST_ATTEMPT = `${BASE_URL}/api/v1/attempts`

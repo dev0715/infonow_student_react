@@ -28,7 +28,7 @@ function* getTopicsHttp() {
     throw "Unknown response received from Server";
 
   } catch (error) {
-    yield put(getUserTopicsFailure(error))
+    yield put(getUserTopicsFailure(error.message ? error.message : error))
   }
 }
 
@@ -43,7 +43,7 @@ function* getUserTopicLessonsHttp({ payload }) {
     throw "Unknown response received from Server";
 
   } catch (error) {
-    yield put(getUserTopicLessonsFailure(error))
+    yield put(getUserTopicLessonsFailure(error.message ? error.message : error))
   }
 }
 

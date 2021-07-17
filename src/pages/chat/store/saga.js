@@ -26,7 +26,7 @@ function* getChatContacts({ payload: { userId } }) {
 
 
   } catch (error) {
-    yield put(getChatContactsFailure(error))
+    yield put(getChatContactsFailure(error.message ? error.message : error))
   }
 }
 
@@ -81,7 +81,7 @@ function* getDoc({ payload: { chatId } }) {
 
 
   } catch (error) {
-    yield put(getSelectChatDocumentsFailure(error))
+    yield put(getSelectChatDocumentsFailure(error.message ? error.message : error))
   }
 }
 
@@ -97,7 +97,7 @@ function* updateAbout({ payload: { about } }) {
     throw "Unknown response received from Server";
 
   } catch (error) {
-    yield put(updateAboutFailure(error))
+    yield put(updateAboutFailure(error.message ? error.message : error))
   }
 }
 

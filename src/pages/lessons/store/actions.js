@@ -7,6 +7,9 @@ import {
   GET_USER_TOPIC_LESSONS_FAILURE,
   SELECT_TOPIC,
   SELECT_LESSON,
+  COMPLETED_LESSON,
+  COMPLETED_LESSON_SUCCESS,
+  COMPLETED_LESSON_FAILURE,
 
 } from './actionTypes'
 
@@ -64,5 +67,26 @@ export const selectLesson = (data) => {
   return {
     type: SELECT_LESSON,
     payload: data
+  }
+}
+
+export const completedLesson = ({ id, data }) => {
+  return {
+    type: COMPLETED_LESSON,
+    payload: { id, data }
+  }
+}
+
+export const completedLessonSuccess = ({ id, data }) => {
+  return {
+    type: COMPLETED_LESSON_SUCCESS,
+    payload: { id, data }
+  }
+}
+
+export const completedLessonFailure = ({ id, error }) => {
+  return {
+    type: COMPLETED_LESSON_FAILURE,
+    payload: { id, error }
   }
 }

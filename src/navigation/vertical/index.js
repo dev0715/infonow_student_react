@@ -31,7 +31,7 @@ export default [
     id: 'tests',
     title: 'Tests',
     icon: <i className="la la-laptop-code" />,
-    navLink: '/apps/calendar'
+    navLink: '/tests'
   },
   {
     id: 'documents',

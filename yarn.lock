@@ -10864,6 +10864,11 @@ react-app-rewired@^2.1.6:
   dependencies:
     semver "^5.6.0"
 
+react-bootstrap-sweetalert@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/react-bootstrap-sweetalert/-/react-bootstrap-sweetalert-5.2.0.tgz#a58bc9fa863eaf518a78b6d0716a25f32182d570"
+  integrity sha512-7eaKHgDcYfoRUxiYPZuHjygeLa3yDycGWB+Xwr+PWo6h0HDixwfgGXqWBmDYXI4ZQ453BcY77iBWBZhRbnH/6g==
+
 react-chartjs-2@2.9.0:
   version "2.9.0"
   resolved "https://registry.npmjs.org/react-chartjs-2/-/react-chartjs-2-2.9.0.tgz"

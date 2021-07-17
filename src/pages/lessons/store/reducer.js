@@ -12,6 +12,9 @@ import {
   GET_USER_TOPIC_LESSONS_FAILURE,
   SELECT_TOPIC,
   SELECT_LESSON,
+  COMPLETED_LESSON,
+  COMPLETED_LESSON_SUCCESS,
+  COMPLETED_LESSON_FAILURE,
 
 } from './actionTypes'
 
@@ -26,6 +29,58 @@ const initialState = {
   selectedLesson: {},
 }
 
+
+const completedLesson = (state, payload) => {
+  if (state.selectedLesson == payload.id)
+    state.selectedLesson.loading = true
+  for (const index in state.lessons) {
+    if (state.lessons[index].id == payload.id) {
+      state.lessons[index].loading = true
+      break
+    }
+  }
+
+  return {
+    ...state,
+    lessons: [...state.lessons]
+  }
+
+}
+
+const completedLessonSuccess = (state, payload) => {
+  if (state.selectedLesson == payload.id)
+    state.selectedLesson.loading = false
+  for (const index in state.lessons) {
+    if (state.lessons[index].id == payload.id) {
+      state.lessons[index].loading = false
+      state.lessons[index].error = null
+      break
+    }
+  }
+
+  return {
+    ...state,
+    lessons: [...state.lessons]
+  }
+
+}
+
+const completedLessonFailure = (state, payload) => {
+  if (state.selectedLesson == payload.id)
+    state.selectedLesson.loading = false
+  for (const index in state.lessons) {
+    if (state.lessons[index].id == payload.id) {
+      state.lessons[index].loading = false
+      state.lessons[index].error = payload.error
+      break
+    }
+  }
+
+  return {
+    ...state,
+    lessons: [...state.lessons]
+  }
+}
 
 
 const lessonReducer = (state = initialState, action) => {
@@ -54,6 +109,15 @@ const lessonReducer = (state = initialState, action) => {
 
     case SELECT_LESSON:
       return { ...state, selectedLesson: action.payload }
+
+    case COMPLETED_LESSON:
+      return completedLesson(state, action.payload)
+
+    case COMPLETED_LESSON_SUCCESS:
+      return completedLessonSuccess(state, action.payload)
+
+    case COMPLETED_LESSON_FAILURE:
+      return completedLessonFailure(state, action.payload)
 
     default:
       return state

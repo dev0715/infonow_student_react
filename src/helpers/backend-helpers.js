@@ -56,3 +56,8 @@ export const updateMeeting = (id, action, data) => put(url.UPDATE_MEETING(id, ac
 
 export const getTopics = () => get(url.GET_TOPICS);
 export const getTopicLessons = id => get(url.GET_TOPIC_LESSONS(id));
+
+//Test
+
+export const getTests = () => get(url.GET_TESTS);
+export const newTestAttempt = (data) => post(url.POST_TEST_ATTEMPT, data);
