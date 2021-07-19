@@ -20,7 +20,7 @@ import {
 } from "./actions"
 
 //Include Both Helper File with needed methods
-import { getTests, newTestAttempt } from "../../../helpers/backend-helpers"
+import { getTests, newTestAttempt, submitTestAttempt } from "../../../helpers/backend-helpers"
 
 function* getTestsHttp() {
   try {
@@ -52,9 +52,26 @@ function* newTestAttemptHttp({ payload: { id, data } }) {
 }
 
 
+function* submitTestAttemptHttp({ payload }) {
+  try {
+    const response = yield call(submitTestAttempt, payload);
+    if (response) {
+      yield put(submitTestAttemptSuccess(response))
+      return;
+    }
+    throw "Unknown response received from Server";
+
+  } catch (error) {
+
+    yield put(submitTestAttemptFailure(error.message ? error.message : error))
+  }
+}
+
+
 function* testSaga() {
   yield takeEvery(GET_TESTS, getTestsHttp)
   yield takeEvery(NEW_TEST_ATTEMPT, newTestAttemptHttp)
+  yield takeEvery(SUBMIT_TEST_ATTEMPT, submitTestAttemptHttp)
 }
 
 export default testSaga

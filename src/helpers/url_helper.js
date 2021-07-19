@@ -52,3 +52,4 @@ export const GET_TOPIC_LESSONS = id => `${BASE_URL}/api/v1/strapi/topics/${id}/l
 
 export const GET_TESTS = `${BASE_URL}/api/v1/tests`
 export const POST_TEST_ATTEMPT = `${BASE_URL}/api/v1/attempts`
+export const SUBMIT_TEST_ATTEMPT = `${BASE_URL}/api/v1/attempts`

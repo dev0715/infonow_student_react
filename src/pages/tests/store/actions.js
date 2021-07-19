@@ -11,7 +11,8 @@ import {
   UPDATE_OBJECTIVE_QUESTION,
   UPDATE_SUBJECTIVE_QUESTION,
   NEXT_QUESTION,
-  PREVIOUS_QUESTION
+  PREVIOUS_QUESTION,
+  SELECT_QUESTION
 
 } from './actionTypes'
 
@@ -58,24 +59,24 @@ export const newTestAttemptFailure = ({ id, error }) => {
 }
 
 
-export const submitTestAttempt = ({ id, data }) => {
+export const submitTestAttempt = (data) => {
   return {
     type: SUBMIT_TEST_ATTEMPT,
-    payload: { id, data }
+    payload: data
   }
 }
 
-export const submitTestAttemptSuccess = ({ id, data }) => {
+export const submitTestAttemptSuccess = (data) => {
   return {
     type: SUBMIT_TEST_ATTEMPT_SUCCESS,
-    payload: { id, data }
+    payload: data
   }
 }
 
-export const submitTestAttemptFailure = ({ id, error }) => {
+export const submitTestAttemptFailure = (error) => {
   return {
     type: SUBMIT_TEST_ATTEMPT_FAILURE,
-    payload: { id, error }
+    payload: error
   }
 }
 
@@ -102,6 +103,13 @@ export const nextQuestion = () => {
 export const previousQuestion = () => {
   return {
     type: PREVIOUS_QUESTION,
+  }
+}
+
+export const selectQuestion = ({ index }) => {
+  return {
+    type: SELECT_QUESTION,
+    payload: { index }
   }
 }
 

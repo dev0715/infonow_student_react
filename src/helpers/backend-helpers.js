@@ -61,3 +61,4 @@ export const getTopicLessons = id => get(url.GET_TOPIC_LESSONS(id));
 
 export const getTests = () => get(url.GET_TESTS);
 export const newTestAttempt = (data) => post(url.POST_TEST_ATTEMPT, data);
+export const submitTestAttempt = (data) => put(url.SUBMIT_TEST_ATTEMPT, data);

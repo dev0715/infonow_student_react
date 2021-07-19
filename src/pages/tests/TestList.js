@@ -7,19 +7,40 @@ import { DateTime } from '../../components/date-time';
 import CardReload from '../../@core/components/card-reload';
 
 import { Button } from 'reactstrap'
-import { Plus } from 'react-feather'
 
 
-import SweetAlert from 'react-bootstrap-sweetalert';
+import '@styles/base/plugins/extensions/ext-component-sweet-alerts.scss'
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
-
-import './style.scss'
+const MySwal = withReactContent(Swal)
 
 
 const TestList = (props) => {
 
-
-    const [test, setTest] = useState({})
+    const handleTestAttempt = (id) => {
+        return MySwal.fire({
+            icon: 'question',
+            title: "Confirm",
+            text: 'The test cannot be paused once you start and test can be attempted only once. \nAre you sure you want to start the test?',
+            customClass: {
+                confirmButton: 'btn btn-primary',
+                cancelButton: 'btn btn-outline-danger ml-1'
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            buttonsStyling: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                props.newTestAttempt({
+                    id: id,
+                    data: {
+                        studentTestId: id
+                    }
+                })
+            }
+        })
+    }
 
     return (
         <div key={'app-test-list'}>
@@ -49,11 +70,11 @@ const TestList = (props) => {
                                     </td>
                                     <td><DateTime dateTime={t.startTime} type="dateTime" /></td>
                                     <td><DateTime dateTime={t.endTime} type="dateTime" /></td>
-                                    <td>{t.test.timeLimit / 60 / 60} mins</td>
+                                    <td>{t.test.timeLimit / 60} mins</td>
                                     <td>
                                         <Button.Ripple
                                             color='primary' outline
-                                            onClick={() => setTest(t)}
+                                            onClick={() => handleTestAttempt(t.studentTestId)}
                                         >
                                             ATTEMPT
                                         </Button.Ripple>
@@ -64,34 +85,6 @@ const TestList = (props) => {
                     </Table>
                 </CardBody>
             </CardReload>
-            {
-                Object.keys(test).length > 0
-                &&
-                <SweetAlert
-                    show={true}
-                    title={test.test.title}
-                    showCancel={true}
-                    onCancel={() => {
-                        setTest({})
-                    }}
-                    onConfirm={() => {
-                        //redirect
-                        props.newTestAttempt({
-                            id: test.studentTestId,
-                            data: {
-                                studentTestId: test.studentTestId
-                            }
-                        })
-                        setTest({})
-                    }}
-                >
-                    <h6>
-                        Once Started,Test can not be cancelled.
-                        <br />
-                        Are you sure to start this test?
-                    </h6>
-                </SweetAlert>
-            }
         </div>
     );
 };

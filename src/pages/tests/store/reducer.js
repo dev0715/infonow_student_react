@@ -17,9 +17,11 @@ import {
   UPDATE_SUBJECTIVE_QUESTION,
   NEXT_QUESTION,
   PREVIOUS_QUESTION,
+  SELECT_QUESTION
 
 } from './actionTypes'
 
+import moment from 'moment'
 
 let TEST_KEY = "ATTEMPT_TEST_OBJECT"
 
@@ -34,7 +36,10 @@ const initialState = {
   selectedTest: testObj.test || {},
   currentIndex: testObj.currentIndex || 0,
   attemptId: testObj.attemptId || null,
+  testStartTime: testObj.testStartTime || null,
   attemptTestError: null,
+  submitTestLoading: false,
+  submitTestError: null
 }
 
 
@@ -43,12 +48,9 @@ const newTestAttemptSuccess = (state, payload) => {
   let test = state.tests.find(t => t.studentTestId == payload.id)
   if (test) {
     state.selectedTest = test
-    state.currentIndex = 0
-    localStorage.setItem(TEST_KEY, JSON.stringify({
-      test: test,
-      currentIndex: 0,
-      attemptId: state.attemptId
-    }))
+    state.currentIndex = 0;
+    state.testStartTime = payload.data.createdAt
+    updateTestStorage(state)
   }
 
   return { ...state, attemptTestLoading: false, attemptTestError: null }
@@ -58,7 +60,8 @@ const updateTestStorage = (state) => {
   localStorage.setItem(TEST_KEY, JSON.stringify({
     test: state.selectedTest,
     currentIndex: state.currentIndex,
-    attemptId: state.attemptId
+    attemptId: state.attemptId,
+    testStartTime: state.testStartTime
   }))
 }
 
@@ -112,6 +115,41 @@ const previousQuestion = (state) => {
   }
 }
 
+const selectQuestion = (state, payload) => {
+  if (state.selectedTest.test) {
+    if (payload.index > -1 && payload.index < state.selectedTest.test.questions.length && state.selectedTest.test.questions.length > 0) {
+      state.currentIndex = payload.index;
+      updateTestStorage(state)
+    }
+  }
+  return {
+    ...state
+  }
+}
+
+const submitTestAttemptSuccess = (state, payload) => {
+  state = {
+    ...state,
+    submitTestError: null,
+    submitTestLoading: false,
+    attemptId: null,
+    selectedTest: {},
+    currentIndex: 0,
+    testStartTime: null
+  }
+  updateTestStorage(state)
+
+  return state
+}
+
+const submitTestAttemptFailure = (state, payload) => {
+  return {
+    ...state,
+    submitTestError: payload,
+    submitTestLoading: false
+  }
+}
+
 
 const testReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -145,6 +183,21 @@ const testReducer = (state = initialState, action) => {
 
     case PREVIOUS_QUESTION:
       return previousQuestion(state)
+
+    case SELECT_QUESTION:
+      return selectQuestion(state, action.payload)
+
+    case SUBMIT_TEST_ATTEMPT:
+      return {
+        ...state,
+        submitTestLoading: true
+      }
+
+    case SUBMIT_TEST_ATTEMPT_SUCCESS:
+      return submitTestAttemptSuccess(state, action.payload)
+
+    case SUBMIT_TEST_ATTEMPT_FAILURE:
+      return submitTestAttemptFailure(state, action.payload)
 
     default:
       return state
