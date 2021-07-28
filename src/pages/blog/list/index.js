@@ -55,7 +55,8 @@ import '../style.scss'
 import moment from 'moment';
 import { GET_BLOG_IMAGE_URL, GET_IMAGE_URL } from '../../../helpers/url_helper';
 import { getCategoryBadgeColor } from '../util';
-
+import NotFound from '../../../components/not-found';
+import NoNetwork from '../../../components/no-network';
 
 const BlogList = (props) => {
 
@@ -137,7 +138,7 @@ const BlogList = (props) => {
       )
     }) :
       <Col>
-        <h2 className="text-center pt-5 pb-5">No Blog Found</h2>
+        <NotFound />
       </Col>
   }
 
@@ -196,16 +197,21 @@ const BlogList = (props) => {
         <div className='content-detached mt-3'>
           <div className='content-body'>
             <UILoader blocking={props.blogListLoading}>
-              {props.blogList.length > 0 &&
-                (
-                  <div className='blog-list-wrapper'>
-                    <Row>{renderRenderList()}</Row>
-                    {
-                      props.blogList.length == 0 && !props.blogListLoading && !props.blogListError
-                      &&
-                      <h2>No Blog</h2>
-                    }
-                    {/* <Row>
+              <div className='blog-list-wrapper'>
+                {props.blogList.length > 0 &&
+                  <Row>{renderRenderList()}</Row>
+                }
+                {
+                  props.blogList.length == 0 && !props.blogListLoading && !props.blogListError
+                  &&
+                  <NotFound />
+                }
+                {
+                  props.blogList.length == 0 && !props.blogListLoading && props.blogListError
+                  &&
+                  <NoNetwork />
+                }
+                {/* <Row>
                       <Col sm='12'>
                         <Pagination className='d-flex justify-content-center mt-2'>
                           <PaginationItem className='prev-item'>
@@ -253,8 +259,7 @@ const BlogList = (props) => {
                       </Col>
                     </Row>
                      */}
-                  </div>
-                )}
+              </div>
             </UILoader>
 
           </div>

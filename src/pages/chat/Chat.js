@@ -59,6 +59,9 @@ const ChatLog = props => {
     isEndOfMessages, documentList, cancelDocumentUpload, updateDocumentProgress,
     user, messages, messagesLoading, setPreviousMessagesLoading } = store
 
+
+
+
   // ** Refs & Dispatch
   const chatArea = useRef(null)
 
@@ -72,6 +75,10 @@ const ChatLog = props => {
   const [dropZoneVisible, setDropZoneVisible] = useState(false)
   const [query, setQuery] = useState("")
 
+
+  useEffect(() => {
+    setQuery("")
+  }, [selectedChat])
 
   // ** Scroll to chat bottom
   const scrollToBottom = (animated = false) => {

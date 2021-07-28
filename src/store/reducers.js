@@ -22,7 +22,7 @@ const rootReducer = combineReducers({
   Documents,
   Blogs,
   Lessons,
-  Tests
+  Tests,
 });
 
 export default rootReducer;

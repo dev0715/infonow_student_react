@@ -10,7 +10,9 @@ import {
   COMPLETED_LESSON,
   COMPLETED_LESSON_SUCCESS,
   COMPLETED_LESSON_FAILURE,
-
+  GET_LESSON,
+  GET_LESSON_SUCCESS,
+  GET_LESSON_FAILURE,
 } from './actionTypes'
 
 
@@ -63,30 +65,51 @@ export const selectTopic = (data) => {
   }
 }
 
-export const selectLesson = (data) => {
+export const selectLesson = (id) => {
   return {
     type: SELECT_LESSON,
+    payload: id
+  }
+}
+
+export const completedLesson = (data) => {
+  return {
+    type: COMPLETED_LESSON,
     payload: data
   }
 }
 
-export const completedLesson = ({ id, data }) => {
-  return {
-    type: COMPLETED_LESSON,
-    payload: { id, data }
-  }
-}
-
-export const completedLessonSuccess = ({ id, data }) => {
+export const completedLessonSuccess = (data) => {
   return {
     type: COMPLETED_LESSON_SUCCESS,
-    payload: { id, data }
+    payload: data
   }
 }
 
-export const completedLessonFailure = ({ id, error }) => {
+export const completedLessonFailure = (error) => {
   return {
     type: COMPLETED_LESSON_FAILURE,
-    payload: { id, error }
+    payload: error
+  }
+}
+
+export const getLesson = (id) => {
+  return {
+    type: GET_LESSON,
+    payload: id
+  }
+}
+
+export const getLessonSuccess = (data) => {
+  return {
+    type: GET_LESSON_SUCCESS,
+    payload: data
+  }
+}
+
+export const getLessonFailure = (error) => {
+  return {
+    type: GET_LESSON_FAILURE,
+    payload: error
   }
 }

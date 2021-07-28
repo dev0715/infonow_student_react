@@ -15,6 +15,9 @@ import {
   COMPLETED_LESSON,
   COMPLETED_LESSON_SUCCESS,
   COMPLETED_LESSON_FAILURE,
+  GET_LESSON,
+  GET_LESSON_SUCCESS,
+  GET_LESSON_FAILURE,
 
 } from './actionTypes'
 
@@ -26,60 +29,26 @@ const initialState = {
   lessonsLoading: false,
   lessonsError: null,
   selectedTopic: {},
-  selectedLesson: {},
+  selectedLesson: null,
+  lessonCompleteLoading: false,
+  lessonCompleteError: null
 }
 
-
-const completedLesson = (state, payload) => {
-  if (state.selectedLesson == payload.id)
-    state.selectedLesson.loading = true
-  for (const index in state.lessons) {
-    if (state.lessons[index].id == payload.id) {
-      state.lessons[index].loading = true
-      break
-    }
-  }
-
-  return {
-    ...state,
-    lessons: [...state.lessons]
-  }
-
-}
 
 const completedLessonSuccess = (state, payload) => {
-  if (state.selectedLesson == payload.id)
-    state.selectedLesson.loading = false
   for (const index in state.lessons) {
-    if (state.lessons[index].id == payload.id) {
-      state.lessons[index].loading = false
-      state.lessons[index].error = null
+    if (state.lessons[index].id == state.selectedLesson && state.lessons[index].isFull) {
+      state.lessons[index].studentLessons[0] = payload
       break
     }
   }
 
   return {
     ...state,
-    lessons: [...state.lessons]
+    lessonCompleteError: payload,
+    lessonCompleteLoading: false
   }
 
-}
-
-const completedLessonFailure = (state, payload) => {
-  if (state.selectedLesson == payload.id)
-    state.selectedLesson.loading = false
-  for (const index in state.lessons) {
-    if (state.lessons[index].id == payload.id) {
-      state.lessons[index].loading = false
-      state.lessons[index].error = payload.error
-      break
-    }
-  }
-
-  return {
-    ...state,
-    lessons: [...state.lessons]
-  }
 }
 
 
@@ -105,19 +74,43 @@ const lessonReducer = (state = initialState, action) => {
       return { ...state, lessons: [], lessonsLoading: false, lessonsError: action.payload }
 
     case SELECT_TOPIC:
-      return { ...state, selectedTopic: action.payload, lessons: [], selectedLesson: {} }
+      return { ...state, selectedTopic: action.payload, lessons: [], selectedLesson: null }
 
     case SELECT_LESSON:
       return { ...state, selectedLesson: action.payload }
 
     case COMPLETED_LESSON:
-      return completedLesson(state, action.payload)
+      return {
+        ...state,
+        lessonCompleteError: null,
+        lessonCompleteLoading: true
+      }
 
     case COMPLETED_LESSON_SUCCESS:
       return completedLessonSuccess(state, action.payload)
 
     case COMPLETED_LESSON_FAILURE:
-      return completedLessonFailure(state, action.payload)
+      return {
+        ...state,
+        lessonCompleteError: action.payload,
+        lessonCompleteLoading: false
+      }
+
+    case GET_LESSON:
+      return { ...state, oneLessonLoading: true }
+
+    case GET_LESSON_SUCCESS:
+      for (const index in state.lessons) {
+        if (state.lessons[index].id == action.payload.id) {
+          state.lessons[index] = action.payload
+          state.lessons[index].isFull = true
+          break
+        }
+      }
+      return { ...state, oneLessonLoading: false, oneLessonError: null }
+
+    case GET_LESSON_FAILURE:
+      return { ...state, oneLessonLoading: false, oneLessonError: action.payload }
 
     default:
       return state

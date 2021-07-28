@@ -11,12 +11,12 @@ import {
     NavbarToggler,
     Button,
     CardTitle,
-    CardHeader
+    CardHeader, Badge
 } from 'reactstrap'
 
 // ** Store & Actions
 import { connect, useSelector } from 'react-redux'
-import { getUserTopics, getUserTopicLessons, selectTopic, selectLesson } from './store/actions'
+import { getUserTopics, getUserTopicLessons, selectTopic, selectLesson, getLesson, completedLesson } from './store/actions'
 
 import { withRouter } from 'react-router';
 import { GET_BLOG_IMAGE_URL } from '../../helpers/url_helper'
@@ -27,12 +27,15 @@ import { render } from 'react-dom'
 import { PlayCircle, Menu, X, ChevronUp, ChevronDown } from 'react-feather'
 
 import UILoader from '../../@core/components/ui-loader';
-import H5AudioPlayer from 'react-h5-audio-player';
+
+import NotFound from '../../components/not-found';
+import NoNetwork from '../../components/no-network';
 
 
 const AppLessons = (props) => {
 
     const lessonRef = React.createRef()
+    const lessonContentRef = React.createRef()
     const [isFullScreen, setFullScreen] = useState(false)
     const [isOpen, setIsOpen] = useState(false);
 
@@ -55,6 +58,12 @@ const AppLessons = (props) => {
 
     useEffect(() => {
         setIsOpenLessons(false)
+        if (props.selectedLesson) {
+            let lesson = props.lessons.find(l => l.id == props.selectedLesson)
+            if (lesson && !lesson.isFull) {
+                props.getLesson(props.selectedLesson)
+            }
+        }
     }, [props.selectedLesson])
 
     useEffect(() => {
@@ -63,56 +72,185 @@ const AppLessons = (props) => {
     }, [props.topics])
 
     useEffect(() => {
-        if (props.lessons.length > 0 && Object.keys(props.selectedLesson).length == 0)
-            props.selectLesson(props.lessons[0])
+        if (props.lessons.length > 0 && !props.selectedLesson)
+            props.selectLesson(props.lessons[0].id)
     }, [props.lessons])
 
-
-    useEffect(() => {
-
-        if (Object.keys(props.selectedLesson).length > 0) {
+    const renderLesson = (content) => {
+        if (content) {
             let uploadPath = "http://192.168.10.102:1337/uploads/";
-            let markdown = String(props.selectedLesson.content).replaceAll("/uploads/", uploadPath);
-            render(<ReactMarkdown>{markdown}</ReactMarkdown>, document.getElementById("active-lesson-content"))
-            setTimeout(() => {
-                window.scrollTo(0, 0)
-                try {
-                    if (lessonRef)
-                        lessonRef.current.scrollTo(0, 0)
-                } catch (error) {
-                    console.warn("Lesson Scroll", error)
+            let markdown = String(content).replaceAll("/uploads/", uploadPath);
+            let fun = () => {
+                if (lessonContentRef.current) {
+                    render(<ReactMarkdown>{markdown}</ReactMarkdown>, lessonContentRef.current)
+                    window.scrollTo(0, 0)
+                    lessonRef.current.scrollTo(0, 0)
+                } else {
+                    setTimeout(fun, 100)
                 }
-            }, 100)
+            }
+            setTimeout(fun, 200)
         }
-    }, [props.selectedLesson])
+    }
+
+
+    const activeLesson = () => {
+        let lesson = props.lessons.find(l => l.id == props.selectedLesson)
+        if (!lesson) return
+        return <UILoader blocking={props.lessonsLoading || props.oneLessonLoading}>
+            {
+                Object.keys(props.selectedTopic).length > 0 &&
+                <Card
+                    className={`active-lesson-container ${isOpenLessons ? 'hide' : ''} ${isFullScreen ? 'active' : ''}`}
+                >
+                    <CardHeader>
+                        <CardTitle>{lesson.title}</CardTitle>
+                    </CardHeader>
+                    <CardBody>
+                        {
+                            props.lessons.length == 0 &&
+                            Object.keys(props.selectedTopic).length > 0 &&
+                            !props.lessonsLoading &&
+                            !props.lessonsError &&
+                            <NotFound />
+                        }
+                        {
+                            !props.lessonsLoading &&
+                            props.lessonsError &&
+                            <div className="pt-5 pb-5 mt-5 mb-5  text-center">
+                                {props.lessonsError}
+                            </div>
+                        }
+                        <div
+                            ref={lessonRef}
+                            className="active-lesson"
+                        >
+                            {
+                                lesson.videoUrl &&
+                                <div className="lesson-video mt-2 mb-2">
+                                    <iframe
+                                        src={lesson.videoUrl}
+                                        title="YouTube video player"
+                                        frameBorder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                    >
+                                    </iframe>
+                                </div>
+                            }
+                            <div
+                                ref={lessonContentRef}
+                                className={"active-lesson-content"}
+                            >
+                                {
+                                    props.oneLessonError &&
+                                    <NotFound />
+                                }
+                            </div>
+                            {
+                                renderLesson(lesson.content)
+                            }
+                        </div>
+                        {
+                            lesson.isFull &&
+                            <div className="text-right p-1">
+                                {
+                                    !lesson.studentLessons[0].isCompleted > 0 ?
+                                        <Button.Ripple
+                                            color='primary'
+                                            onClick={() => {
+                                                props.completedLesson({
+                                                    studentLessonId: lesson.studentLessons[0].id,
+                                                    isCompleted: true
+                                                })
+                                            }}
+                                        >
+                                            Mark As Completed
+                                        </Button.Ripple> :
+                                        <Badge color='success'>
+                                            Completed
+                                        </Badge>
+                                }
+                            </div>
+                        }
+                    </CardBody>
+                </Card>
+            }
+            {
+                props.lessons.length > 1 &&
+                <div className={`other-lessons ${isOpenLessons ? 'active' : 'm-2'}`}>
+                    <div className="heading" onClick={toggleLessons}>
+                        <h4 class="p-2 m-0">
+                            Other Lessons
+                        </h4>
+                        <div className="mr-1">
+                            {
+                                isOpenLessons
+                                    ? <ChevronDown size={20} />
+                                    : <ChevronUp size={20} />
+                            }
+                        </div>
+                    </div>
+                    {
+                        isOpenLessons &&
+                        <Collapse isOpen={isOpenLessons}>
+                            <div className="lesson-list">
+                                {
+                                    props.lessons.map((l, index) => {
+                                        if (l.id == props.selectedLesson.id) return
+                                        return <div key={'lesson-key-' + index} className="lesson-item">
+                                            <div>
+                                                <div className="heading">
+                                                    {l.title}
+                                                </div>
+                                                <div className="description">
+                                                    {l.description}
+                                                </div>
+                                            </div>
+                                            <div className="icon">
+                                                <PlayCircle
+                                                    color="#9135ab" width={25} height={25}
+                                                    onClick={() => {
+                                                        props.selectLesson(l.id)
+                                                        setIsOpenLessons(false)
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+                                    })
+                                }
+                            </div>
+                        </Collapse>
+                    }
+                </div>
+            }
+        </UILoader>
+
+    }
 
     return (
         <Fragment >
-            <UILoader blocking={props.topicsLoading} className="ui-loader">
+            <UILoader blocking={props.topicsLoading || props.lessonCompleteLoading} className="ui-loader">
                 <Card>
                     <CardBody className="p-0">
                         {
                             props.topics.length == 0 &&
                             !props.topicsLoading &&
                             !props.topicsError &&
-                            <h5 className="text-center p-3">
-                                No Topics
-                            </h5>
+                            <NotFound />
                         }
                         {
                             !props.topicsLoading &&
                             props.topicsError &&
-                            <h5 className="text-center p-3">
-                                {props.topicsError}
-                            </h5>
+                            <NoNetwork />
                         }
                         {
                             !props.topicsError &&
                             props.topics.length > 0 &&
-                            <Row>
+                            <Row className="full-height">
                                 {
                                     !isFullScreen &&
-                                    <Col lg={3}
+                                    <Col lg={3} sm='12' md='12'
                                         className={`pr-lg-0 ${isFullScreen ? "" : "topic-list-shadow"}`}
                                     >
                                         {
@@ -197,7 +335,7 @@ const AppLessons = (props) => {
                                         }
                                     </Col>
                                 }
-                                <Col lg={isFullScreen ? 12 : 9}>
+                                <Col lg={isFullScreen ? 12 : 9} md='12' sm='12'>
                                     <div className="d-lg-flex">
                                         {
                                             isFullScreen &&
@@ -209,110 +347,9 @@ const AppLessons = (props) => {
                                                 />
                                             </div>
                                         }
-                                        <UILoader blocking={props.lessonsLoading}>
-                                            {
-                                                Object.keys(props.selectedTopic).length > 0 &&
-                                                <Card
-                                                    className={`active-lesson-container ${isOpenLessons ? 'hide' : ''} ${isFullScreen ? 'active' : ''}`}
-                                                >
-                                                    <CardHeader>
-                                                        <CardTitle>{props.selectedLesson.title}</CardTitle>
-                                                    </CardHeader>
-                                                    <CardBody>
-                                                        {
-                                                            props.lessons.length == 0 &&
-                                                            Object.keys(props.selectedTopic).length > 0 &&
-                                                            !props.lessonsLoading &&
-                                                            !props.lessonsError &&
-                                                            <div className="pt-5 pb-5 mt-5 mb-5  text-center">
-                                                                No Lessons
-                                                            </div>
-                                                        }
-                                                        {
-                                                            !props.lessonsLoading &&
-                                                            props.lessonsError &&
-                                                            <div className="pt-5 pb-5 mt-5 mb-5  text-center">
-                                                                {props.lessonsError}
-                                                            </div>
-                                                        }
-                                                        {
-                                                            Object.keys(props.selectedLesson).length > 0 &&
-                                                            <div
-                                                                ref={lessonRef}
-                                                                className="active-lesson"
-                                                            >
-                                                                {
-                                                                    props.selectedLesson.videoUrl &&
-                                                                    <div className="lesson-video mt-2">
-                                                                        <iframe
-                                                                            src={props.selectedLesson.videoUrl}
-                                                                            title="YouTube video player"
-                                                                            frameBorder="0"
-                                                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                                            allowFullScreen
-                                                                        >
-                                                                        </iframe>
-                                                                    </div>
-                                                                }
-                                                                <div
-                                                                    id="active-lesson-content"
-                                                                    className={props.selectedLesson.videoUrl ? "mt-4" : ""}
-                                                                >
-                                                                </div>
-                                                            </div>
-                                                        }
-                                                    </CardBody>
-                                                </Card>
-                                            }
-                                            {
-                                                props.lessons.length > 1 &&
-                                                <div className={`other-lessons ${isOpenLessons ? 'active' : 'm-2'}`}>
-                                                    <div className="heading" onClick={toggleLessons}>
-                                                        <h3>
-                                                            Other Lessons
-                                                        </h3>
-                                                        <div>
-                                                            {
-                                                                isOpenLessons
-                                                                    ? <ChevronDown size={20} />
-                                                                    : <ChevronUp size={20} />
-                                                            }
-                                                        </div>
-                                                    </div>
-                                                    {
-                                                        isOpenLessons &&
-                                                        <Collapse isOpen={isOpenLessons}>
-                                                            <div className="lesson-list">
-                                                                {
-                                                                    props.lessons.map((l, index) => {
-                                                                        if (l.id == props.selectedLesson.id) return
-                                                                        return <div key={'lesson-key-' + index} className="lesson-item">
-                                                                            <div>
-                                                                                <div className="heading">
-                                                                                    {l.title}
-                                                                                </div>
-                                                                                <div className="description">
-                                                                                    {l.description}
-                                                                                </div>
-                                                                            </div>
-                                                                            <div className="icon">
-                                                                                <PlayCircle
-                                                                                    color="#9135ab" width={25} height={25}
-                                                                                    onClick={() => {
-                                                                                        props.selectLesson(l)
-                                                                                        setIsOpenLessons(false)
-                                                                                    }}
-                                                                                />
-                                                                            </div>
-                                                                        </div>
-                                                                    })
-                                                                }
-                                                            </div>
-                                                        </Collapse>
-                                                    }
-                                                </div>
-                                            }
-                                        </UILoader>
+                                        {
+                                            activeLesson()
+                                        }
                                     </div>
                                 </Col>
                             </Row>
@@ -336,6 +373,10 @@ const mapStateToProps = (state) => {
         lessonsError,
         selectedTopic,
         selectedLesson,
+        oneLessonLoading,
+        oneLessonError,
+        lessonCompleteLoading,
+        lessonCompleteError
 
     } = state.Lessons;
     return {
@@ -347,6 +388,10 @@ const mapStateToProps = (state) => {
         lessonsError,
         selectedTopic,
         selectedLesson,
+        oneLessonLoading,
+        oneLessonError,
+        lessonCompleteLoading,
+        lessonCompleteError
     }
 }
 
@@ -354,6 +399,7 @@ export default withRouter(
     connect(mapStateToProps, {
         getUserTopics,
         getUserTopicLessons,
-        selectTopic, selectLesson
+        selectTopic, selectLesson,
+        getLesson, completedLesson
     })(AppLessons)
 )

@@ -43,6 +43,8 @@ export const getBlogComments = (id) => get(url.GET_BLOG_COMMENTS(id))
 export const postCommentOnBlog = (data) => post(url.COMMENT_ON_BLOG, data)
 
 
+export const uploadBlogImage = (data, options) => postForm(url.UPLOAD_BLOG_IMAGE_URL, data, options);
+
 // Student Actions
 export const postStudentLogin = data => post(url.POST_STUDENT_LOGIN, data);
 
@@ -54,8 +56,11 @@ export const updateMeeting = (id, action, data) => put(url.UPDATE_MEETING(id, ac
 
 //Lessons
 
-export const getTopics = () => get(url.GET_TOPICS);
+export const getTopics = () => get(url.TOPICS);
+export const getLesson = (id) => get(url.LESSON(id));
+export const completedLesson = (data) => put(url.STUDENT_LESSONS, data);
 export const getTopicLessons = id => get(url.GET_TOPIC_LESSONS(id));
+export const uploadNewTopic = data => postForm(url.NEW_TOPICS, data);
 
 //Test
 

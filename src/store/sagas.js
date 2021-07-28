@@ -19,6 +19,6 @@ export default function* rootSaga() {
     DocumentSaga(),
     BlogSaga(),
     LessonsSaga(),
-    TestsSaga()
+    TestsSaga(),
   ])
 }

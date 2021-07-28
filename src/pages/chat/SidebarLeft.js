@@ -24,6 +24,8 @@ import UILoader from '../../@core/components/ui-loader';
 import { GET_IMAGE_URL } from './../../helpers/url_helper';
 
 import { getPreviousMessages } from './socket/events'
+
+
 const SidebarLeft = props => {
   // ** Props & Store
   const { sidebar, handleUserSidebarLeft, handleSidebar, userSidebarLeft, socket, store } = props

@@ -7,6 +7,10 @@
 		width: 100%;
 	}
 
+	.full-height {
+		height: 100% !important;
+	}
+
 	.ui-loader {
 		height: 100%;
 		width: 100%;
@@ -95,7 +99,7 @@
 			}
 		}
 
-		#active-lesson-content {
+		.active-lesson-content {
 			p {
 				font-size: 1.2rem;
 				line-height: 1.7;
@@ -116,7 +120,6 @@
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
-			padding: 14px 18px;
 		}
 	}
 

@@ -54,6 +54,7 @@ const Routes = [
     className: 'lesson-application',
     component: lazy(() => import('../../pages/lessons'))
   },
+
   {
     path: '/tests',
     exact: true,

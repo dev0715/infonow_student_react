@@ -43,9 +43,14 @@ export const GET_BLOG_CATEGORIES = `${BASE_URL}/api/v1/strapi/categories`
 export const GET_BLOG_COMMENTS = id => `${BASE_URL}/api/v1/strapi/blogs/${id}/comments`
 export const COMMENT_ON_BLOG = `${BASE_URL}/api/v1/strapi/comments`
 
+export const UPLOAD_BLOG_IMAGE_URL = `${BASE_URL}/api/v1/strapi/uploads`;
+
 //Lessons
 
-export const GET_TOPICS = `${BASE_URL}/api/v1/strapi/topics`
+export const NEW_TOPICS = `${BASE_URL}/api/v1/strapi/topics`
+export const TOPICS = `${BASE_URL}/api/v1/strapi/topics`
+export const LESSON = id => `${BASE_URL}/api/v1/strapi/lessons/${id}`
+export const STUDENT_LESSONS = `${BASE_URL}/api/v1/strapi/student-lessons/`
 export const GET_TOPIC_LESSONS = id => `${BASE_URL}/api/v1/strapi/topics/${id}/lessons`
 
 //Tests 
