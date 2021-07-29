@@ -19,7 +19,7 @@ function MeetingHome(props) {
 
 	const getUpcomingMeetings = () => {
 		const meetingList = props.meetings || [];
-		return meetingList.filter(x => moment(x.scheduledAt).isSameOrAfter(moment()));
+		return meetingList.filter(x => moment(x.scheduledAt).isSameOrAfter(moment()) && x.status === 'accepted');
 	}
 
 	const upcomingMeetings = getUpcomingMeetings();
