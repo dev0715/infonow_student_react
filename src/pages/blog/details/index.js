@@ -1,16 +1,12 @@
 import React from 'react'
 import { Fragment, useState, useEffect } from 'react'
-import axios from 'axios'
-import classnames from 'classnames'
 import Avatar from '@components/avatar'
-import cmtImg from '@src/assets/images/portrait/small/avatar-s-6.jpg'
-import { kFormatter } from '@utils'
 
 
 import { withRouter } from 'react-router';
 
 // ** Store & Actions
-import { connect, useSelector } from 'react-redux'
+import { connect } from 'react-redux'
 import {
   getBlogList,
   getBlogListSuccess,
@@ -26,18 +22,6 @@ import {
 } from '../store/actions'
 
 
-import {
-  Share2,
-  MessageSquare,
-  Bookmark,
-  GitHub,
-  Gitlab,
-  Facebook,
-  Twitter,
-  Linkedin,
-  CornerUpLeft
-} from 'react-feather'
-import Breadcrumbs from '@components/breadcrumbs'
 
 
 import UILoader from '../../../@core/components/ui-loader';
@@ -51,32 +35,23 @@ import {
   Col,
   Card,
   CardBody,
-  CardTitle,
-  CardText,
-  CardImg,
   Badge,
   Media,
-  UncontrolledDropdown,
-  DropdownMenu,
-  DropdownItem,
-  DropdownToggle,
   Form,
   Input,
   Button,
-  FormGroup,
-  CustomInput
+  FormGroup
 } from 'reactstrap'
 
 import '@styles/base/pages/page-blog.scss'
 import '../style.scss'
 
-import { GET_BLOG_IMAGE_URL, GET_IMAGE_URL } from '../../../helpers/url_helper';
+import { GET_BLOG_IMAGE_URL, GET_IMAGE_URL, BLOG_API_URL } from '../../../helpers/url_helper';
 import moment from 'moment'
 
 import ReactMarkdown from 'react-markdown'
 import { render } from 'react-dom'
 import { getCategoryBadgeColor } from '../util'
-
 
 const BlogDetails = (props) => {
 
@@ -94,7 +69,7 @@ const BlogDetails = (props) => {
 
 
     if (selectedBlog.id) {
-      let uploadPath = "http://192.168.10.102:1337/uploads/";
+      let uploadPath = `${BLOG_API_URL}/uploads/`;
       let markdown = String(selectedBlog.content).replaceAll("/uploads/", uploadPath);
 
       render(<ReactMarkdown>{markdown}</ReactMarkdown>, document.getElementById("blog-content-container"))

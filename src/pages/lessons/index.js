@@ -30,7 +30,7 @@ import UILoader from '../../@core/components/ui-loader';
 
 import NotFound from '../../components/not-found';
 import NoNetwork from '../../components/no-network';
-
+import { BLOG_API_URL } from '../../helpers/url_helper'
 
 const AppLessons = (props) => {
 
@@ -78,7 +78,7 @@ const AppLessons = (props) => {
 
     const renderLesson = (content) => {
         if (content) {
-            let uploadPath = "http://192.168.10.102:1337/uploads/";
+            let uploadPath = `${BLOG_API_URL}/uploads/`;
             let markdown = String(content).replaceAll("/uploads/", uploadPath);
             let fun = () => {
                 if (lessonContentRef.current) {
