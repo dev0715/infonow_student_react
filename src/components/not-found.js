@@ -2,7 +2,6 @@ import React from 'react'
 import { useSkin } from '@hooks/useSkin'
 const NotFound = (props) => {
 
-    console.log(props.message)
     const [skin, setSkin] = useSkin();
 
     const illustration = skin === 'dark' ? 'not-found.png' : 'not-found.png',

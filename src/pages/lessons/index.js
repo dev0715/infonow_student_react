@@ -180,7 +180,7 @@ const AppLessons = (props) => {
                 props.lessons.length > 1 &&
                 <div className={`other-lessons ${isOpenLessons ? 'active' : 'm-2'}`}>
                     <div className="heading" onClick={toggleLessons}>
-                        <h4 class="p-2 m-0">
+                        <h4 className="p-2 m-0">
                             Other Lessons
                         </h4>
                         <div className="mr-1">

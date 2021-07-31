@@ -31,15 +31,14 @@ function* getChatContacts({ payload: { userId } }) {
 }
 
 function* uploadDoc({ payload: { chatId, file, callback } }) {
+  let document = {
+    documentId: v4(),
+    chatId,
+    name: file.name,
+    progress: 0,
+    request: axios.CancelToken.source(),
+  }
   try {
-
-    let document = {
-      documentId: v4(),
-      chatId,
-      name: file.name,
-      progress: 0,
-      request: axios.CancelToken.source(),
-    }
 
     yield put(addDocumentToQueue(document))
     const options = {

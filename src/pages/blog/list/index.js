@@ -204,7 +204,7 @@ const BlogList = (props) => {
                 {
                   props.blogList.length == 0 && !props.blogListLoading && !props.blogListError
                   &&
-                  <NotFound />
+                  <NotFound message={"No blog found"} />
                 }
                 {
                   props.blogList.length == 0 && !props.blogListLoading && props.blogListError

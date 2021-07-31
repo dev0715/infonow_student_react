@@ -45,9 +45,6 @@ import { GET_DOCUMENT_URL } from '../../helpers/url_helper'
 import moment from 'moment';
 
 
-import ReactMarkdown from 'react-markdown'
-import { render } from 'react-dom'
-
 import { notifyError, notifySuccess } from '../../utility/toast'
 
 import '@styles/base/plugins/extensions/ext-component-sweet-alerts.scss'
@@ -57,7 +54,6 @@ import { Modal, ModalBody } from 'reactstrap'
 
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-import { isObjectLiteralExpression } from 'typescript';
 
 const MySwal = withReactContent(Swal)
 
