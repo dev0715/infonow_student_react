@@ -13,7 +13,10 @@ import {
     updateMeetingFailure
 
 } from "./actions"
-import { getLoggedInUser, getStudentAllMeetings, getMeetingDates, newMeeting, updateMeeting } from '@helpers/backend-helpers'
+import {
+    getLoggedInUser, getStudentAllMeetings, getMeetingDates,
+    newMeeting, updateMeeting
+} from '@helpers/backend-helpers'
 
 
 function* getAllMeetingsHttp() {

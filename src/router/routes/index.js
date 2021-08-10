@@ -32,6 +32,31 @@ const Routes = [
   },
   {
     appLayout: true,
+    path: '/assignments',
+    exact: true,
+    className: 'assignments-application',
+    component: lazy(() => import('../../pages/assignments'))
+  },
+  {
+    appLayout: true,
+    path: '/assignments/details',
+    className: 'assignments-application',
+    component: lazy(() => import('../../pages/assignments/assignment-details'))
+  },
+  {
+    appLayout: true,
+    path: '/past-assignments',
+    className: 'assignments-application',
+    component: lazy(() => import('../../pages/assignments/past-assignments'))
+  },
+  {
+    appLayout: true,
+    path: '/new-assignments',
+    className: 'assignments-application',
+    component: lazy(() => import('../../pages/assignments/new-assignments'))
+  },
+  {
+    appLayout: true,
     path: '/documents',
     component: lazy(() => import('../../pages/documents'))
   },

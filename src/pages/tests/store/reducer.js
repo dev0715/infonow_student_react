@@ -4,9 +4,12 @@
 
 import {
 
-  GET_TESTS,
-  GET_TESTS_SUCCESS,
-  GET_TESTS_FAILURE,
+  GET_UPCOMING_TESTS,
+  GET_UPCOMING_TESTS_SUCCESS,
+  GET_UPCOMING_TESTS_FAILURE,
+  GET_PAST_TESTS,
+  GET_PAST_TESTS_SUCCESS,
+  GET_PAST_TESTS_FAILURE,
   NEW_TEST_ATTEMPT,
   NEW_TEST_ATTEMPT_SUCCESS,
   NEW_TEST_ATTEMPT_FAILURE,
@@ -29,9 +32,12 @@ let testObj = JSON.parse(localStorage.getItem(TEST_KEY) || "{}")
 
 
 const initialState = {
-  tests: [],
-  testsLoading: false,
-  testsError: null,
+  newTests: [],
+  newTestsLoading: false,
+  newTestsError: null,
+  pastTests: [],
+  pastTestsLoading: false,
+  pastTestsError: null,
   attemptTestLoading: false,
   selectedTest: testObj.test || {},
   currentIndex: testObj.currentIndex || 0,
@@ -45,15 +51,19 @@ const initialState = {
 
 const newTestAttemptSuccess = (state, payload) => {
   state.attemptId = payload.data.attemptId
-  let test = state.tests.find(t => t.studentTestId == payload.id)
-  if (test) {
-    state.selectedTest = test
-    state.currentIndex = 0;
-    state.testStartTime = payload.data.createdAt
-    updateTestStorage(state)
-  }
+  state.selectedTest.test = payload.data.test
+  state.currentIndex = 0;
+  state.testStartTime = payload.data.createdAt
+  updateTestStorage(state)
 
-  return { ...state, attemptTestLoading: false, attemptTestError: null }
+  return {
+    ...state,
+    selectedTest: { ...state.selectedTest },
+    currentIndex: 0,
+    testStartTime: payload.data.createdAt,
+    attemptTestLoading: false,
+    attemptTestError: null
+  }
 }
 
 const updateTestStorage = (state) => {
@@ -64,7 +74,6 @@ const updateTestStorage = (state) => {
     testStartTime: state.testStartTime
   }))
 }
-
 
 const updateSubjectiveQuestion = (state, payload) => {
   state.selectedTest.test.questions[state.currentIndex].answerText = payload
@@ -143,9 +152,20 @@ const submitTestAttemptSuccess = (state, payload) => {
 }
 
 const submitTestAttemptFailure = (state, payload) => {
+  if (payload.isSubmitted) {
+    state = {
+      ...state,
+      attemptId: null,
+      selectedTest: {},
+      currentIndex: 0,
+      testStartTime: null
+    }
+    updateTestStorage(state)
+  }
+
   return {
     ...state,
-    submitTestError: payload,
+    submitTestError: payload.error,
     submitTestLoading: false
   }
 }
@@ -154,14 +174,23 @@ const submitTestAttemptFailure = (state, payload) => {
 const testReducer = (state = initialState, action) => {
   switch (action.type) {
 
-    case GET_TESTS:
-      return { ...state, tests: [], testsLoading: true }
+    case GET_UPCOMING_TESTS:
+      return { ...state, newTests: [], newTestsLoading: true }
 
-    case GET_TESTS_SUCCESS:
-      return { ...state, tests: action.payload, testsLoading: false, testsError: null }
+    case GET_UPCOMING_TESTS_SUCCESS:
+      return { ...state, newTests: action.payload, newTestsLoading: false, newTestsError: null }
 
-    case GET_TESTS_FAILURE:
-      return { ...state, tests: [], testsLoading: false, testsError: action.payload }
+    case GET_UPCOMING_TESTS_FAILURE:
+      return { ...state, newTests: [], newTestsLoading: false, newTestsError: action.payload }
+
+    case GET_PAST_TESTS:
+      return { ...state, pastTests: [], pastTestsLoading: true }
+
+    case GET_PAST_TESTS_SUCCESS:
+      return { ...state, pastTests: action.payload, pastTestsLoading: false, pastTestsError: null }
+
+    case GET_PAST_TESTS_FAILURE:
+      return { ...state, pastTests: [], pastTestsLoading: false, pastTestsError: action.payload }
 
     case NEW_TEST_ATTEMPT:
       return { ...state, attemptTestLoading: true, attemptTestError: null }

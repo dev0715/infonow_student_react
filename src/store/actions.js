@@ -13,6 +13,9 @@ export * from "./../pages/chat/store/actions"
 // Meetings
 export * from "./../pages/meetings/store/actions"
 
+//Assignments 
+export * from './../pages/assignments/store/actions'
+
 //Documents 
 export * from './../pages/documents/store/actions'
 
@@ -21,7 +24,6 @@ export * from './../pages/blog/store/actions'
 
 //Lessons
 export * from './../pages/lessons/store/actions'
-
 
 
 //Tests

@@ -34,6 +34,12 @@ export default [
     navLink: '/tests'
   },
   {
+    id: 'assignments',
+    title: 'Assignments',
+    icon: <i className="la la-file-text" />,
+    navLink: '/assignments'
+  },
+  {
     id: 'documents',
     title: 'Documents',
     icon: <i className="la la-folder-open" />,

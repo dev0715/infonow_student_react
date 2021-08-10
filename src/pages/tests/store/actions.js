@@ -1,7 +1,10 @@
 import {
-  GET_TESTS,
-  GET_TESTS_SUCCESS,
-  GET_TESTS_FAILURE,
+  GET_UPCOMING_TESTS,
+  GET_UPCOMING_TESTS_SUCCESS,
+  GET_UPCOMING_TESTS_FAILURE,
+  GET_PAST_TESTS,
+  GET_PAST_TESTS_SUCCESS,
+  GET_PAST_TESTS_FAILURE,
   NEW_TEST_ATTEMPT,
   NEW_TEST_ATTEMPT_SUCCESS,
   NEW_TEST_ATTEMPT_FAILURE,
@@ -17,22 +20,42 @@ import {
 } from './actionTypes'
 
 
-export const getTests = () => {
+export const getUpcomingTests = () => {
   return {
-    type: GET_TESTS,
+    type: GET_UPCOMING_TESTS,
   }
 }
 
-export const getTestsSuccess = (data) => {
+export const getUpcomingTestsSuccess = (data) => {
   return {
-    type: GET_TESTS_SUCCESS,
+    type: GET_UPCOMING_TESTS_SUCCESS,
     payload: data
   }
 }
 
-export const getTestsFailure = (error) => {
+export const getUpcomingTestsFailure = (error) => {
   return {
-    type: GET_TESTS_FAILURE,
+    type: GET_UPCOMING_TESTS_FAILURE,
+    payload: error
+  }
+}
+
+export const getPastTests = () => {
+  return {
+    type: GET_PAST_TESTS,
+  }
+}
+
+export const getPastTestsSuccess = (data) => {
+  return {
+    type: GET_PAST_TESTS_SUCCESS,
+    payload: data
+  }
+}
+
+export const getPastTestsFailure = (error) => {
+  return {
+    type: GET_PAST_TESTS_FAILURE,
     payload: error
   }
 }
@@ -58,7 +81,6 @@ export const newTestAttemptFailure = ({ id, error }) => {
   }
 }
 
-
 export const submitTestAttempt = (data) => {
   return {
     type: SUBMIT_TEST_ATTEMPT,
@@ -73,10 +95,10 @@ export const submitTestAttemptSuccess = (data) => {
   }
 }
 
-export const submitTestAttemptFailure = (error) => {
+export const submitTestAttemptFailure = ({ error, isSubmitted }) => {
   return {
     type: SUBMIT_TEST_ATTEMPT_FAILURE,
-    payload: error
+    payload: { error, isSubmitted }
   }
 }
 

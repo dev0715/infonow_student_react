@@ -64,6 +64,15 @@ export const uploadNewTopic = data => postForm(url.NEW_TOPICS, data);
 
 //Test
 
-export const getTests = () => get(url.GET_TESTS);
+export const getPastTests = () => get(url.GET_PAST_TESTS);
+export const getUpcomingTests = () => get(url.GET_UPCOMING_TESTS);
 export const newTestAttempt = (data) => post(url.POST_TEST_ATTEMPT, data);
 export const submitTestAttempt = (data) => put(url.SUBMIT_TEST_ATTEMPT, data);
+
+// Assignments 
+export const getNewAssignments = () => get(url.NEW_ASSIGNMENTS)
+export const getPastAssignments = () => get(url.PAST_ASSIGNMENTS)
+export const getAssignmentAttempt = (id) => get(url.GET_ASSIGNMENT_ATTEMPT(id))
+export const getAssignment = (id) => get(url.GET_ASSIGNMENT(id))
+export const createAssignmentAttempt = (data) => post(url.ASSIGNMENT_ATTEMPT, data)
+export const submitAssignment = (data) => put(url.ASSIGNMENT_ATTEMPT, data)

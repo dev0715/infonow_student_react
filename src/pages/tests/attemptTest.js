@@ -24,7 +24,6 @@ import {
 // ** Store & Actions
 import { connect, useSelector } from 'react-redux'
 import {
-    getTests,
     newTestAttempt, submitTestAttempt,
     updateObjectiveQuestion,
     updateSubjectiveQuestion,
@@ -121,7 +120,6 @@ const AttemptTest = (props) => {
                 let seconds = String(Math.floor((rem % 3600.0) % 60)).padStart(2, '0')
                 setTimeLeft(`${hours}: ${minutes}: ${seconds}`);
             }
-
         }
 
     }
@@ -143,7 +141,8 @@ const AttemptTest = (props) => {
     useEffect(() => {
         if (!props.submitTestLoading && isTestSubmitted && props.submitTestError) {
             notifyError("Test Submit", props.submitTestError)
-        } else if (!props.submitTestLoading && isTestSubmitted && !props.submitTestError) {
+        }
+        else if (!props.submitTestLoading && isTestSubmitted && !props.submitTestError) {
             notifySuccess("Test Submit", 'Test Submitted Successfully')
         }
     }, [props.submitTestLoading])
@@ -158,7 +157,6 @@ const AttemptTest = (props) => {
             return false
         })
     }
-
 
     const submitTest = () => {
 
@@ -400,7 +398,6 @@ const mapStateToProps = (state) => {
 
 export default withRouter(
     connect(mapStateToProps, {
-        getTests,
         newTestAttempt, submitTestAttempt,
         updateObjectiveQuestion,
         updateSubjectiveQuestion,

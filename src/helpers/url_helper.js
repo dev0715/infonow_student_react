@@ -1,17 +1,17 @@
 
-// export const BASE_URL = `http://192.168.10.102:3600`
-// export const DOCUMENT_BASE_URL = `${BASE_URL}/public`
-// export const MEETING_API_URL = `http://192.168.10.104:3900`
-// export const CHAT_API_URL = `http://192.168.10.104:3700`
-// export const CHAT_SOCKET_API_URL = `http://192.168.10.104:3701`
-// export const BLOG_API_URL = `http://192.168.10.102:1337`
-
-export const BASE_URL = `https://api.meditati.ro/main`
+export const BASE_URL = `http://192.168.10.102:3600`
 export const DOCUMENT_BASE_URL = `${BASE_URL}/public`
-export const MEETING_API_URL = `https://meeting.meditati.ro/api`
-export const CHAT_API_URL = `https://api.meditati.ro/chat`
-export const CHAT_SOCKET_API_URL = `https://api.meditati.ro/`
-export const BLOG_API_URL = `https://api.meditati.ro/blog`
+export const MEETING_API_URL = `http://192.168.10.104:3900`
+export const CHAT_API_URL = `http://192.168.10.104:3700`
+export const CHAT_SOCKET_API_URL = `http://192.168.10.104:3701`
+export const BLOG_API_URL = `http://192.168.10.102:1337`
+
+// export const BASE_URL = `https://api.meditati.ro/main`
+// export const DOCUMENT_BASE_URL = `${BASE_URL}/public`
+// export const MEETING_API_URL = `https://meeting.meditati.ro/api`
+// export const CHAT_API_URL = `https://api.meditati.ro/chat`
+// export const CHAT_SOCKET_API_URL = `https://api.meditati.ro/`
+// export const BLOG_API_URL = `https://api.meditati.ro/blog`
 
 export const GET_IMAGE_URL = url => url ? DOCUMENT_BASE_URL + url : DOCUMENT_BASE_URL + "/profile-pictures/default.png"
 
@@ -61,6 +61,16 @@ export const GET_TOPIC_LESSONS = id => `${BASE_URL}/api/v1/strapi/topics/${id}/l
 
 //Tests 
 
-export const GET_TESTS = `${BASE_URL}/api/v1/tests`
+export const GET_PAST_TESTS = `${BASE_URL}/api/v1/tests/past-tests`
+export const GET_UPCOMING_TESTS = `${BASE_URL}/api/v1/tests/upcoming-tests`
 export const POST_TEST_ATTEMPT = `${BASE_URL}/api/v1/attempts`
 export const SUBMIT_TEST_ATTEMPT = `${BASE_URL}/api/v1/attempts`
+
+// Assignments
+
+
+export const ASSIGNMENT_ATTEMPT = `${BASE_URL}/api/v1/assignments-attempts`
+export const NEW_ASSIGNMENTS = `${BASE_URL}/api/v1/assignments/upcoming-assignments`
+export const PAST_ASSIGNMENTS = `${BASE_URL}/api/v1/assignments/past-assignments`
+export const GET_ASSIGNMENT_ATTEMPT = id => `${BASE_URL}/api/v1/assignments-attempts/${id}`
+export const GET_ASSIGNMENT = id => `${BASE_URL}/api/v1/assignments/${id}`

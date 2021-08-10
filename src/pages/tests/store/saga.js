@@ -3,15 +3,18 @@ import { call, put, takeEvery } from "redux-saga/effects"
 
 // Login Redux States
 import {
-  GET_TESTS,
+  GET_UPCOMING_TESTS,
+  GET_PAST_TESTS,
   NEW_TEST_ATTEMPT,
   SUBMIT_TEST_ATTEMPT
 } from "./actionTypes"
 
 
 import {
-  getTestsFailure,
-  getTestsSuccess,
+  getPastTestsSuccess,
+  getPastTestsFailure,
+  getUpcomingTestsSuccess,
+  getUpcomingTestsFailure,
   newTestAttemptFailure,
   newTestAttemptSuccess,
   submitTestAttemptFailure,
@@ -20,19 +23,33 @@ import {
 } from "./actions"
 
 //Include Both Helper File with needed methods
-import { getTests, newTestAttempt, submitTestAttempt } from "../../../helpers/backend-helpers"
+import { getPastTests, getUpcomingTests, newTestAttempt, submitTestAttempt } from "../../../helpers/backend-helpers"
 
-function* getTestsHttp() {
+function* getUpcomingTestsHttp() {
   try {
-    const response = yield call(getTests);
+    const response = yield call(getUpcomingTests);
     if (response) {
-      yield put(getTestsSuccess(response))
+      yield put(getUpcomingTestsSuccess(response))
       return;
     }
     throw "Unknown response received from Server";
 
   } catch (error) {
-    yield put(getTestsFailure(error.message ? error.message : error))
+    yield put(getUpcomingTestsFailure(error.message ? error.message : error))
+  }
+}
+
+function* getPastTestsHttp() {
+  try {
+    const response = yield call(getPastTests);
+    if (response) {
+      yield put(getPastTestsSuccess(response))
+      return;
+    }
+    throw "Unknown response received from Server";
+
+  } catch (error) {
+    yield put(getPastTestsFailure(error.message ? error.message : error))
   }
 }
 
@@ -51,7 +68,6 @@ function* newTestAttemptHttp({ payload: { id, data } }) {
   }
 }
 
-
 function* submitTestAttemptHttp({ payload }) {
   try {
     const response = yield call(submitTestAttempt, payload);
@@ -63,13 +79,16 @@ function* submitTestAttemptHttp({ payload }) {
 
   } catch (error) {
 
-    yield put(submitTestAttemptFailure(error.message ? error.message : error))
+    yield put(submitTestAttemptFailure({
+      error: error.message ? error.message : error,
+      isSubmitted: error.data ? error.data.isSubmitted : null
+    }))
   }
 }
 
-
 function* testSaga() {
-  yield takeEvery(GET_TESTS, getTestsHttp)
+  yield takeEvery(GET_UPCOMING_TESTS, getUpcomingTestsHttp)
+  yield takeEvery(GET_PAST_TESTS, getPastTestsHttp)
   yield takeEvery(NEW_TEST_ATTEMPT, newTestAttemptHttp)
   yield takeEvery(SUBMIT_TEST_ATTEMPT, submitTestAttemptHttp)
 }
