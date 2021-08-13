@@ -85,7 +85,11 @@ const NewAssignments = (props) => {
     }
 
     const handleAssignmentAttempt = (a) => {
-        if (moment().isAfter(moment(a.startDate))) {
+        if (moment().isAfter(moment(a.startDate))
+            || moment().isSame(moment(a.startDate))
+            || moment().isBefore(moment(a.endDate))
+            || moment().isSame(moment(a.endDate))
+        ) {
             return MySwal.fire({
                 icon: 'question',
                 title: "Confirm",
@@ -151,7 +155,12 @@ const NewAssignments = (props) => {
                 return (
                     <>
                         {
-                            moment().isAfter(moment(a.startDate)) &&
+                            (
+                                moment().isAfter(moment(a.startDate))
+                                || moment().isSame(moment(a.startDate))
+                                || moment().isBefore(moment(a.endDate))
+                                || moment().isSame(moment(a.endDate))
+                            ) &&
                             <Button.Ripple color='flat-primary'
                                 onClick={() => handleAssignmentAttempt(a)}
                             >

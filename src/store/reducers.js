@@ -12,6 +12,8 @@ import Blogs from "./../pages/blog/store/reducer"
 import Lessons from "./../pages/lessons/store/reducer"
 import Tests from "./../pages/tests/store/reducer"
 import Assignments from "./../pages/assignments/store/reducer"
+import GoogleSignIn from './../views/google-signin/store/reducer'
+import SetupPassword from './../pages/auth/setup-password/store/reducer'
 
 const rootReducer = combineReducers({
   Register,
@@ -24,7 +26,9 @@ const rootReducer = combineReducers({
   Blogs,
   Lessons,
   Tests,
-  Assignments
+  Assignments,
+  GoogleSignIn,
+  SetupPassword
 });
 
 export default rootReducer;

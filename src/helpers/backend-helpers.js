@@ -47,6 +47,8 @@ export const uploadBlogImage = (data, options) => postForm(url.UPLOAD_BLOG_IMAGE
 
 // Student Actions
 export const postStudentLogin = data => post(url.POST_STUDENT_LOGIN, data);
+export const signInWithGoogle = data => post(url.SIGN_IN_WITH_GOOGLE, data);
+export const setupAccountPassword = data => post(url.RESET_PASSWORD, data);
 
 //Meeting
 export const newMeeting = data => post(url.NEW_MEETING, data);

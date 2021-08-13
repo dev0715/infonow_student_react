@@ -101,6 +101,11 @@ const Routes = [
     }
   },
   {
+    path: '/setup-password',
+    component: lazy(() => import('../../pages/auth/setup-password')),
+    layout: 'BlankLayout',
+  },
+  {
     path: '/error',
     component: lazy(() => import('../../views/Error')),
     layout: 'BlankLayout'

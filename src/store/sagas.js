@@ -10,6 +10,8 @@ import BlogSaga from "./../pages/blog/store/saga"
 import LessonsSaga from "./../pages/lessons/store/saga"
 import TestsSaga from "./../pages/tests/store/saga"
 import AssignmentsSaga from "./../pages/assignments/store/saga"
+import GoogleSignInSaga from "./../views/google-signin/store/saga"
+import SetupPasswordSaga from "./../pages/auth/setup-password/store/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -21,6 +23,8 @@ export default function* rootSaga() {
     BlogSaga(),
     LessonsSaga(),
     TestsSaga(),
-    AssignmentsSaga()
+    AssignmentsSaga(),
+    GoogleSignInSaga(),
+    SetupPasswordSaga()
   ])
 }

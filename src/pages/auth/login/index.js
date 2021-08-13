@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSkin } from '@hooks/useSkin'
 import { Link, useHistory, withRouter } from 'react-router-dom'
 import { Facebook, Twitter, Mail, GitHub, Coffee } from 'react-feather'
@@ -11,6 +11,8 @@ import BrandLogo from '../../../components/brand-logo'
 import { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { useEffect } from 'react';
+
+import GoogleSignIn from '../../../views/google-signin';
 
 const ToastContent = ({ name, role }) => (
     <Fragment>
@@ -28,6 +30,9 @@ const ToastContent = ({ name, role }) => (
 
 const Login = (props) => {
     const [skin, setSkin] = useSkin()
+
+    const [isSigningIn, setIsSigningIn] = useState(false)
+
     const history = useHistory()
 
     const illustration = skin === 'dark' ? 'login-v2-dark.svg' : 'login-v2.svg',
@@ -119,8 +124,8 @@ const Login = (props) => {
                                 type='submit'
                                 color='primary'
                                 block
-                                disabled={props.loading}>
-                                {props.loading && <><i className="fa fa-spinner fa-spin" />&nbsp;&nbsp;</>}Sign in
+                                disabled={props.loading || isSigningIn}>
+                                {(props.loading || isSigningIn) && <><i className="las la-spinner la-spin"></i>&nbsp;&nbsp;</>}Sign in
                             </Button.Ripple>
 
                         </AvForm>
@@ -136,18 +141,9 @@ const Login = (props) => {
                         </div>
 
                         <div className='auth-footer-btn d-flex justify-content-center'>
-                            <Button.Ripple color='facebook'>
-                                <Facebook size={14} />
-                            </Button.Ripple>
-                            <Button.Ripple color='twitter'>
-                                <Twitter size={14} />
-                            </Button.Ripple>
-                            <Button.Ripple color='google'>
-                                <Mail size={14} />
-                            </Button.Ripple>
-                            <Button.Ripple className='mr-0' color='github'>
-                                <GitHub size={14} />
-                            </Button.Ripple>
+                            <GoogleSignIn
+                                processingCallBack={() => setIsSigningIn(!isSigningIn)}
+                            />
                         </div>
                     </Col>
                 </Col>

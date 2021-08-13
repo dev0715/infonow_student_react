@@ -53,7 +53,11 @@ const AppAssignments = (props) => {
     }
 
     const handleAssignmentAttempt = (a) => {
-        if (moment().isAfter(moment(a.startDate))) {
+        if (moment().isAfter(moment(a.startDate))
+            || moment().isSame(moment(a.startDate))
+            || moment().isBefore(moment(a.endDate))
+            || moment().isSame(moment(a.endDate))
+        ) {
             return MySwal.fire({
                 icon: 'question',
                 title: "Confirm",
@@ -77,148 +81,162 @@ const AppAssignments = (props) => {
         <Fragment >
             <UILoader
                 blocking={props.newAssignmentsLoading || props.pastAssignmentsLoading}
-                className="w-100">
-                <Card >
-                    <CardBody >
-                        <Row>
-                            <Col sm='12'>
-                                <div className="d-flex align-items-center justify-content-between">
-                                    <h5 >
-                                        New Assignments
-                                    </h5>
-                                    <Button.Ripple color='flat-primary'
-                                        onClick={() => goToNewAssignmentList()}
-                                    >
-                                        View All
-                                    </Button.Ripple>
-                                </div>
-                            </Col>
-                            <Col sm='12 mt-2'>
-                                {
-                                    !props.newAssignmentsLoading &&
-                                    props.newAssignmentsError &&
-                                    <NoNetwork />
-                                }
-                                {
-                                    !props.newAssignmentsLoading &&
-                                    !props.newAssignmentsError &&
-                                    props.newAssignments.length == 0 &&
-                                    <NotFound />
-                                }
-                                {
-                                    !props.newAssignmentsLoading &&
-                                    !props.newAssignmentsError &&
-                                    props.newAssignments.length > 0 &&
-                                    <Table responsive hover className="pb-2">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Start Date</th>
-                                                <th>Due Date</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {props.newAssignments.filter((as, index) => index < 5).map((a, index) =>
-                                                <tr key={"new-assign" + index} >
-                                                    <td>
-                                                        {a.assignment.title}
-                                                    </td>
-                                                    <td><DateTime dateTime={a.startDate} type="date" /></td>
-                                                    <td><DateTime dateTime={a.endDate} type="date" /></td>
-                                                    <td>
-                                                        {
-                                                            moment().isAfter(moment(a.startDate)) &&
-                                                            <Button.Ripple color='flat-primary'
-                                                                onClick={() => handleAssignmentAttempt(a)}
-                                                            >
-                                                                Start
-                                                            </Button.Ripple>
-                                                        }
-                                                    </td>
-                                                </tr>
-                                            )}
-                                        </tbody>
-                                    </Table>
-                                }
-                            </Col>
-                        </Row>
-                        <Row className="mt-3">
-                            <Col sm='12'>
-                                <div className="d-flex align-items-center justify-content-between">
-                                    <h5 >
-                                        Past Assignments
-                                    </h5>
-                                    <Button.Ripple color='flat-primary'
-                                        onClick={() => goToPastAssignmentList()}
-                                    >
-                                        View All
-                                    </Button.Ripple>
-                                </div>
-                            </Col>
-                            <Col sm='12 mt-2'>
-                                {
-                                    !props.pastAssignmentsLoading &&
-                                    props.pastAssignmentsError &&
-                                    <NoNetwork />
-                                }
-                                {
-                                    !props.pastAssignmentsLoading &&
-                                    !props.pastAssignmentsError &&
-                                    props.pastAssignments.length == 0 &&
-                                    <NotFound />
-                                }
-                                {
-                                    !props.pastAssignmentsLoading &&
-                                    !props.pastAssignmentsError &&
-                                    props.pastAssignments.length > 0 &&
-                                    <Table responsive hover className="mb-">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Submission Date</th>
-                                                <th>Marks</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {props.pastAssignments.filter((as, index) => index < 5).map((a, index) =>
-                                                <tr key={"new-assign" + index}
-                                                    onClick={() => goToAssignment(a)}
-                                                >
-                                                    <td>
-                                                        {a.assignment.title}
-                                                    </td>
-                                                    <td>
-                                                        {
-                                                            a.assignmentAttempt ?
-                                                                <DateTime dateTime={a.assignmentAttempt.submittedAt} type="date" />
-                                                                : "..."
-                                                        }
-                                                    </td>
-                                                    <td>
-                                                        {
-                                                            a.assignmentAttempt ?
-                                                                <div>
-                                                                    {
-                                                                        a.assignmentAttempt.obtainedMarks || "..."
-                                                                    }
-                                                                    /
-                                                                    {
-                                                                        a.assignment.totalMarks
-                                                                    }
-                                                                </div>
-                                                                : "..."
-                                                        }
-                                                    </td>
-                                                </tr>
-                                            )}
-                                        </tbody>
-                                    </Table>
-                                }
-                            </Col>
-                        </Row>
-                    </CardBody>
-                </Card>
+                className="w-100 h-100">
+                <Row>
+                    <Col lg='12'>
+                        <Card className="m-1">
+                            <CardBody >
+                                <Row>
+                                    <Col sm='12'>
+                                        <div className="d-flex align-items-center justify-content-between">
+                                            <h5 >
+                                                New Assignments
+                                            </h5>
+                                            <Button.Ripple color='flat-primary'
+                                                onClick={() => goToNewAssignmentList()}
+                                            >
+                                                View All
+                                            </Button.Ripple>
+                                        </div>
+                                    </Col>
+                                    <Col sm='12' className="mt-2">
+                                        {
+                                            !props.newAssignmentsLoading &&
+                                            props.newAssignmentsError &&
+                                            <NoNetwork />
+                                        }
+                                        {
+                                            !props.newAssignmentsLoading &&
+                                            !props.newAssignmentsError &&
+                                            props.newAssignments.length == 0 &&
+                                            <NotFound />
+                                        }
+                                        {
+                                            !props.newAssignmentsLoading &&
+                                            !props.newAssignmentsError &&
+                                            props.newAssignments.length > 0 &&
+                                            <Table responsive hover className="pb-2">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Start Date</th>
+                                                        <th>Due Date</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {props.newAssignments.filter((as, index) => index < 5).map((a, index) =>
+                                                        <tr key={"new-assign" + index} >
+                                                            <td>
+                                                                {a.assignment.title}
+                                                            </td>
+                                                            <td><DateTime dateTime={a.startDate} type="date" /></td>
+                                                            <td><DateTime dateTime={a.endDate} type="date" /></td>
+                                                            <td>
+                                                                {
+                                                                    (moment().isAfter(moment(a.startDate))
+                                                                        || moment().isSame(moment(a.startDate))
+                                                                        || moment().isBefore(moment(a.endDate))
+                                                                        || moment().isSame(moment(a.endDate))
+                                                                    ) &&
+                                                                    <Button.Ripple color='flat-primary'
+                                                                        onClick={() => handleAssignmentAttempt(a)}
+                                                                    >
+                                                                        Start
+                                                                    </Button.Ripple>
+                                                                }
+                                                            </td>
+                                                        </tr>
+                                                    )}
+                                                </tbody>
+                                            </Table>
+                                        }
+                                    </Col>
+                                </Row>
+                            </CardBody>
+                        </Card>
+                    </Col>
+                    <Col lg='12' className="mt-1">
+                        <Card className="m-1">
+                            <CardBody >
+                                <Row >
+                                    <Col sm='12'>
+                                        <div className="d-flex align-items-center justify-content-between">
+                                            <h5 >
+                                                Past Assignments
+                                            </h5>
+                                            <Button.Ripple color='flat-primary'
+                                                onClick={() => goToPastAssignmentList()}
+                                            >
+                                                View All
+                                            </Button.Ripple>
+                                        </div>
+                                    </Col>
+                                    <Col sm='12 mt-2'>
+                                        {
+                                            !props.pastAssignmentsLoading &&
+                                            props.pastAssignmentsError &&
+                                            <NoNetwork />
+                                        }
+                                        {
+                                            !props.pastAssignmentsLoading &&
+                                            !props.pastAssignmentsError &&
+                                            props.pastAssignments.length == 0 &&
+                                            <NotFound />
+                                        }
+                                        {
+                                            !props.pastAssignmentsLoading &&
+                                            !props.pastAssignmentsError &&
+                                            props.pastAssignments.length > 0 &&
+                                            <Table responsive hover className="mb-">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Submission Date</th>
+                                                        <th>Marks</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {props.pastAssignments.filter((as, index) => index < 5).map((a, index) =>
+                                                        <tr key={"new-assign" + index}
+                                                            onClick={() => goToAssignment(a)}
+                                                        >
+                                                            <td>
+                                                                {a.assignment.title}
+                                                            </td>
+                                                            <td>
+                                                                {
+                                                                    a.assignmentAttempt ?
+                                                                        <DateTime dateTime={a.assignmentAttempt.submittedAt} type="date" />
+                                                                        : "..."
+                                                                }
+                                                            </td>
+                                                            <td>
+                                                                {
+                                                                    a.assignmentAttempt ?
+                                                                        <div>
+                                                                            {
+                                                                                a.assignmentAttempt.obtainedMarks || "..."
+                                                                            }
+                                                                            /
+                                                                            {
+                                                                                a.assignment.totalMarks
+                                                                            }
+                                                                        </div>
+                                                                        : "..."
+                                                                }
+                                                            </td>
+                                                        </tr>
+                                                    )}
+                                                </tbody>
+                                            </Table>
+                                        }
+                                    </Col>
+                                </Row>
+                            </CardBody>
+                        </Card>
+                    </Col>
+                </Row>
             </UILoader >
         </Fragment >
     )

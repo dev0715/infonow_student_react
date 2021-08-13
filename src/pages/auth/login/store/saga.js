@@ -6,7 +6,6 @@ import { loginError, loginSuccess } from "./actions"
 
 //Include Both Helper File with needed methods
 import { postStudentLogin } from "../../../../helpers/backend-helpers";
-import { resetAPIAuthToken } from "../../../../helpers/api_helper";
 
 
 function* loginUser({ payload: { user, history } }) {

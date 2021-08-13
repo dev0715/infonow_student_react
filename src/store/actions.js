@@ -25,6 +25,11 @@ export * from './../pages/blog/store/actions'
 //Lessons
 export * from './../pages/lessons/store/actions'
 
-
 //Tests
 export * from './../pages/tests/store/actions'
+
+//GoogleSignIn
+export * from './../views/google-signin/store/actions'
+
+//Setup Password
+export * from './../pages/auth/setup-password/store/actions'

@@ -13,11 +13,39 @@
 .assignments-application {
 	.ui-loader {
 		height: 100%;
+		overflow: hidden;
+		overflow-y: auto;
+
 		.card {
 			height: 100%;
 			.card-body {
 				height: 100%;
 				overflow-y: auto;
+			}
+		}
+	}
+
+	.react-dataTable {
+		background-color: inherit !important;
+		color: inherit !important;
+		.rdt_Table {
+			background-color: inherit !important;
+			color: inherit !important;
+			.rdt_TableHeadRow {
+				background-color: inherit !important;
+				color: inherit !important;
+				.rdt_TableCol {
+					background-color: inherit !important;
+					color: inherit !important;
+				}
+			}
+			.rdt_TableBody {
+				background-color: inherit !important;
+				color: inherit !important;
+				.rdt_TableRow {
+					background-color: inherit !important;
+					color: inherit !important;
+				}
 			}
 		}
 	}

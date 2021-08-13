@@ -28,6 +28,8 @@ export const UPDATE_USER = id => `${BASE_URL}/api/v1/students/${id}/profile`
 
 // Students
 export const POST_STUDENT_LOGIN = `${BASE_URL}/authenticate/student`
+export const SIGN_IN_WITH_GOOGLE = `${BASE_URL}/authenticate-with-google/student`
+export const RESET_PASSWORD = `${BASE_URL}/reset-password`
 
 
 // Meetings

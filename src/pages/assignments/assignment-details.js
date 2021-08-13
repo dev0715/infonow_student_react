@@ -235,7 +235,7 @@ const AssignmentsDetails = (props) => {
     }
 
     return (
-        <Fragment >
+        <Fragment  >
             <UILoader blocking={props.assignmentLoading || props.attemptLoading}
                 className="h-100 w-100"
             >
