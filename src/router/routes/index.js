@@ -10,7 +10,8 @@ const DefaultRoute = '/home'
 const Routes = [
   {
     path: '/home',
-    component: lazy(() => import('../../views/Home'))
+    className: 'dashboard-application',
+    component: lazy(() => import('../../pages/dashboard'))
   },
   {
     path: '/meetings',
@@ -96,6 +97,12 @@ const Routes = [
     path: '/login',
     component: lazy(() => import('../../pages/auth/login')),
     layout: 'BlankLayout',
+
+  },
+  {
+    path: '/register',
+    component: lazy(() => import('../../pages/auth/register')),
+    layout: 'BlankLayout',
     meta: {
       authRoute: true
     }
@@ -104,6 +111,9 @@ const Routes = [
     path: '/setup-password',
     component: lazy(() => import('../../pages/auth/setup-password')),
     layout: 'BlankLayout',
+    meta: {
+      authRoute: true
+    }
   },
   {
     path: '/error',

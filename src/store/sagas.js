@@ -12,6 +12,7 @@ import TestsSaga from "./../pages/tests/store/saga"
 import AssignmentsSaga from "./../pages/assignments/store/saga"
 import GoogleSignInSaga from "./../views/google-signin/store/saga"
 import SetupPasswordSaga from "./../pages/auth/setup-password/store/saga"
+import RegisterSaga from "./../pages/auth/register/store/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -25,6 +26,7 @@ export default function* rootSaga() {
     TestsSaga(),
     AssignmentsSaga(),
     GoogleSignInSaga(),
-    SetupPasswordSaga()
+    SetupPasswordSaga(),
+    RegisterSaga()
   ])
 }

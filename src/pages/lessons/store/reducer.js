@@ -18,6 +18,12 @@ import {
   GET_LESSON,
   GET_LESSON_SUCCESS,
   GET_LESSON_FAILURE,
+  GET_RECENT_LESSONS,
+  GET_RECENT_LESSONS_SUCCESS,
+  GET_RECENT_LESSONS_FAILURE,
+  GET_INCOMPLETE_LESSONS_COUNT,
+  GET_INCOMPLETE_LESSONS_COUNT_SUCCESS,
+  GET_INCOMPLETE_LESSONS_COUNT_FAILURE,
 
 } from './actionTypes'
 
@@ -31,7 +37,13 @@ const initialState = {
   selectedTopic: {},
   selectedLesson: null,
   lessonCompleteLoading: false,
-  lessonCompleteError: null
+  lessonCompleteError: null,
+  recentLessons: [],
+  recentLessonsLoading: false,
+  recentLessonsError: null,
+  incompleteLessons: 0,
+  incompleteLessonsLoading: false,
+  incompleteLessonsError: null,
 }
 
 
@@ -111,6 +123,25 @@ const lessonReducer = (state = initialState, action) => {
 
     case GET_LESSON_FAILURE:
       return { ...state, oneLessonLoading: false, oneLessonError: action.payload }
+
+    case GET_RECENT_LESSONS:
+      return { ...state, recentLessons: [], recentLessonsLoading: true }
+
+    case GET_RECENT_LESSONS_SUCCESS:
+      return { ...state, recentLessons: action.payload, recentLessonsLoading: false, recentLessonsError: null }
+
+    case GET_RECENT_LESSONS_FAILURE:
+      return { ...state, recentLessons: [], recentLessonsLoading: false, recentLessonsError: action.payload }
+
+    case GET_INCOMPLETE_LESSONS_COUNT:
+      return { ...state, incompleteLessons: 0, incompleteLessonsLoading: true }
+
+    case GET_INCOMPLETE_LESSONS_COUNT_SUCCESS:
+      return { ...state, incompleteLessons: action.payload, incompleteLessonsLoading: false, incompleteLessonsError: null }
+
+    case GET_INCOMPLETE_LESSONS_COUNT_FAILURE:
+      return { ...state, incompleteLessons: 0, incompleteLessonsLoading: false, incompleteLessonsError: action.payload }
+
 
     default:
       return state

@@ -1,10 +1,13 @@
 
-// export const BASE_URL = `http://192.168.10.102:3600`
+// export const BASE_URL = `http://192.168.1.100:3600`
+// // export const BASE_URL = `http://192.168.10.102:3600`
 // export const DOCUMENT_BASE_URL = `${BASE_URL}/public`
-// export const MEETING_API_URL = `http://192.168.10.104:3900`
+// // export const MEETING_API_URL = `http://192.168.10.104:3900`
+// export const MEETING_API_URL = `http://192.168.1.101:3900`
 // export const CHAT_API_URL = `http://192.168.10.104:3700`
 // export const CHAT_SOCKET_API_URL = `http://192.168.10.104:3701`
-// export const BLOG_API_URL = `http://192.168.10.102:1337`
+// // export const BLOG_API_URL = `http://192.168.10.102:1337`
+// export const BLOG_API_URL = `http://192.168.1.100:1337`
 
 export const BASE_URL = `https://api.meditati.ro/main`
 export const DOCUMENT_BASE_URL = `${BASE_URL}/public`
@@ -30,6 +33,7 @@ export const UPDATE_USER = id => `${BASE_URL}/api/v1/students/${id}/profile`
 export const POST_STUDENT_LOGIN = `${BASE_URL}/authenticate/student`
 export const SIGN_IN_WITH_GOOGLE = `${BASE_URL}/authenticate-with-google/student`
 export const RESET_PASSWORD = `${BASE_URL}/reset-password`
+export const REGISTER = `${BASE_URL}/register`
 
 
 // Meetings
@@ -60,6 +64,8 @@ export const TOPICS = `${BASE_URL}/api/v1/strapi/topics`
 export const LESSON = id => `${BASE_URL}/api/v1/strapi/lessons/${id}`
 export const STUDENT_LESSONS = `${BASE_URL}/api/v1/strapi/student-lessons/`
 export const GET_TOPIC_LESSONS = id => `${BASE_URL}/api/v1/strapi/topics/${id}/lessons`
+export const GET_RECENT_LESSONS = `${BASE_URL}/api/v1/strapi/recent-lessons`
+export const GET_INCOMPLETE_LESSON_COUNT = `${BASE_URL}/api/v1/strapi/lessons?isCompleted=0`
 
 //Tests 
 

@@ -131,7 +131,7 @@ const Login = (props) => {
                         </AvForm>
                         <p className='text-center mt-2'>
                             <span className='mr-25'>New on our platform?</span>
-                            <Link to='/'>
+                            <Link to='/register'>
                                 <span>Create an account</span>
                             </Link>
                         </p>
@@ -142,6 +142,7 @@ const Login = (props) => {
 
                         <div className='auth-footer-btn d-flex justify-content-center'>
                             <GoogleSignIn
+                                processing={isSigningIn}
                                 processingCallBack={() => setIsSigningIn(!isSigningIn)}
                             />
                         </div>

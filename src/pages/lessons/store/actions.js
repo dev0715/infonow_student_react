@@ -13,6 +13,12 @@ import {
   GET_LESSON,
   GET_LESSON_SUCCESS,
   GET_LESSON_FAILURE,
+  GET_RECENT_LESSONS,
+  GET_RECENT_LESSONS_SUCCESS,
+  GET_RECENT_LESSONS_FAILURE,
+  GET_INCOMPLETE_LESSONS_COUNT,
+  GET_INCOMPLETE_LESSONS_COUNT_SUCCESS,
+  GET_INCOMPLETE_LESSONS_COUNT_FAILURE,
 } from './actionTypes'
 
 
@@ -35,7 +41,6 @@ export const getUserTopicsFailure = (error) => {
     payload: error
   }
 }
-
 
 export const getUserTopicLessons = (id) => {
   return {
@@ -110,6 +115,46 @@ export const getLessonSuccess = (data) => {
 export const getLessonFailure = (error) => {
   return {
     type: GET_LESSON_FAILURE,
+    payload: error
+  }
+}
+
+export const getRecentLessons = () => {
+  return {
+    type: GET_RECENT_LESSONS,
+  }
+}
+
+export const getRecentLessonsSuccess = (data) => {
+  return {
+    type: GET_RECENT_LESSONS_SUCCESS,
+    payload: data
+  }
+}
+
+export const getRecentLessonsFailure = (error) => {
+  return {
+    type: GET_RECENT_LESSONS_FAILURE,
+    payload: error
+  }
+}
+
+export const getIncompleteLessonsCount = () => {
+  return {
+    type: GET_INCOMPLETE_LESSONS_COUNT,
+  }
+}
+
+export const getIncompleteLessonsCountSuccess = (data) => {
+  return {
+    type: GET_INCOMPLETE_LESSONS_COUNT_SUCCESS,
+    payload: data
+  }
+}
+
+export const getIncompleteLessonsCountFailure = (error) => {
+  return {
+    type: GET_INCOMPLETE_LESSONS_COUNT_FAILURE,
     payload: error
   }
 }

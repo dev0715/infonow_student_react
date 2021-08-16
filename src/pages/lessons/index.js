@@ -64,16 +64,22 @@ const AppLessons = (props) => {
                 props.getLesson(props.selectedLesson)
             }
         }
+
     }, [props.selectedLesson])
 
     useEffect(() => {
-        if (props.topics.length > 0)
+        if (props.topics.length > 0 && Object.keys(props.selectedTopic).length == 0) {
             props.selectTopic(props.topics[0])
+        }
     }, [props.topics])
 
     useEffect(() => {
-        if (props.lessons.length > 0 && !props.selectedLesson)
+        if (props.lessons.length > 0 && !props.selectedLesson) {
             props.selectLesson(props.lessons[0].id)
+        } else if (props.lessons.length > 0 && props.selectedLesson) {
+            props.getLesson(props.selectedLesson)
+        }
+
     }, [props.lessons])
 
     const renderLesson = (content) => {
@@ -138,17 +144,20 @@ const AppLessons = (props) => {
                                     </iframe>
                                 </div>
                             }
-                            <div
-                                ref={lessonContentRef}
-                                className={"active-lesson-content"}
-                            >
-                                {
-                                    props.oneLessonError &&
-                                    <NotFound />
-                                }
-                            </div>
                             {
-                                renderLesson(lesson.content)
+                                lesson.content &&
+                                <div
+                                    ref={lessonContentRef}
+                                    className={"active-lesson-content"}
+                                >
+                                    {
+                                        props.oneLessonError &&
+                                        <NotFound />
+                                    }
+                                    {
+                                        renderLesson(lesson.content)
+                                    }
+                                </div>
                             }
                         </div>
                         {
@@ -196,7 +205,7 @@ const AppLessons = (props) => {
                         <Collapse isOpen={isOpenLessons}>
                             <div className="lesson-list">
                                 {
-                                    props.lessons.map((l, index) => {
+                                    props.lessons.filter(ls => ls.id != props.selectedLesson).map((l, index) => {
                                         if (l.id == props.selectedLesson.id) return
                                         return <div key={'lesson-key-' + index} className="lesson-item">
                                             <div>

@@ -17,7 +17,7 @@ let clientId = "378379895413-ovfahkbo3b8g9vv890jc2apsjkbirj61.apps.googleusercon
 
 const GoogleSignIn = (props) => {
 
-    const { processingCallBack } = props
+    const { processing, processingCallBack } = props
     const [isSigning, setIsSigning] = useState(false)
 
     useEffect(() => {
@@ -54,6 +54,7 @@ const GoogleSignIn = (props) => {
     }
 
     return <GoogleLogin
+        disabled={processing || props.loading}
         clientId={clientId}
         buttonText="Sign in with Google"
         onSuccess={responseGoogle}

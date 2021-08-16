@@ -6,7 +6,9 @@ import {
   GET_USER_TOPIC_LESSONS,
   GET_USER_TOPICS,
   GET_LESSON,
-  COMPLETED_LESSON
+  COMPLETED_LESSON,
+  GET_RECENT_LESSONS,
+  GET_INCOMPLETE_LESSONS_COUNT
 } from "./actionTypes"
 
 
@@ -18,11 +20,22 @@ import {
   getLessonFailure,
   getLessonSuccess,
   completedLessonFailure,
-  completedLessonSuccess
+  completedLessonSuccess,
+  getRecentLessonsSuccess,
+  getRecentLessonsFailure,
+  getIncompleteLessonsCountFailure,
+  getIncompleteLessonsCountSuccess
 } from "./actions"
 
 //Include Both Helper File with needed methods
-import { getTopicLessons, getTopics, getLesson, completedLesson } from "../../../helpers/backend-helpers"
+import {
+  getTopicLessons,
+  getTopics,
+  getLesson,
+  completedLesson,
+  getRecentLessons,
+  getIncompleteLessonsCount
+} from "../../../helpers/backend-helpers"
 
 function* getTopicsHttp() {
   try {
@@ -38,7 +51,6 @@ function* getTopicsHttp() {
   }
 }
 
-
 function* getUserTopicLessonsHttp({ payload }) {
   try {
     const response = yield call(getTopicLessons, payload);
@@ -52,7 +64,6 @@ function* getUserTopicLessonsHttp({ payload }) {
     yield put(getUserTopicLessonsFailure(error.message ? error.message : error))
   }
 }
-
 
 function* getLessonHttp({ payload }) {
   try {
@@ -82,6 +93,33 @@ function* completedLessonHttp({ payload }) {
   }
 }
 
+function* getRecentLessonsHttp() {
+  try {
+    const response = yield call(getRecentLessons);
+    if (response) {
+      yield put(getRecentLessonsSuccess(response))
+      return;
+    }
+    throw "Unknown response received from Server";
+
+  } catch (error) {
+    yield put(getRecentLessonsFailure(error.message ? error.message : error))
+  }
+}
+
+function* getIncompleteLessonsCountHttp() {
+  try {
+    const response = yield call(getIncompleteLessonsCount);
+    if (response) {
+      yield put(getIncompleteLessonsCountSuccess(response))
+      return;
+    }
+    throw "Unknown response received from Server";
+
+  } catch (error) {
+    yield put(getIncompleteLessonsCountFailure(error.message ? error.message : error))
+  }
+}
 
 
 function* lessonSaga() {
@@ -89,6 +127,8 @@ function* lessonSaga() {
   yield takeEvery(GET_USER_TOPIC_LESSONS, getUserTopicLessonsHttp)
   yield takeEvery(GET_LESSON, getLessonHttp)
   yield takeEvery(COMPLETED_LESSON, completedLessonHttp)
+  yield takeEvery(GET_RECENT_LESSONS, getRecentLessonsHttp)
+  yield takeEvery(GET_INCOMPLETE_LESSONS_COUNT, getIncompleteLessonsCountHttp)
 }
 
 export default lessonSaga

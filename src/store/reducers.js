@@ -2,7 +2,6 @@ import { combineReducers } from "redux"
 
 // Authentication
 import Login from "./../pages/auth/login/store/reducer"
-import Register from "./auth/register/reducer"
 import Layout from "./layout/reducer"
 import Navbar from "./navbar/reducer"
 import Chat from "./../pages/chat/store/reducer"
@@ -14,6 +13,7 @@ import Tests from "./../pages/tests/store/reducer"
 import Assignments from "./../pages/assignments/store/reducer"
 import GoogleSignIn from './../views/google-signin/store/reducer'
 import SetupPassword from './../pages/auth/setup-password/store/reducer'
+import Register from './../pages/auth/register/store/reducer'
 
 const rootReducer = combineReducers({
   Register,

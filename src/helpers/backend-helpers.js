@@ -49,6 +49,7 @@ export const uploadBlogImage = (data, options) => postForm(url.UPLOAD_BLOG_IMAGE
 export const postStudentLogin = data => post(url.POST_STUDENT_LOGIN, data);
 export const signInWithGoogle = data => post(url.SIGN_IN_WITH_GOOGLE, data);
 export const setupAccountPassword = data => post(url.RESET_PASSWORD, data);
+export const registerUser = data => post(url.REGISTER, data);
 
 //Meeting
 export const newMeeting = data => post(url.NEW_MEETING, data);
@@ -63,6 +64,8 @@ export const getLesson = (id) => get(url.LESSON(id));
 export const completedLesson = (data) => put(url.STUDENT_LESSONS, data);
 export const getTopicLessons = id => get(url.GET_TOPIC_LESSONS(id));
 export const uploadNewTopic = data => postForm(url.NEW_TOPICS, data);
+export const getRecentLessons = (id) => get(url.GET_RECENT_LESSONS);
+export const getIncompleteLessonsCount = () => get(url.GET_INCOMPLETE_LESSON_COUNT);
 
 //Test
 
