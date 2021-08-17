@@ -2,7 +2,6 @@ import React from 'react';
 
 import {
 	CardBody,
-	CardTitle,
 	Table,
 	Badge,
 	UncontrolledDropdown,
@@ -24,7 +23,7 @@ import {
 } from 'reactstrap';
 
 
-import { MoreVertical, Bell, Plus, X, Calendar, AlertCircle } from 'react-feather'
+import { MoreVertical, X, Calendar, AlertCircle } from 'react-feather'
 
 import CardReload from '../../@core/components/card-reload';
 
@@ -33,7 +32,7 @@ import { DateTime } from '../../components/date-time';
 import { useState, useEffect } from 'react';
 import { getAllMeetings, updateMeeting } from '@store/actions';
 import { withRouter } from 'react-router-dom';
-import { connect, useDispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import { MeetingActions } from './util';
 import { getLoggedInUser } from '../../helpers/backend-helpers'
 

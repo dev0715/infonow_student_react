@@ -2,17 +2,10 @@ import React from 'react';
 // ** React Imports
 import { Fragment, useState, useEffect } from 'react'
 
-import {
-    useParams
-} from "react-router-dom";
 
 // ** Third Party Components
-import classnames from 'classnames'
 import {
     Card, CardBody, Row, Col,
-    Collapse,
-    Navbar,
-    NavbarToggler,
     Button,
     CardTitle,
     CardHeader,
@@ -22,7 +15,7 @@ import {
 } from 'reactstrap'
 
 // ** Store & Actions
-import { connect, useSelector } from 'react-redux'
+import { connect } from 'react-redux'
 import {
     newTestAttempt, submitTestAttempt,
     updateObjectiveQuestion,

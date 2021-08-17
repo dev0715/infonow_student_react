@@ -1,7 +1,7 @@
 import React from 'react';
 // ** React Imports
 import { useEffect } from 'react'
-import { NavLink, useLocation, matchPath, useParams } from 'react-router-dom'
+import { NavLink, useLocation, matchPath } from 'react-router-dom'
 
 // ** Third Party Components
 import { Badge } from 'reactstrap'
@@ -11,7 +11,7 @@ import classnames from 'classnames'
 import navigation from '@src/navigation/vertical'
 
 // ** Utils
-import { isNavLinkActive, search, getAllParents } from '@layouts/utils'
+import { search, getAllParents } from '@layouts/utils'
 
 const VerticalNavMenuLink = ({
   item,
@@ -82,20 +82,20 @@ const VerticalNavMenuLink = ({
         /*eslint-disable */
         {...(item.externalLink === true
           ? {
-              href: item.navLink || '/'
-            }
+            href: item.navLink || '/'
+          }
           : {
-              to: item.navLink || '/',
-              isActive: (match, location) => {
-                if (!match) {
-                  return false
-                }
-
-                if (match.url && match.url !== '' && match.url === item.navLink) {
-                  currentActiveItem = item.navLink
-                }
+            to: item.navLink || '/',
+            isActive: (match, location) => {
+              if (!match) {
+                return false
               }
-            })}
+
+              if (match.url && match.url !== '' && match.url === item.navLink) {
+                currentActiveItem = item.navLink
+              }
+            }
+          })}
         /*eslint-enable */
         onClick={e => {
           if (!item.navLink.length) {

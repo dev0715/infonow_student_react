@@ -30,6 +30,9 @@ axiosApi.interceptors.response.use(
 				logoutUser();
 			}
 			if (data.status !== 200 || data.status !== 201) {
+				if (data.data && data.message) {
+					return Promise.reject(data);
+				}
 				if (data.message) {
 					return Promise.reject(data.message);
 				}

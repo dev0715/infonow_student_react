@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSkin } from '@hooks/useSkin'
 import { Link, useHistory, withRouter } from 'react-router-dom'
-import { Facebook, Twitter, Mail, GitHub, Coffee } from 'react-feather'
+import { Coffee } from 'react-feather'
 import Avatar from '@components/avatar'
 import { loginUser, loginError } from '@store/actions'
 import { Row, Col, CardTitle, CardText, FormGroup, Label, CustomInput, Button, Alert } from 'reactstrap'

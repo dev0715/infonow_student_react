@@ -20,11 +20,13 @@ import {
   UPDATE_SUBJECTIVE_QUESTION,
   NEXT_QUESTION,
   PREVIOUS_QUESTION,
-  SELECT_QUESTION
+  SELECT_QUESTION,
+  GET_TEST_ATTEMPT_DETAILS,
+  GET_TEST_ATTEMPT_DETAILS_SUCCESS,
+  GET_TEST_ATTEMPT_DETAILS_FAILURE,
 
 } from './actionTypes'
 
-import moment from 'moment'
 
 let TEST_KEY = "ATTEMPT_TEST_OBJECT"
 
@@ -45,7 +47,10 @@ const initialState = {
   testStartTime: testObj.testStartTime || null,
   attemptTestError: null,
   submitTestLoading: false,
-  submitTestError: null
+  submitTestError: null,
+  attemptDetails: {},
+  attemptDetailsLoading: false,
+  attemptDetailsError: null
 }
 
 
@@ -227,6 +232,15 @@ const testReducer = (state = initialState, action) => {
 
     case SUBMIT_TEST_ATTEMPT_FAILURE:
       return submitTestAttemptFailure(state, action.payload)
+
+    case GET_TEST_ATTEMPT_DETAILS:
+      return { ...state, attemptDetailsLoading: true, attemptDetailsError: null }
+
+    case GET_TEST_ATTEMPT_DETAILS_SUCCESS:
+      return { ...state, attemptDetails: action.payload, attemptDetailsLoading: false, attemptDetailsError: null }
+
+    case GET_TEST_ATTEMPT_DETAILS_FAILURE:
+      return { ...state, attemptDetails: [], attemptDetailsLoading: false, attemptDetailsError: action.payload }
 
     default:
       return state

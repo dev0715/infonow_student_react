@@ -22,7 +22,7 @@ import GoogleSignIn from '../../../views/google-signin';
 const Register = (props) => {
     const [skin, setSkin] = useSkin()
 
-    const illustration = skin === 'dark' ? 'login-v2-dark.svg' : 'login-v2.svg',
+    const illustration = skin === 'dark' ? 'register-dark.svg' : 'register-light.svg',
         source = require(`@src/assets/images/pages/${illustration}`)
 
     const [processing, setProcessing] = useState(false)

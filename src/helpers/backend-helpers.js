@@ -73,6 +73,7 @@ export const getPastTests = () => get(url.GET_PAST_TESTS);
 export const getUpcomingTests = () => get(url.GET_UPCOMING_TESTS);
 export const newTestAttempt = (data) => post(url.POST_TEST_ATTEMPT, data);
 export const submitTestAttempt = (data) => put(url.SUBMIT_TEST_ATTEMPT, data);
+export const getTestAttemptDetails = (id) => get(url.GET_TEST_ATTEMPT_DETAILS(id));
 
 // Assignments 
 export const getNewAssignments = () => get(url.NEW_ASSIGNMENTS)

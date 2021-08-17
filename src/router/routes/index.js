@@ -94,6 +94,12 @@ const Routes = [
     component: lazy(() => import('../../pages/tests/attemptTest'))
   },
   {
+    path: '/attempt-details/:id',
+    exact: true,
+    className: 'test-application',
+    component: lazy(() => import('../../pages/tests/AttemptDetails'))
+  },
+  {
     path: '/login',
     component: lazy(() => import('../../pages/auth/login')),
     layout: 'BlankLayout',

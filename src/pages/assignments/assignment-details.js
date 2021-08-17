@@ -3,11 +3,9 @@ import React from 'react';
 import { Fragment, useState, useEffect } from 'react'
 
 // ** Third Party Components
-import classnames from 'classnames'
 import {
     Card, CardBody, Row, Col,
     Button,
-    Table,
 } from 'reactstrap'
 
 // ** Store & Actions
@@ -107,8 +105,8 @@ const AssignmentsDetails = (props) => {
         }
         else if (props.selectedAssignment.assignmentAttempt) {
             props.getAssignmentAttempt(
-                props.selectedAssignment.
-                    assignmentAttempt
+                props.selectedAssignment
+                    .assignmentAttempt
                     .assignmentAttemptId)
         }
         else if (!props.selectedAssignment.assignmentAttempt) {
@@ -292,6 +290,21 @@ const AssignmentsDetails = (props) => {
                                             >
                                                 Submit
                                             </Button.Ripple>
+                                        }
+                                        {
+                                            props.attempt.obtainedMarks != null &&
+                                            <div className="d-flex flex-column ">
+                                                <h6>
+                                                    Marks
+                                                </h6>
+                                                <h5>
+                                                    {props.attempt.obtainedMarks}
+                                                    /
+                                                    {
+                                                        props.attempt.assignment.totalMarks
+                                                    }
+                                                </h5>
+                                            </div>
                                         }
                                     </div>
                                     <div className="w-100  p-2 text-dark ">

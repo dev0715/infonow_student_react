@@ -15,7 +15,10 @@ import {
   UPDATE_SUBJECTIVE_QUESTION,
   NEXT_QUESTION,
   PREVIOUS_QUESTION,
-  SELECT_QUESTION
+  SELECT_QUESTION,
+  GET_TEST_ATTEMPT_DETAILS,
+  GET_TEST_ATTEMPT_DETAILS_SUCCESS,
+  GET_TEST_ATTEMPT_DETAILS_FAILURE,
 
 } from './actionTypes'
 
@@ -135,3 +138,23 @@ export const selectQuestion = ({ index }) => {
   }
 }
 
+export const getTestAttemptDetails = (id) => {
+  return {
+    type: GET_TEST_ATTEMPT_DETAILS,
+    payload: id
+  }
+}
+
+export const getTestAttemptDetailsSuccess = (data) => {
+  return {
+    type: GET_TEST_ATTEMPT_DETAILS_SUCCESS,
+    payload: data
+  }
+}
+
+export const getTestAttemptDetailsFailure = (error) => {
+  return {
+    type: GET_TEST_ATTEMPT_DETAILS_FAILURE,
+    payload: error
+  }
+}

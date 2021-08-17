@@ -56,13 +56,15 @@ const Dashboard = (props) => {
 
     return (
         <Fragment >
-            <UILoader blocking={
-                props.meetingsLoading
-                || props.recentLessonsLoading
-                || props.newTestsLoading
-                || props.newAssignmentsLoading
-                || props.incompleteLessonsLoading
-            } >
+            <UILoader
+                blocking={
+                    props.meetingsLoading
+                    || props.recentLessonsLoading
+                    || props.newTestsLoading
+                    || props.newAssignmentsLoading
+                    || props.incompleteLessonsLoading
+                }
+            >
                 <Card>
                     <CardBody >
                         <Row>
@@ -113,177 +115,161 @@ const Dashboard = (props) => {
                                     </div>
                                     <div className="count text-primary">
                                         {
-                                            props.meetings.length
+                                            props.meetings.filter(m => m.status == 'accepted' && moment(m.scheduledAt).isSameOrAfter(moment())).length
                                         }
                                     </div>
                                 </div>
                             </Col>
                         </Row>
-                        <Row className="mt-4">
-                            {
-                                getUpcomingMeeting() &&
-                                <Col sm='12' md='12' lg='6' >
-                                    <div className="shadow-container">
-                                        <UpcomingMeeting meeting={getUpcomingMeeting()} />
-                                    </div>
-                                </Col>
-                            }
-                            <Col sm='12' md='12'
-                                lg={getUpcomingMeeting() ? '6' : '12'}
-                                className='d-flex'
-                            >
-                                <div className={`h-100 w-100 shadow-container  ${getUpcomingMeeting() ? 'ml-lg-2' : ''}`}>
-                                    <div className={`d-flex align-items-center justify-content-between p-1`}>
-                                        <h5 className='m-0'>
-                                            Upcoming Assignments
-                                        </h5>
-                                        <Button.Ripple
-                                            color='flat-primary'
-                                            onClick={() => props.history.push("/assignments")}
-                                        >
-                                            View All
-                                        </Button.Ripple>
-                                    </div>
+                        {
+                            (props.newAssignmentsError ||
+                                props.newTestsError ||
+                                props.meetingsError ||
+                                props.recentLessonsError) &&
+                            <div>
+                                <NoNetwork message="Something went wrong" />
+                            </div>
+                        }
+                        {
+                            !props.newAssignmentsError &&
+                            !props.newTestsError &&
+                            !props.meetingsError &&
+                            !props.recentLessonsError &&
+                            <>
+                                <Row className="mt-4">
                                     {
-                                        !props.newAssignmentsLoading &&
-                                        props.newAssignmentsError &&
-                                        <NoNetwork />
-                                    }
-                                    {
-                                        !props.newAssignmentsLoading &&
-                                        !props.newAssignmentsError &&
-                                        props.newAssignments.length == 0 &&
-                                        <NotFound />
+                                        getUpcomingMeeting() &&
+                                        <Col sm='12' md='12' lg='6' >
+                                            <div className="shadow-container">
+                                                <UpcomingMeeting meeting={getUpcomingMeeting()} />
+                                            </div>
+                                        </Col>
                                     }
                                     {
                                         !props.newAssignmentsLoading &&
                                         !props.newAssignmentsError &&
                                         props.newAssignments.length > 0 &&
-                                        <Table responsive hover >
-                                            <tbody>
-                                                {props.newAssignments.filter((na, i) => i < 9).map((a, index) =>
-                                                    <tr key={"recent-lesson" + index}>
-                                                        <td>
-                                                            <div
-                                                                className="d-flex justify-content-between align-items-center"
-                                                            >
-                                                                <div>
-                                                                    {a.assignment.title}
-                                                                </div>
-                                                                <div className="text-primary">
-                                                                    <DateTime dateTime={a.endDate} type="date" />
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                )}</tbody>
-                                        </Table>
-                                    }
-                                </div>
-                            </Col>
-                        </Row>
-                        <Row className="mt-3 ">
-                            <Col lg='12'>
-                                <div className="shadow-container">
-                                    <h5 className="p-1 m-0">
-                                        Upcoming Tests
-                                    </h5>
-                                    {
-                                        !props.newTestsLoading &&
-                                        !props.newTestsError &&
-                                        props.newTests.length == 0 &&
-                                        <NotFound />
-                                    }
-                                    {
-                                        !props.newTestsLoading && props.newTestsError &&
-                                        <NoNetwork />
-                                    }
-                                    {
-                                        !props.newTestsLoading &&
-                                        !props.newTestsError &&
-                                        props.newTests.length > 0 &&
-                                        <Table responsive hover>
-                                            <thead>
-                                                <tr>
-                                                    <th>Test</th>
-                                                    <th>Start Time</th>
-                                                    <th>Duration</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {props.newTests.map((t, index) =>
-                                                    <tr key={'test-key' + index}>
-                                                        <td>
-                                                            <span className='align-middle font-weight-bold'>
-                                                                {t.test.title}
-                                                            </span>
-                                                        </td>
-                                                        <td><DateTime dateTime={t.startTime} type="date" /></td>
-                                                        <td>{t.test.timeLimit / 60} mins</td>
-                                                    </tr>)
-                                                }
-                                            </tbody>
-                                        </Table>
-                                    }
-                                </div>
-                            </Col>
-                        </Row>
-                        <div className="pt-3">
-                            <h5>
-                                Recent Lessons
-                            </h5>
-
-                            {
-                                !props.recentLessonsLoading &&
-                                props.recentLessonsError &&
-                                <NoNetwork />
-                            }
-                            {
-                                !props.recentLessonsLoading &&
-                                !props.recentLessonsError &&
-                                props.recentLessons.length == 0 &&
-                                <NotFound />
-                            }
-                            {
-                                !props.recentLessonsLoading &&
-                                !props.recentLessonsError &&
-                                props.recentLessons.length > 0 &&
-                                <Row>
-                                    {
-                                        props.recentLessons.map((l, index) =>
-                                            <Col
-                                                key={'topic-key-' + index}
-                                                sm='12' md='6' lg='6'
-                                                className='pl-1 pr-1 pb-1 '
-                                                onClick={() => handleLesson(l)}
-                                            >
-                                                <div
-                                                    className={`topic-item`}
-                                                >
-                                                    <div
-                                                        className="topic-image"
-                                                        style={{
-                                                            backgroundImage: `url(${GET_BLOG_IMAGE_URL(l.topic.image.formats.thumbnail.url)})`
-                                                        }}
+                                        <Col sm='12' md='12'
+                                            lg={getUpcomingMeeting() ? '6' : '12'}
+                                            className='d-flex'
+                                        >
+                                            <div className={`h-100 w-100 shadow-container  ${getUpcomingMeeting() ? 'ml-lg-2' : ''}`}>
+                                                <div className={`d-flex align-items-center justify-content-between p-1`}>
+                                                    <h5 className='m-0'>
+                                                        Upcoming Assignments
+                                                    </h5>
+                                                    <Button.Ripple
+                                                        color='flat-primary'
+                                                        onClick={() => props.history.push("/assignments")}
                                                     >
-                                                    </div>
-                                                    <div className="topic-content">
-                                                        <div
-                                                            className="heading"
-                                                        >
-                                                            {l.title}
-                                                        </div>
-                                                        <div className="description">
-                                                            {l.description}
-                                                        </div>
-                                                    </div>
+                                                        View All
+                                                    </Button.Ripple>
                                                 </div>
-                                            </Col>
-                                        )
+                                                <Table responsive hover >
+                                                    <tbody>
+                                                        {props.newAssignments.filter((na, i) => i < 9).map((a, index) =>
+                                                            <tr key={"recent-lesson" + index}>
+                                                                <td>
+                                                                    <div
+                                                                        className="d-flex justify-content-between align-items-center"
+                                                                    >
+                                                                        <div>
+                                                                            {a.assignment.title}
+                                                                        </div>
+                                                                        <div className="text-primary">
+                                                                            <DateTime dateTime={a.endDate} type="date" />
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        )}</tbody>
+                                                </Table>
+                                            </div>
+                                        </Col>
                                     }
                                 </Row>
-                            }
-                        </div>
+                                {
+                                    !props.newTestsLoading &&
+                                    !props.newTestsError &&
+                                    props.newTests.length > 0 &&
+                                    <Row className="mt-3 ">
+                                        <Col lg='12'>
+                                            <div className="shadow-container">
+                                                <h5 className="p-1 m-0">
+                                                    Upcoming Tests
+                                                </h5>
+                                                <Table responsive hover>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Test</th>
+                                                            <th>Start Time</th>
+                                                            <th>Duration</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {props.newTests.map((t, index) =>
+                                                            <tr key={'test-key' + index}>
+                                                                <td>
+                                                                    <span className='align-middle font-weight-bold'>
+                                                                        {t.test.title}
+                                                                    </span>
+                                                                </td>
+                                                                <td><DateTime dateTime={t.startTime} type="date" /></td>
+                                                                <td>{t.test.timeLimit / 60} mins</td>
+                                                            </tr>)
+                                                        }
+                                                    </tbody>
+                                                </Table>
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                }
+                                {
+                                    !props.recentLessonsLoading &&
+                                    !props.recentLessonsError &&
+                                    props.recentLessons.length > 0 &&
+                                    <div className="pt-3">
+                                        <h5>
+                                            Recent Lessons
+                                        </h5>
+                                        <Row>
+                                            {
+                                                props.recentLessons.map((l, index) =>
+                                                    <Col
+                                                        key={'topic-key-' + index}
+                                                        sm='12' md='6' lg='6'
+                                                        className='pl-1 pr-1 pb-1 '
+                                                        onClick={() => handleLesson(l)}
+                                                    >
+                                                        <div
+                                                            className={`topic-item`}
+                                                        >
+                                                            <div
+                                                                className="topic-image"
+                                                                style={{
+                                                                    backgroundImage: `url(${GET_BLOG_IMAGE_URL(l.topic.image.formats.thumbnail.url)})`
+                                                                }}
+                                                            >
+                                                            </div>
+                                                            <div className="topic-content">
+                                                                <div
+                                                                    className="heading"
+                                                                >
+                                                                    {l.title}
+                                                                </div>
+                                                                <div className="description">
+                                                                    {l.description}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </Col>
+                                                )
+                                            }
+                                        </Row>
+                                    </div>
+                                }
+                            </>
+                        }
                     </CardBody>
                 </Card>
             </UILoader >

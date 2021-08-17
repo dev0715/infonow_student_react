@@ -6,7 +6,8 @@ import {
   GET_UPCOMING_TESTS,
   GET_PAST_TESTS,
   NEW_TEST_ATTEMPT,
-  SUBMIT_TEST_ATTEMPT
+  SUBMIT_TEST_ATTEMPT,
+  GET_TEST_ATTEMPT_DETAILS
 } from "./actionTypes"
 
 
@@ -18,12 +19,20 @@ import {
   newTestAttemptFailure,
   newTestAttemptSuccess,
   submitTestAttemptFailure,
-  submitTestAttemptSuccess
+  submitTestAttemptSuccess,
+  getTestAttemptDetailsSuccess,
+  getTestAttemptDetailsFailure
 
 } from "./actions"
 
 //Include Both Helper File with needed methods
-import { getPastTests, getUpcomingTests, newTestAttempt, submitTestAttempt } from "../../../helpers/backend-helpers"
+import {
+  getPastTests,
+  getUpcomingTests,
+  newTestAttempt,
+  submitTestAttempt,
+  getTestAttemptDetails
+} from "../../../helpers/backend-helpers"
 
 function* getUpcomingTestsHttp() {
   try {
@@ -78,11 +87,24 @@ function* submitTestAttemptHttp({ payload }) {
     throw "Unknown response received from Server";
 
   } catch (error) {
-
     yield put(submitTestAttemptFailure({
       error: error.message ? error.message : error,
       isSubmitted: error.data ? error.data.isSubmitted : null
     }))
+  }
+}
+
+function* getTestAttemptDetailsHttp({ payload }) {
+  try {
+    const response = yield call(getTestAttemptDetails, payload);
+    if (response) {
+      yield put(getTestAttemptDetailsSuccess(response))
+      return;
+    }
+    throw "Unknown response received from Server";
+
+  } catch (error) {
+    yield put(getTestAttemptDetailsFailure(error.message ? error.message : error))
   }
 }
 
@@ -91,6 +113,7 @@ function* testSaga() {
   yield takeEvery(GET_PAST_TESTS, getPastTestsHttp)
   yield takeEvery(NEW_TEST_ATTEMPT, newTestAttemptHttp)
   yield takeEvery(SUBMIT_TEST_ATTEMPT, submitTestAttemptHttp)
+  yield takeEvery(GET_TEST_ATTEMPT_DETAILS, getTestAttemptDetailsHttp)
 }
 
 export default testSaga

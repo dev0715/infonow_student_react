@@ -1,9 +1,9 @@
 
-// export const BASE_URL = `http://192.168.1.100:3600`
+// export const BASE_URL = `http://192.168.1.101:3600`
 // // export const BASE_URL = `http://192.168.10.102:3600`
 // export const DOCUMENT_BASE_URL = `${BASE_URL}/public`
 // // export const MEETING_API_URL = `http://192.168.10.104:3900`
-// export const MEETING_API_URL = `http://192.168.1.101:3900`
+// export const MEETING_API_URL = `http://192.168.1.103:3900`
 // export const CHAT_API_URL = `http://192.168.10.104:3700`
 // export const CHAT_SOCKET_API_URL = `http://192.168.10.104:3701`
 // // export const BLOG_API_URL = `http://192.168.10.102:1337`
@@ -73,6 +73,7 @@ export const GET_PAST_TESTS = `${BASE_URL}/api/v1/tests/past-tests`
 export const GET_UPCOMING_TESTS = `${BASE_URL}/api/v1/tests/upcoming-tests`
 export const POST_TEST_ATTEMPT = `${BASE_URL}/api/v1/attempts`
 export const SUBMIT_TEST_ATTEMPT = `${BASE_URL}/api/v1/attempts`
+export const GET_TEST_ATTEMPT_DETAILS = id => `${BASE_URL}/api/v1/tests/${id}/attempts`
 
 // Assignments
 

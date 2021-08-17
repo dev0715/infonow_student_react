@@ -3,21 +3,15 @@ import React from 'react';
 import { Fragment, useState, useEffect } from 'react'
 
 // ** Third Party Components
-import classnames from 'classnames'
 import {
-    Card, CardBody, Row, Col,
-    Collapse,
-    Navbar,
-    NavbarToggler,
-    Button, Table,
-    CardTitle,
-    CardHeader, TabContent, TabPane, Nav, NavItem, NavLink
+    Card, CardBody, Button, Table,
+    TabContent, TabPane, Nav, NavItem, NavLink
 } from 'reactstrap'
 
 
 
 // ** Store & Actions
-import { connect, useSelector } from 'react-redux'
+import { connect } from 'react-redux'
 import { getPastTests, getUpcomingTests, newTestAttempt, submitTestAttempt } from './store/actions'
 
 import { withRouter } from 'react-router';
@@ -82,7 +76,6 @@ const AppTests = (props) => {
         if (props.attemptId && Object.keys(props.selectedTest).length > 0) {
             props.history.push('/tests/attempt')
         }
-        console.log("props", props.selectedTest)
     }, [props.selectedTest])
 
     useEffect(() => {
@@ -95,7 +88,7 @@ const AppTests = (props) => {
         return <>{
             !props.newTestsLoading &&
             !props.newTestsError &&
-            props.newTests.length == 0 &&
+            props.newTests.length === 0 &&
             <NotFound />
         }
             {
@@ -145,6 +138,10 @@ const AppTests = (props) => {
         </>
     }
 
+    const handlePastTest = (id) => {
+        props.history.push(`/attempt-details/${id}`)
+    }
+
     const pastTestsView = () => {
         return (<div>
             {
@@ -173,7 +170,10 @@ const AppTests = (props) => {
                     </thead>
                     <tbody>
                         {props.pastTests.map((t, index) =>
-                            <tr key={'past-test-key' + index}>
+                            <tr
+                                key={'past-test-key' + index}
+                                onClick={() => handlePastTest(t.studentTestId)}
+                            >
                                 <td>{index + 1}</td>
                                 <td>
                                     <span className='align-middle font-weight-bold'>

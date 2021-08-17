@@ -3,19 +3,17 @@ import React from 'react';
 import { Fragment, useState, useEffect } from 'react'
 
 // ** Third Party Components
-import classnames from 'classnames'
 import {
     Card, CardBody, Row, Col,
     Collapse,
     Navbar,
-    NavbarToggler,
     Button,
     CardTitle,
     CardHeader, Badge
 } from 'reactstrap'
 
 // ** Store & Actions
-import { connect, useSelector } from 'react-redux'
+import { connect } from 'react-redux'
 import { getUserTopics, getUserTopicLessons, selectTopic, selectLesson, getLesson, completedLesson } from './store/actions'
 
 import { withRouter } from 'react-router';
