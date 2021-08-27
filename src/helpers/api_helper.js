@@ -14,6 +14,7 @@ const DEBUG = false;
 
 function logoutUser() {
 	localStorage.removeItem('authUser');
+	localStorage.removeItem('authToken');
 	localStorage.removeItem('adminUser');
 	window.location.href = '/';
 }

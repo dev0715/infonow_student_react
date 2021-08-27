@@ -25,7 +25,7 @@ function* getAllMeetingsHttp() {
         const response = yield call(getStudentAllMeetings, user.userId);
         yield put(getAllMeetingsSuccess(response))
     } catch (error) {
-        yield put(getAllMeetingsError(error))
+        yield put(getAllMeetingsError(error.message ? error.message : error))
     }
 }
 
@@ -34,7 +34,7 @@ function* getMeetingDatesHttp({ payload }) {
         const response = yield call(getMeetingDates, payload);
         yield put(getMeetingDatesSuccess(response))
     } catch (error) {
-        yield put(getMeetingDatesFailure(error))
+        yield put(getMeetingDatesFailure(error.message ? error.message : error))
     }
 }
 
@@ -43,7 +43,7 @@ function* newMeetingHttp({ payload }) {
         const response = yield call(newMeeting, payload);
         yield put(newMeetingSuccess(response))
     } catch (error) {
-        yield put(newMeetingFailure(error))
+        yield put(newMeetingFailure(error.message ? error.message : error))
     }
 }
 
@@ -52,7 +52,7 @@ function* updateMeetingHttp({ payload: { id, action, data } }) {
         const response = yield call(updateMeeting, id, action, data);
         yield put(updateMeetingSuccess({ id, data: response }))
     } catch (error) {
-        yield put(updateMeetingFailure({ id, error }))
+        yield put(updateMeetingFailure({ id, error: error.message ? error.message : error }))
     }
 }
 

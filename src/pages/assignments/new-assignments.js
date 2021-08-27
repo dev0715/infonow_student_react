@@ -26,6 +26,9 @@ import UILoader from '../../@core/components/ui-loader';
 import NotFound from '../../components/not-found';
 import NoNetwork from '../../components/no-network';
 import { DateTime } from '../../components/date-time';
+
+// ** Styles
+import '@styles/react/libs/tables/react-dataTable-component.scss'
 import './style.scss'
 
 import moment from 'moment'

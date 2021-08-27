@@ -25,6 +25,10 @@ export const isUserAuthenticated = () => {
 }
 
 
+// Get started
+export const getStartedContent = () => get(url.GET_STARTED_CONTENT)
+
+
 // Chats
 export const getChatContactsRequest = id => get(url.GET_CHATS_CONTACTS(id))
 export const getChatDocuments = id => get(url.GET_CHAT_DOCUMENTS(id))
@@ -48,14 +52,18 @@ export const uploadBlogImage = (data, options) => postForm(url.UPLOAD_BLOG_IMAGE
 // Student Actions
 export const postStudentLogin = data => post(url.POST_STUDENT_LOGIN, data);
 export const signInWithGoogle = data => post(url.SIGN_IN_WITH_GOOGLE, data);
-export const setupAccountPassword = data => post(url.RESET_PASSWORD, data);
+export const setupAccountPassword = data => post(url.SETUP_ACCOUNT_PASSWORD, data);
 export const registerUser = data => post(url.REGISTER, data);
+export const forgotAccountPassword = data => post(url.FORGOT_PASSWORD, data);
+export const resetAccountPassword = data => post(url.RESET_PASSWORD, data);
 
 //Meeting
 export const newMeeting = data => post(url.NEW_MEETING, data);
 export const getStudentAllMeetings = userId => get(url.GET_ALL_MEETINGS(userId));
 export const getMeetingDates = userId => get(url.GET_MEETING_DATES(userId));
 export const updateMeeting = (id, action, data) => put(url.UPDATE_MEETING(id, action), data);
+export const getMeetingWithAdmin = userId => get(url.GET_ADMIN_MEETING(userId));
+export const newAdminMeeting = data => post(url.NEW_ADMIN_MEETING, data);
 
 //Lessons
 
@@ -82,3 +90,9 @@ export const getAssignmentAttempt = (id) => get(url.GET_ASSIGNMENT_ATTEMPT(id))
 export const getAssignment = (id) => get(url.GET_ASSIGNMENT(id))
 export const createAssignmentAttempt = (data) => post(url.ASSIGNMENT_ATTEMPT, data)
 export const submitAssignment = (data) => put(url.ASSIGNMENT_ATTEMPT, data)
+
+//Profile
+
+export const updateProfileData = (id, data) => put(url.UPDATE_PROFILE_DATA(id), data);
+export const uploadProfilePicture = (id, data) => postForm(url.UPLOAD_PROFILE_PICTURE(id), data);
+export const updatePassword = (id, data) => put(url.UPDATE_PASSWORD(id), data);

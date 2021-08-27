@@ -52,30 +52,30 @@ const AppAssignments = (props) => {
         props.history.push(`/assignments/details`)
     }
 
-    const handleAssignmentAttempt = (a) => {
-        if (moment().isAfter(moment(a.startDate))
-            || moment().isSame(moment(a.startDate))
-            || moment().isBefore(moment(a.endDate))
-            || moment().isSame(moment(a.endDate))
-        ) {
-            return MySwal.fire({
-                icon: 'question',
-                title: "Confirm",
-                text: 'Are you sure you want to start the assignment?',
-                customClass: {
-                    confirmButton: 'btn btn-primary',
-                    cancelButton: 'btn btn-outline-danger ml-1'
-                },
-                showCancelButton: true,
-                confirmButtonText: 'Yes',
-                buttonsStyling: false
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    goToAssignment(a)
-                }
-            })
-        }
-    }
+    // const handleAssignmentAttempt = (a) => {
+    //     if (moment().isAfter(moment(a.startDate))
+    //         || moment().isSame(moment(a.startDate))
+    //         || moment().isBefore(moment(a.endDate))
+    //         || moment().isSame(moment(a.endDate))
+    //     ) {
+    //         return MySwal.fire({
+    //             icon: 'question',
+    //             title: "Confirm",
+    //             text: 'Are you sure you want to start the assignment?',
+    //             customClass: {
+    //                 confirmButton: 'btn btn-primary',
+    //                 cancelButton: 'btn btn-outline-danger ml-1'
+    //             },
+    //             showCancelButton: true,
+    //             confirmButtonText: 'Yes',
+    //             buttonsStyling: false
+    //         }).then((result) => {
+    //             if (result.isConfirmed) {
+    //                 goToAssignment(a)
+    //             }
+    //         })
+    //     }
+    // }
 
     return (
         <Fragment >
@@ -140,7 +140,7 @@ const AppAssignments = (props) => {
                                                                         || moment().isSame(moment(a.endDate))
                                                                     ) &&
                                                                     <Button.Ripple color='flat-primary'
-                                                                        onClick={() => handleAssignmentAttempt(a)}
+                                                                        onClick={() => goToAssignment(a)}
                                                                     >
                                                                         Start
                                                                     </Button.Ripple>

@@ -59,6 +59,8 @@ const MySwal = withReactContent(Swal)
 
 const AssignmentsDetails = (props) => {
 
+    const [isCreateAssignment, setIsCreateAssignment] = useState(false)
+
     const THEORETICAL = "theoretical"
     const CODING = "coding"
 
@@ -93,15 +95,42 @@ const AssignmentsDetails = (props) => {
         setCodeValue(value)
     }
 
+    const handleAssignmentAttempt = (a) => {
+        if (moment().isAfter(moment(a.startDate))
+            || moment().isSame(moment(a.startDate))
+            || moment().isBefore(moment(a.endDate))
+            || moment().isSame(moment(a.endDate))
+        ) {
+            return MySwal.fire({
+                icon: 'question',
+                title: "Confirm",
+                text: 'Are you sure you want to start the assignment?',
+                customClass: {
+                    confirmButton: 'btn btn-primary',
+                    cancelButton: 'btn btn-outline-danger ml-1'
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                buttonsStyling: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    setIsCreateAssignment(true)
+                    props.createAssignmentAttempt({
+                        studentAssignmentId: props.selectedAssignment.studentAssignmentId
+                    });
+                } else {
+                    props.history.goBack();
+                }
+            })
+        }
+    }
     useEffect(() => {
         if (Object.keys(props.selectedAssignment).length == 0) {
             props.history.goBack();
         }
         else if (moment().isAfter(moment(props.selectedAssignment.startDate))
             && moment().isBefore(moment(props.selectedAssignment.endDate))) {
-            props.createAssignmentAttempt({
-                studentAssignmentId: props.selectedAssignment.studentAssignmentId
-            });
+            handleAssignmentAttempt(props.selectedAssignment)
         }
         else if (props.selectedAssignment.assignmentAttempt) {
             props.getAssignmentAttempt(
@@ -115,7 +144,8 @@ const AssignmentsDetails = (props) => {
     }, [props.selectedAssignment])
 
     useEffect(() => {
-        if (props.createAttemptError) {
+        if (isCreateAssignment && props.createAttemptError) {
+            setIsCreateAssignment(false)
             notifyError("Assignment Attempt", props.createAttemptError)
         }
     }, [props.createAttemptError])

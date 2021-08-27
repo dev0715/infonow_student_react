@@ -366,6 +366,9 @@ const ChatLog = props => {
         <div className='start-chat-icon mb-1'>
           <MessageSquare />
         </div>
+        <h4 className='sidebar-toggle start-chat-text' onClick={handleStartConversation}>
+          Start Conversation
+        </h4>
       </div>
 
       <div className={
@@ -596,10 +599,11 @@ const ChatLog = props => {
                   <span className='d-none d-lg-block'>Send</span>
                 </Button>
               </Form>
-              :
-              <div className="text-center pt-1">
-                You can not reply to this conversation
-              </div>
+              : <>
+                <div className="text-center pt-1">
+                  You can not reply to this conversation
+                </div>
+              </>
           }
         </div>
       }

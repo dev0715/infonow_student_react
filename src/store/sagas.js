@@ -13,6 +13,10 @@ import AssignmentsSaga from "./../pages/assignments/store/saga"
 import GoogleSignInSaga from "./../views/google-signin/store/saga"
 import SetupPasswordSaga from "./../pages/auth/setup-password/store/saga"
 import RegisterSaga from "./../pages/auth/register/store/saga"
+import GetStartedSaga from "./../pages/get-started/store/saga"
+import ProfileSaga from "./../pages/profile/store/saga"
+import ForgotPasswordSaga from "./../pages/auth/forgot-password/store/saga"
+import ResetPasswordSaga from "./../pages/auth/reset-password/store/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -27,6 +31,10 @@ export default function* rootSaga() {
     AssignmentsSaga(),
     GoogleSignInSaga(),
     SetupPasswordSaga(),
-    RegisterSaga()
+    RegisterSaga(),
+    GetStartedSaga(),
+    ProfileSaga(),
+    ForgotPasswordSaga(),
+    ResetPasswordSaga()
   ])
 }

@@ -34,5 +34,17 @@ export * from './../views/google-signin/store/actions'
 //Setup Password
 export * from './../pages/auth/setup-password/store/actions'
 
+//Forgot Password
+export * from './../pages/auth/forgot-password/store/actions'
+
+//Reset Password
+export * from './../pages/auth/reset-password/store/actions'
+
 //Register
 export * from './../pages/auth/register/store/actions'
+
+//GetStarted
+export * from './../pages/get-started/store/actions'
+
+//Profile
+export * from './../pages/profile/store/actions'

@@ -1,20 +1,17 @@
 
-// export const BASE_URL = `http://192.168.1.101:3600`
-// // export const BASE_URL = `http://192.168.10.102:3600`
-// export const DOCUMENT_BASE_URL = `${BASE_URL}/public`
-// // export const MEETING_API_URL = `http://192.168.10.104:3900`
-// export const MEETING_API_URL = `http://192.168.1.103:3900`
-// export const CHAT_API_URL = `http://192.168.10.104:3700`
-// export const CHAT_SOCKET_API_URL = `http://192.168.10.104:3701`
-// // export const BLOG_API_URL = `http://192.168.10.102:1337`
-// export const BLOG_API_URL = `http://192.168.1.100:1337`
-
-export const BASE_URL = `https://api.meditati.ro/main`
+export const BASE_URL = `http://192.168.10.102:3600`
 export const DOCUMENT_BASE_URL = `${BASE_URL}/public`
-export const MEETING_API_URL = `https://meeting.meditati.ro/api`
-export const CHAT_API_URL = `https://api.meditati.ro/chat`
-export const CHAT_SOCKET_API_URL = `https://api.meditati.ro/`
-export const BLOG_API_URL = `https://api.meditati.ro/blog`
+export const MEETING_API_URL = `http://192.168.10.104:3900`
+export const CHAT_API_URL = `http://192.168.10.104:3700`
+export const CHAT_SOCKET_API_URL = `http://192.168.10.104:3701`
+export const BLOG_API_URL = `http://192.168.10.102:1337`
+
+// export const BASE_URL = `https://api.meditati.ro/main`
+// export const DOCUMENT_BASE_URL = `${BASE_URL}/public`
+// export const MEETING_API_URL = `https://meeting.meditati.ro/api`
+// export const CHAT_API_URL = `https://api.meditati.ro/chat`
+// export const CHAT_SOCKET_API_URL = `https://api.meditati.ro/`
+// export const BLOG_API_URL = `https://api.meditati.ro/blog`
 
 export const GET_IMAGE_URL = url => url ? DOCUMENT_BASE_URL + url : DOCUMENT_BASE_URL + "/profile-pictures/default.png"
 
@@ -22,6 +19,10 @@ export const GET_BLOG_IMAGE_URL = url => BLOG_API_URL + url
 
 export const GET_DOCUMENT_URL = url => DOCUMENT_BASE_URL + url
 
+
+//Get Started
+
+export const GET_STARTED_CONTENT = `${BASE_URL}/api/v1/strapi/content/student_content`
 
 
 // Chats
@@ -32,8 +33,10 @@ export const UPDATE_USER = id => `${BASE_URL}/api/v1/students/${id}/profile`
 // Students
 export const POST_STUDENT_LOGIN = `${BASE_URL}/authenticate/student`
 export const SIGN_IN_WITH_GOOGLE = `${BASE_URL}/authenticate-with-google/student`
+export const SETUP_ACCOUNT_PASSWORD = `${BASE_URL}/setup-password`
 export const RESET_PASSWORD = `${BASE_URL}/reset-password`
 export const REGISTER = `${BASE_URL}/register`
+export const FORGOT_PASSWORD = `${BASE_URL}/forget-password`
 
 
 // Meetings
@@ -41,6 +44,8 @@ export const NEW_MEETING = `${MEETING_API_URL}/meetings`
 export const UPDATE_MEETING = (id, action) => `${MEETING_API_URL}/meetings/${id}/${action}`
 export const GET_ALL_MEETINGS = id => `${MEETING_API_URL}/users/${id}/meetings`
 export const GET_MEETING_DATES = id => `${MEETING_API_URL}/meetings/check-dates/${id}`
+export const GET_ADMIN_MEETING = id => `${MEETING_API_URL}/users/${id}/admin-meeting`
+export const NEW_ADMIN_MEETING = `${MEETING_API_URL}/meetings/admin-meeting`
 
 //Document
 
@@ -78,8 +83,14 @@ export const GET_TEST_ATTEMPT_DETAILS = id => `${BASE_URL}/api/v1/tests/${id}/at
 // Assignments
 
 
-export const ASSIGNMENT_ATTEMPT = `${BASE_URL}/api/v1/assignments-attempts`
+export const ASSIGNMENT_ATTEMPT = `${BASE_URL}/api/v1/assignment-attempts`
 export const NEW_ASSIGNMENTS = `${BASE_URL}/api/v1/assignments/upcoming-assignments`
 export const PAST_ASSIGNMENTS = `${BASE_URL}/api/v1/assignments/past-assignments`
 export const GET_ASSIGNMENT_ATTEMPT = id => `${BASE_URL}/api/v1/assignments-attempts/${id}`
 export const GET_ASSIGNMENT = id => `${BASE_URL}/api/v1/assignments/${id}`
+
+
+//Profile
+export const UPDATE_PROFILE_DATA = id => `${BASE_URL}/api/v1/students/${id}/profile`
+export const UPLOAD_PROFILE_PICTURE = id => `${BASE_URL}/api/v1/students/${id}/profile-picture`
+export const UPDATE_PASSWORD = id => `${BASE_URL}/api/v1/students/${id}/password`

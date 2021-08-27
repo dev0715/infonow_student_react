@@ -6,12 +6,39 @@ const TemplateTitle = '%s - InfoNow'
 // ** Default Route
 const DefaultRoute = '/home'
 
+// ** Default Route for new user
+const GetStartedRoute = '/get-started'
+
 // ** Merge Routes
 const Routes = [
   {
     path: '/home',
     className: 'dashboard-application',
     component: lazy(() => import('../../pages/dashboard'))
+  },
+  {
+    path: '/get-started',
+    className: 'dashboard-application',
+    component: lazy(() => import('../../pages/get-started')),
+    meta: {
+      newUserAccessible: true
+    }
+  },
+  {
+    path: '/profile',
+    className: 'profile-application',
+    component: lazy(() => import('../../pages/profile')),
+    meta: {
+      newUserAccessible: true
+    }
+  },
+  {
+    path: '/calender',
+    className: 'calender-application',
+    component: lazy(() => import('../../pages/calendar')),
+    meta: {
+      newUserAccessible: true
+    }
   },
   {
     path: '/meetings',
@@ -36,7 +63,7 @@ const Routes = [
     path: '/assignments',
     exact: true,
     className: 'assignments-application',
-    component: lazy(() => import('../../pages/assignments'))
+    component: lazy(() => import('../../pages/assignments')),
   },
   {
     appLayout: true,
@@ -64,14 +91,18 @@ const Routes = [
   {
     path: '/blog',
     exact: true,
-    component: lazy(() => import('../../pages/blog/list'))
+    component: lazy(() => import('../../pages/blog/list')),
+    meta: {
+      newUserAccessible: true
+    }
   },
   {
     path: '/blog/:id',
     exact: true,
     component: lazy(() => import('../../pages/blog/details')),
     meta: {
-      navLink: '/blog/:id'
+      navLink: '/blog/:id',
+      newUserAccessible: true
     }
   },
   {
@@ -103,7 +134,9 @@ const Routes = [
     path: '/login',
     component: lazy(() => import('../../pages/auth/login')),
     layout: 'BlankLayout',
-
+    meta: {
+      authRoute: true
+    }
   },
   {
     path: '/register',
@@ -117,8 +150,23 @@ const Routes = [
     path: '/setup-password',
     component: lazy(() => import('../../pages/auth/setup-password')),
     layout: 'BlankLayout',
+
+  },
+  {
+    path: '/forgot-password',
+    component: lazy(() => import('../../pages/auth/forgot-password')),
+    layout: 'BlankLayout',
     meta: {
       authRoute: true
+    }
+  },
+  {
+    path: '/reset-password/:token',
+    component: lazy(() => import('../../pages/auth/reset-password')),
+    layout: 'BlankLayout',
+    meta: {
+      authRoute: true,
+      navLink: '/reset-password/:token'
     }
   },
   {
@@ -130,7 +178,14 @@ const Routes = [
     path: '/unauthorized',
     component: lazy(() => import('../../views/NotAuthorized')),
     layout: 'BlankLayout'
-  }
+  },
+  {
+    path: '/feedback',
+    component: lazy(() => import('../../pages/feedback')),
+    meta: {
+      newUserAccessible: true
+    }
+  },
 ]
 
-export { DefaultRoute, TemplateTitle, Routes }
+export { GetStartedRoute, DefaultRoute, TemplateTitle, Routes }
