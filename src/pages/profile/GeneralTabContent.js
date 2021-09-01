@@ -58,6 +58,7 @@ const GeneralTabs = (props) => {
       notifySuccess("Update Profile", "Profile updated successfully")
     }
     else if (isEditing && !props.updateProfileLoading && props.updateProfileError) {
+      setIsEditing(false)
       notifyError("Update Profile", props.updateProfileError)
     }
   }, [props.updateProfileLoading])
