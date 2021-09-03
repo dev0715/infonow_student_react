@@ -1,6 +1,6 @@
 import React from 'react';
 // ** React Imports
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 // ** Custom Components
 import Avatar from '@components/avatar'
@@ -11,13 +11,17 @@ import { formatDateToMonthShort } from '@utils'
 // ** Third Party Components
 import classnames from 'classnames'
 import PerfectScrollbar from 'react-perfect-scrollbar'
-import { X, Search, CheckSquare, Bell, User, Trash } from 'react-feather'
+import { X, Search, Bell, Plus } from 'react-feather'
 import {
   CardText, InputGroup, InputGroupAddon,
-  Input, InputGroupText, Badge,
-  CustomInput, Button
+  Input, InputGroupText, CustomInput, Button, Modal, ModalBody, Row, Col
 } from 'reactstrap'
 
+
+import NotFound from '../../components/not-found';
+import NoNetwork from '../../components/no-network';
+
+import { notifyError, notifySuccess } from '../../utility/toast'
 
 import UILoader from '../../@core/components/ui-loader';
 
@@ -32,8 +36,16 @@ const SidebarLeft = props => {
 
   const {
     setNotificationEnabled,
-    isNotificationEnabled, selectChat, selectedChat,
-    user, chats, chatLoading, updateAbout
+    isNotificationEnabled,
+    selectChat, selectedChat,
+    user, chats, chatLoading, updateAbout,
+    newChatLoading,
+    newChatError,
+    createChat,
+    getAllTeachers,
+    teachersList,
+    teachersListLoading,
+    teachersListError,
   } = store
 
   // ** State
@@ -42,6 +54,8 @@ const SidebarLeft = props => {
   const [active, setActive] = useState({})
   const [status, setStatus] = useState('online')
   const [filteredChat, setFilteredChat] = useState([])
+
+  const [isNewChat, setIsNewChat] = useState(false)
 
   // ** Handles User Chat Click
   const handleUserClick = (chat, socket) => {
@@ -84,7 +98,15 @@ const SidebarLeft = props => {
                     : item.chatParticipants.find(u => u.user.userId != user.userId).user.name}
                 </h5>
                 <CardText className='text-truncate'>
-                  {item.messages.length > 0 ? item.messages[0].content : ''}
+                  {
+                    item.chatParticipants.find(u => u.user.userId == user.userId && !u.blockedAt) ?
+                      <>
+                        {item.messages.length > 0 ? item.messages[0].content : ''}
+                      </>
+                      :
+                      '...'
+                  }
+
                 </CardText>
               </div>
               <div className='chat-meta text-nowrap'>
@@ -125,6 +147,37 @@ const SidebarLeft = props => {
     console.log("ABOUT___", e.target.value)
     updateAbout({ about: e.target.value })
   }
+
+
+  useEffect(() => {
+    if (isNewChat && !newChatLoading && newChatError) {
+      setIsNewChat(false)
+      notifyError("New Chat", newChatError)
+    }
+    else if (isNewChat && !newChatLoading && !newChatError) {
+      notifySuccess("New Chat", 'Chat started Successfully')
+    }
+  }, [newChatLoading])
+
+
+  const getChatByUserId = (id) => {
+    return chats
+      .filter(ct => ct.type == "chat")
+      .find(c => c.chatParticipants.find(p => p.user.userId == id))
+  }
+
+  const openNewChatModel = () => {
+    setIsNewChat(true);
+    getAllTeachers();
+  }
+
+  const startNewChat = (id) => {
+    createChat({
+      participants: [id],
+      type: "chat"
+    })
+  }
+
 
 
   return (
@@ -256,11 +309,22 @@ const SidebarLeft = props => {
                 <Input
                   value={query}
                   className='round'
-                  placeholder='Search or start a new chat'
+                  placeholder='Search chat'
                   onChange={handleFilter}
                 />
               </InputGroup>
             </div>
+
+            <div className="d-flex  justify-content-center align-items-center pl-1">
+              <Button.Ripple
+                color="flat-primary"
+                className="btn btn-icon btn-sm"
+                onClick={() => openNewChatModel()}
+              >
+                <Plus size='18' />
+              </Button.Ripple>
+            </div>
+
           </div>
           <PerfectScrollbar className='chat-user-list-wrapper list-group' options={{ wheelPropagation: false }}>
             <h4 className='chat-list-title'>Chats</h4>
@@ -270,9 +334,58 @@ const SidebarLeft = props => {
               </UILoader>
             </ul>
           </PerfectScrollbar>
-
         </div>
       </div>
+      <Modal isOpen={isNewChat} className="pt-5">
+        <UILoader blocking={newChatLoading || teachersListLoading}>
+          <ModalBody className="p-2">
+            <div className="d-flex justify-content-lg-between align-items-center">
+              <h3 className="m-0">New Chat</h3>
+              <X
+                size={16}
+                onClick={() => setIsNewChat(false)}
+              />
+            </div>
+            <div className="mt-2">
+              <div className="text-center">
+                {
+                  teachersList.length == 0 ? <NotFound message="No user Available for new chat" /> :
+                    teachersList.map((t, index) =>
+                      <Row key={'non-connected' + index}>
+                        <Col sm='12'>
+                          <div className="d-flex justify-content-lg-between align-items-center mb-1">
+                            <h5 className="m-0">
+                              {
+                                t.name
+                              }
+                            </h5>
+                            {
+                              getChatByUserId(t.userId) ?
+                                <Button.Ripple
+                                  color='primary'
+                                  className="btn btn-sm"
+                                  disabled={true}
+                                >
+                                  Chatting
+                                </Button.Ripple>
+                                :
+                                <Button.Ripple
+                                  color='primary'
+                                  className="btn btn-sm"
+                                  onClick={() => startNewChat(t.userId)}
+                                >
+                                  Start Conversation
+                                </Button.Ripple>
+                            }
+                          </div>
+                        </Col>
+                      </Row>)
+                }
+              </div>
+            </div>
+          </ModalBody>
+        </UILoader>
+      </Modal>
     </div>
   )
 }

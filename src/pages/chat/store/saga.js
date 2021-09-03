@@ -5,17 +5,41 @@ import {
   GET_SELECT_CHAT_DOCUMENTS,
   UPDATE_ABOUT,
   UPLOAD_DOCUMENT,
+  CREATE_CHAT,
+  GET_ALL_TEACHERS
 } from "./actionTypes"
 
 import { v4 } from 'uuid';
 import axios from 'axios';
 
-import { addDocumentToQueue, apiError, cancelDocumentUpload, getChatContactsFailure, getChatContactsSuccess, getSelectChatDocumentsFailure, getSelectChatDocumentsSuccess, updateAboutFailure, updateAboutSuccess, updateDocumentProgress, } from "./actions"
+import {
+  addDocumentToQueue,
+  cancelDocumentUpload,
+  getChatContactsFailure,
+  getChatContactsSuccess,
+  getSelectChatDocumentsFailure,
+  getSelectChatDocumentsSuccess,
+  updateAboutFailure,
+  updateAboutSuccess,
+  updateDocumentProgress,
+  createChatSuccess,
+  createChatFailure,
+  getAllTeachersSuccess,
+  getAllTeachersFailure
+} from "./actions"
 
 //Include Both Helper File with needed methods
-import { getChatContactsRequest, getChatDocuments, getLoggedInUser, updateUser, uploadDocument } from "../../../helpers/backend-helpers"
+import {
+  getChatContactsRequest,
+  getChatDocuments,
+  getLoggedInUser,
+  updateUser,
+  uploadDocument,
+  createChat,
+  getAllTeachers
+} from "../../../helpers/backend-helpers"
 
-function* getChatContacts({ payload: { userId } }) {
+function* getChatContactsHttp({ payload: { userId } }) {
   try {
     const response = yield call(getChatContactsRequest, userId);
     if (response) {
@@ -30,7 +54,7 @@ function* getChatContacts({ payload: { userId } }) {
   }
 }
 
-function* uploadDoc({ payload: { chatId, file, callback } }) {
+function* uploadDocHttp({ payload: { chatId, file, callback } }) {
   let document = {
     documentId: v4(),
     chatId,
@@ -69,7 +93,7 @@ function* uploadDoc({ payload: { chatId, file, callback } }) {
   }
 }
 
-function* getDoc({ payload: { chatId } }) {
+function* getDocHttp({ payload: { chatId } }) {
   try {
     const response = yield call(getChatDocuments, chatId);
     if (response) {
@@ -84,7 +108,7 @@ function* getDoc({ payload: { chatId } }) {
   }
 }
 
-function* updateAbout({ payload: { about } }) {
+function* updateAboutHttp({ payload: { about } }) {
   try {
     let user = getLoggedInUser()
     user.about = about
@@ -100,11 +124,43 @@ function* updateAbout({ payload: { about } }) {
   }
 }
 
+function* createChatHttp({ payload }) {
+  try {
+
+    const response = yield call(createChat, payload);
+    if (response) {
+      yield put(createChatSuccess(response))
+      return;
+    }
+    throw "Unknown response received from Server";
+
+  } catch (error) {
+    yield put(createChatFailure(error.message ? error.message : error))
+  }
+}
+
+function* getAllTeachersHttp() {
+  try {
+    let user = getLoggedInUser()
+    const response = yield call(getAllTeachers, user.userId);
+    if (response) {
+      yield put(getAllTeachersSuccess(response))
+      return;
+    }
+    throw "Unknown response received from Server";
+
+  } catch (error) {
+    yield put(getAllTeachersFailure(error.message ? error.message : error))
+  }
+}
+
 function* chatSaga() {
-  yield takeEvery(GET_CHAT_CONTACTS, getChatContacts)
-  yield takeEvery(UPLOAD_DOCUMENT, uploadDoc)
-  yield takeEvery(GET_SELECT_CHAT_DOCUMENTS, getDoc)
-  yield takeEvery(UPDATE_ABOUT, updateAbout)
+  yield takeEvery(GET_CHAT_CONTACTS, getChatContactsHttp)
+  yield takeEvery(UPLOAD_DOCUMENT, uploadDocHttp)
+  yield takeEvery(GET_SELECT_CHAT_DOCUMENTS, getDocHttp)
+  yield takeEvery(UPDATE_ABOUT, updateAboutHttp)
+  yield takeEvery(CREATE_CHAT, createChatHttp)
+  yield takeEvery(GET_ALL_TEACHERS, getAllTeachersHttp)
 }
 
 export default chatSaga

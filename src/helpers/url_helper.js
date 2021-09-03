@@ -1,17 +1,17 @@
 
-// export const BASE_URL = `http://192.168.10.102:3600`
-// export const DOCUMENT_BASE_URL = `${BASE_URL}/public`
-// export const MEETING_API_URL = `http://192.168.10.104:3900`
-// export const CHAT_API_URL = `http://192.168.10.104:3700`
-// export const CHAT_SOCKET_API_URL = `http://192.168.10.104:3701`
-// export const BLOG_API_URL = `http://192.168.10.102:1337`
-
-export const BASE_URL = `https://api.meditati.ro/main`
+export const BASE_URL = `http://192.168.10.102:3600`
 export const DOCUMENT_BASE_URL = `${BASE_URL}/public`
-export const MEETING_API_URL = `https://meeting.meditati.ro/api`
-export const CHAT_API_URL = `https://api.meditati.ro/chat`
-export const CHAT_SOCKET_API_URL = `https://api.meditati.ro/`
-export const BLOG_API_URL = `https://api.meditati.ro/blog`
+export const MEETING_API_URL = `http://192.168.10.104:3900`
+export const CHAT_API_URL = `http://192.168.10.104:3700`
+export const CHAT_SOCKET_API_URL = `http://192.168.10.104:3701`
+export const BLOG_API_URL = `http://192.168.10.102:1337`
+
+// export const BASE_URL = `https://api.meditati.ro/main`
+// export const DOCUMENT_BASE_URL = `${BASE_URL}/public`
+// export const MEETING_API_URL = `https://meeting.meditati.ro/api`
+// export const CHAT_API_URL = `https://api.meditati.ro/chat`
+// export const CHAT_SOCKET_API_URL = `https://api.meditati.ro/`
+// export const BLOG_API_URL = `https://api.meditati.ro/blog`
 
 export const GET_IMAGE_URL = url => url ? DOCUMENT_BASE_URL + url : DOCUMENT_BASE_URL + "/profile-pictures/default.png"
 
@@ -25,7 +25,13 @@ export const GET_DOCUMENT_URL = url => DOCUMENT_BASE_URL + url
 export const GET_STARTED_CONTENT = `${BASE_URL}/api/v1/strapi/content/student_content`
 
 
+
+// Teacher History
+export const All_TEACHERS = (id) => `${BASE_URL}/api/v1/teachers?limit=1000&page=1`;
+
 // Chats
+
+export const CHATS = `${CHAT_API_URL}/chats`
 export const GET_CHATS_CONTACTS = id => `${CHAT_API_URL}/users/${id}/chats`
 export const GET_CHAT_DOCUMENTS = id => `${BASE_URL}/documents?chatId=${id}`
 export const UPDATE_USER = id => `${BASE_URL}/api/v1/students/${id}/profile`

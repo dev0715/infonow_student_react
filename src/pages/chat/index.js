@@ -20,13 +20,25 @@ import classnames from 'classnames'
 import { connect, useSelector } from 'react-redux'
 import {
   setLoggedUser,
-  getChatContacts, authorizedSuccess, authorizedFailure,
-  setRoomJoined, selectChat, updateSelectChat,
-  getPreviousMessagesSuccess, getPreviousMessagesFailure,
-  newMessage, saveNewMessage, deleteMessages,
-  updateChatHeadMessage, updateChatParticipants,
-  playNotificationSound, stopNotificationSound, setNotificationEnabled,
-  setNotificationIds, muteChatNotification, unmuteChatNotification,
+  getChatContacts,
+  authorizedSuccess,
+  authorizedFailure,
+  setRoomJoined,
+  selectChat,
+  updateSelectChat,
+  getPreviousMessagesSuccess,
+  getPreviousMessagesFailure,
+  newMessage,
+  saveNewMessage,
+  deleteMessages,
+  updateChatHeadMessage,
+  updateChatParticipants,
+  playNotificationSound,
+  stopNotificationSound,
+  setNotificationEnabled,
+  setNotificationIds,
+  muteChatNotification,
+  unmuteChatNotification,
   uploadDocument,
   addDocumentToQueue,
   cancelDocumentUpload,
@@ -38,7 +50,9 @@ import {
   updateAbout,
   updateAboutSuccess,
   updateAboutFailure,
-  setPreviousMessagesLoading
+  setPreviousMessagesLoading,
+  createChat,
+  getAllTeachers
 
 } from './store/actions'
 
@@ -191,7 +205,12 @@ const mapStateToProps = (state) => {
     chatDocumentsLoading,
     chatLoading,
     aboutUpdating,
-    messagesLoading
+    messagesLoading,
+    newChatLoading,
+    newChatError,
+    teachersList,
+    teachersListLoading,
+    teachersListError,
 
   } = state.Chat;
   return {
@@ -215,21 +234,37 @@ const mapStateToProps = (state) => {
     chatDocumentsLoading,
     chatLoading,
     aboutUpdating,
-    messagesLoading
+    messagesLoading,
+    newChatLoading,
+    newChatError,
+    teachersList,
+    teachersListLoading,
+    teachersListError,
   }
 }
 
 export default withRouter(
   connect(mapStateToProps, {
     setLoggedUser,
-    getChatContacts, authorizedSuccess, authorizedFailure, saveNewMessage,
-    setRoomJoined, selectChat, updateSelectChat,
-    getPreviousMessagesSuccess, getPreviousMessagesFailure,
+    getChatContacts,
+    authorizedSuccess,
+    authorizedFailure,
+    saveNewMessage,
+    setRoomJoined,
+    selectChat,
+    updateSelectChat,
+    getPreviousMessagesSuccess,
+    getPreviousMessagesFailure,
     newMessage,
-    updateChatHeadMessage, updateChatParticipants,
+    updateChatHeadMessage,
+    updateChatParticipants,
     deleteMessages,
-    playNotificationSound, stopNotificationSound, setNotificationEnabled,
-    setNotificationIds, muteChatNotification, unmuteChatNotification,
+    playNotificationSound,
+    stopNotificationSound,
+    setNotificationEnabled,
+    setNotificationIds,
+    muteChatNotification,
+    unmuteChatNotification,
     uploadDocument,
     addDocumentToQueue,
     cancelDocumentUpload,
@@ -241,6 +276,8 @@ export default withRouter(
     updateAbout,
     updateAboutSuccess,
     updateAboutFailure,
-    setPreviousMessagesLoading
+    setPreviousMessagesLoading,
+    createChat,
+    getAllTeachers
   })(AppChat)
 )

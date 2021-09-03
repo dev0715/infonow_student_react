@@ -37,6 +37,12 @@ import {
   UPDATE_ABOUT_SUCCESS,
   UPDATE_ABOUT_FAILURE,
   SET_PREVIOUS_MESSAGES_LOADING,
+  CREATE_CHAT,
+  CREATE_CHAT_SUCCESS,
+  CREATE_CHAT_FAILURE,
+  GET_ALL_TEACHERS,
+  GET_ALL_TEACHERS_SUCCESS,
+  GET_ALL_TEACHERS_FAILURE,
 
 } from './actionTypes'
 
@@ -62,12 +68,15 @@ const initialState = {
   isEndOfMessages: false,
   isNotificationEnabled: localStorage.getItem("isNotificationEnabled"),
   mutedNotificationIds: {},
-
   documentList: [],
   uploadedDocuments: [],
-
   aboutUpdating: false,
-  aboutError: null
+  aboutError: null,
+  newChatLoading: false,
+  newChatError: null,
+  teachersList: [],
+  teachersListLoading: false,
+  teachersListError: null,
 }
 
 
@@ -204,10 +213,10 @@ const chatReducer = (state = initialState, action) => {
       return { ...state, user: action.payload }
 
     case GET_CHAT_CONTACTS:
-      return { ...state, chats: [], chatsError: {}, chatLoading: true }
+      return { ...state, chats: [], chatsError: null, chatLoading: true }
 
     case GET_CHAT_CONTACTS_SUCCESS:
-      return { ...state, chats: action.payload, chatsError: {}, chatLoading: false }
+      return { ...state, chats: action.payload, chatsError: null, chatLoading: false }
 
     case GET_CHAT_CONTACTS_FAILURE:
       return { ...state, chats: [], chatsError: action.payload, chatLoading: false }
@@ -223,7 +232,6 @@ const chatReducer = (state = initialState, action) => {
 
     case SELECT_CHAT:
       return { ...state, selectedChat: action.payload, chatDocuments: [], messages: [], isEndOfMessages: false }
-
 
     case UPDATE_SELECT_CHAT:
       return updateSelectChat(state, action)
@@ -299,6 +307,24 @@ const chatReducer = (state = initialState, action) => {
 
     case UPDATE_ABOUT_FAILURE:
       return { ...state, aboutUpdating: false, aboutError: action.payload }
+
+    case CREATE_CHAT:
+      return { ...state, newChatLoading: true }
+
+    case CREATE_CHAT_SUCCESS:
+      return { ...state, chats: [...state.chats.filter(c => c.chatId != action.payload.chatId), action.payload], newChatError: null, newChatLoading: false }
+
+    case CREATE_CHAT_FAILURE:
+      return { ...state, newChatError: action.payload, newChatLoading: false }
+
+    case GET_ALL_TEACHERS:
+      return { ...state, teachersListLoading: true, teachersListError: null }
+
+    case GET_ALL_TEACHERS_SUCCESS:
+      return { ...state, teachersList: action.payload, teachersListError: null, teachersListLoading: false }
+
+    case GET_ALL_TEACHERS_FAILURE:
+      return { ...state, teachersList: [], teachersListError: action.payload, teachersListLoading: false }
 
     default:
       return state

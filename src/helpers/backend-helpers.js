@@ -28,11 +28,16 @@ export const isUserAuthenticated = () => {
 // Get started
 export const getStartedContent = () => get(url.GET_STARTED_CONTENT)
 
+//Teacher History
+
+export const getAllTeachers = (id) => get(url.All_TEACHERS(id))
+
 
 // Chats
 export const getChatContactsRequest = id => get(url.GET_CHATS_CONTACTS(id))
 export const getChatDocuments = id => get(url.GET_CHAT_DOCUMENTS(id))
 export const updateUser = (id, data) => put(url.UPDATE_USER(id), data)
+export const createChat = data => post(url.CHATS, data)
 
 //Documents
 export const getUserDocuments = () => get(url.GET_USER_DOCUMENTS)
