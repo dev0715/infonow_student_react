@@ -56,6 +56,7 @@ const SidebarLeft = props => {
   const [filteredChat, setFilteredChat] = useState([])
 
   const [isNewChat, setIsNewChat] = useState(false)
+  const [userQuery, setUserQuery] = useState('')
 
   // ** Handles User Chat Click
   const handleUserClick = (chat, socket) => {
@@ -155,6 +156,8 @@ const SidebarLeft = props => {
       notifyError("New Chat", newChatError)
     }
     else if (isNewChat && !newChatLoading && !newChatError) {
+      setIsNewChat(false)
+      if (chats.length > 0) handleUserClick(chats[chats.length - 1], socket)
       notifySuccess("New Chat", 'Chat started Successfully')
     }
   }, [newChatLoading])
@@ -339,7 +342,7 @@ const SidebarLeft = props => {
       <Modal isOpen={isNewChat} className="pt-5">
         <UILoader blocking={newChatLoading || teachersListLoading}>
           <ModalBody className="p-2">
-            <div className="d-flex justify-content-lg-between align-items-center">
+            <div className="d-flex justify-content-between align-items-center">
               <h3 className="m-0">New Chat</h3>
               <X
                 size={16}
@@ -347,39 +350,55 @@ const SidebarLeft = props => {
               />
             </div>
             <div className="mt-2">
-              <div className="text-center">
+              <InputGroup className='input-group-merge'>
+                <Input placeholder='Search here' value={userQuery} onChange={e => setUserQuery(e.target.value)} />
+                <InputGroupAddon addonType='append'>
+                  <InputGroupText>
+                    {
+                      !userQuery &&
+                      <Search size={14} />
+                    }
+                    {
+                      userQuery &&
+                      <X size={14} onClick={() => setUserQuery('')} />
+                    }
+                  </InputGroupText>
+                </InputGroupAddon>
+              </InputGroup>
+
+              <div className="mt-2">
                 {
                   teachersList.length == 0 ? <NotFound message="No user Available for new chat" /> :
-                    teachersList.map((t, index) =>
-                      <Row key={'non-connected' + index}>
-                        <Col sm='12'>
-                          <div className="d-flex justify-content-lg-between align-items-center mb-1">
-                            <h5 className="m-0">
-                              {
-                                t.name
-                              }
-                            </h5>
-                            {
-                              getChatByUserId(t.userId) ?
-                                <Button.Ripple
-                                  color='primary'
-                                  className="btn btn-sm"
-                                  disabled={true}
-                                >
-                                  Chatting
-                                </Button.Ripple>
-                                :
-                                <Button.Ripple
-                                  color='primary'
-                                  className="btn btn-sm"
-                                  onClick={() => startNewChat(t.userId)}
-                                >
-                                  Start Conversation
-                                </Button.Ripple>
-                            }
-                          </div>
-                        </Col>
-                      </Row>)
+                    teachersList
+                      .filter(u => u.name.toLowerCase().includes(userQuery.toLowerCase()))
+                      .map((s, index) =>
+                        <Row key={'non-connected' + index}>
+                          <Col sm='12'>
+                            <div className=" new-chat-head-item d-flex justify-content-lg-between align-items-center mb-1">
+                              <div className="d-flex align-items-center">
+                                <Avatar
+                                  img={GET_IMAGE_URL(s.profilePicture)} size='sm' />
+                                <h5 className="m-0 ml-25">
+                                  {
+                                    s.name
+                                  }
+                                </h5>
+                              </div>
+                              <div className="action-btn">
+                                {
+                                  !getChatByUserId(s.userId) &&
+                                  <Button.Ripple
+                                    color='primary'
+                                    className="btn btn-sm"
+                                    onClick={() => startNewChat(s.userId)}
+                                  >
+                                    Start Conversation
+                                  </Button.Ripple>
+                                }
+                              </div>
+                            </div>
+                          </Col>
+                        </Row>)
                 }
               </div>
             </div>
