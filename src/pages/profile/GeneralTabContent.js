@@ -77,7 +77,7 @@ const GeneralTabs = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log("submitting")
+    // console.log("submitting")
     props.updateProfileData({
       name, about
     })

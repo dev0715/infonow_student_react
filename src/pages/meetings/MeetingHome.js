@@ -88,12 +88,14 @@ function MeetingHome(props) {
 		let date = moment(meetingDate)
 		let time = moment(meetingTime)
 		date.set('hour', time.get('hour')).set('minute', time.get('minute'))
-		props.newMeeting({
+		let data = {
 			guest: user.student.teacher.user.userId,
 			scheduledAt: date,
 			agenda,
 			message
-		})
+		}
+		if (!data.message) delete data.message
+		props.newMeeting(data)
 	}
 
 	return (
@@ -214,7 +216,6 @@ function MeetingHome(props) {
 												placeholder='Send a personal message'
 												value={message}
 												onChange={e => setMessage(e.target.value)}
-												required
 											/>
 										</InputGroup>
 									</FormGroup>

@@ -76,7 +76,7 @@ function* uploadUserDoc({ payload: { file, callback } }) {
 
 function* deleteUseDoc({ payload }) {
   try {
-    console.log("documentId", payload)
+    // console.log("documentId", payload)
     const response = yield call(deleteUserDocument, payload);
     if (response) {
       yield put(deleteUserDocumentSuccess(payload))

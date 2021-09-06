@@ -82,7 +82,7 @@ const NewAssignments = (props) => {
     )
 
     const goToAssignment = (a) => {
-        console.log("Assignment", a)
+        // console.log("Assignment", a)
         props.selectAssignment(a)
         props.history.push(`/assignments/details`)
     }

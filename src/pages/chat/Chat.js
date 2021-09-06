@@ -44,6 +44,9 @@ import { GET_DOCUMENT_URL, GET_IMAGE_URL, DOCUMENT_BASE_URL } from './../../help
 import { detectLinkInMessage, getFileIcon, getFilePreview } from './utility';
 import Picker, { SKIN_TONE_NEUTRAL } from "emoji-picker-react";
 
+
+import { DateTime } from '../../components/date-time'
+
 import { useDropzone } from 'react-dropzone'
 
 const ChatLog = props => {
@@ -157,9 +160,10 @@ const ChatLog = props => {
             >
               <Calendar size={16} />
               &nbsp;&nbsp;
-              {
+              <DateTime type="date" dateTime={item.createdAt} />
+              {/* {
                 moment(item.createdAt).format("DD MMM YYYY")
-              }
+              } */}
             </div>
           }
 
@@ -230,10 +234,16 @@ const ChatLog = props => {
                     item.user.userId == msgs[index + 1].user.userId
                       && moment(msgs[index + 1].createdAt).isSame(item.createdAt, 'minute') ?
                       ""
-                      : <div className="msg-time" > {moment(item.createdAt).format("hh:mm a")}</div>
+                      : <div className="msg-time" >
+                        <DateTime type="time" dateTime={item.createdAt} />
+                        {/* {moment(item.createdAt).format("hh:mm a")} */}
+                      </div>
                   }
                 </>
-                : <div className="msg-time" > {moment(item.createdAt).format("hh:mm a")}</div>
+                : <div className="msg-time" >
+                  {/* {moment(item.createdAt).format("hh:mm a")} */}
+                  <DateTime type="time" dateTime={item.createdAt} />
+                </div>
             }
           </div>
         </div>
@@ -324,7 +334,7 @@ const ChatLog = props => {
 
     let count = 0;
     files.forEach(file => {
-      console.log("DROPZONE FILE", file)
+      // console.log("DROPZONE FILE", file)
       if (count < 5) uploadFile(file)
       count++
     });
@@ -337,7 +347,7 @@ const ChatLog = props => {
     let count = 0;
     for (let key in e.target.files) {
       if (e.target.files.hasOwnProperty(key)) {
-        console.log("SELECTED FILE ", e.target.files[key])
+        // console.log("SELECTED FILE ", e.target.files[key])
         uploadFile(e.target.files[key])
         if (count == 5) {
           break;
@@ -350,12 +360,12 @@ const ChatLog = props => {
 
 
   const captureDragOver = (e) => {
-    console.log("DRAG", e)
+    // console.log("DRAG", e)
     setDropZoneVisible(true)
 
   }
   const captureDragLeave = (e) => {
-    console.log("RELEASE", e)
+    // console.log("RELEASE", e)
     setDropZoneVisible(false)
 
   }
@@ -511,6 +521,7 @@ const ChatLog = props => {
                 <AvatarGroup
                   data={
                     selectedChat.chatParticipants
+                      .filter(cp => cp.chatParticipantStatus != 0)
                       .filter(cp => cp.seenAt != null && cp.user.userId != user.userId)
                       .map(p => ({
                         title: p.user.name,

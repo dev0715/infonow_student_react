@@ -120,10 +120,12 @@ const MeetingList = (props) => {
 		let date = moment(meetingDate)
 		let time = moment(meetingTime)
 		date.set('hour', time.get('hour')).set('minute', time.get('minute'))
-		onMeetingAction(e, updateMeetingId, MeetingActions.Reschedule, {
+		let data = {
 			message,
 			scheduledAt: date,
-		})
+		}
+		if (!data.message) delete data.message
+		onMeetingAction(e, updateMeetingId, MeetingActions.Reschedule, data)
 	}
 
 	const closeRescheduleMeeting = () => {
@@ -178,7 +180,6 @@ const MeetingList = (props) => {
 										placeholder='Send a personal message'
 										value={message}
 										onChange={e => setMessage(e.target.value)}
-										required
 									/>
 								</InputGroup>
 							</FormGroup>

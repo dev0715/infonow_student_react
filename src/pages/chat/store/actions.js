@@ -40,6 +40,8 @@ import {
   GET_ALL_TEACHERS,
   GET_ALL_TEACHERS_SUCCESS,
   GET_ALL_TEACHERS_FAILURE,
+  REMOVE_CHAT_PARTICIPANTS,
+  ADD_CHAT_PARTICIPANTS
 
 } from './actionTypes'
 
@@ -323,5 +325,19 @@ export const getAllTeachersFailure = (error) => {
   return {
     type: GET_ALL_TEACHERS_FAILURE,
     payload: error
+  }
+}
+
+export const removeChatParticipants = (data) => {
+  return {
+    type: REMOVE_CHAT_PARTICIPANTS,
+    payload: data
+  }
+}
+
+export const addChatParticipants = (data) => {
+  return {
+    type: ADD_CHAT_PARTICIPANTS,
+    payload: data
   }
 }

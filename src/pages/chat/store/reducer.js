@@ -43,6 +43,8 @@ import {
   GET_ALL_TEACHERS,
   GET_ALL_TEACHERS_SUCCESS,
   GET_ALL_TEACHERS_FAILURE,
+  REMOVE_CHAT_PARTICIPANTS,
+  ADD_CHAT_PARTICIPANTS
 
 } from './actionTypes'
 
@@ -89,7 +91,7 @@ const saveNewMessage = (state, { success, chatId, data, messageId, error }) => {
     state.messages.forEach(m => {
       if (m.messageId == messageId) {
         m.error = true;
-        console.log("MESSAGE ERROR", error)
+        // // console.log("MESSAGE ERROR", error)
       }
     })
   }
@@ -97,13 +99,13 @@ const saveNewMessage = (state, { success, chatId, data, messageId, error }) => {
     state.messages.forEach(m => {
       if (m.messageId == messageId) {
         m = data;
-        console.log("MESSAGE REPLACED", state.messages)
+        // // console.log("MESSAGE REPLACED", state.messages)
       }
     })
   }
   else if (success && !messageId && chatId == state.selectedChat.chatId) {
     state.messages.push(data)
-    console.log("MESSAGE PUSHED", state.messages)
+    // // console.log("MESSAGE PUSHED", state.messages)
   }
 
   return { ...state, messages: [...state.messages] }
@@ -146,7 +148,7 @@ const getPreviousMessagesSuccess = (state, action) => {
 const playNotificationSound = (state, res) => {
 
   if (res.success && state.selectedChat.chatId != res.chatId && state.isNotificationEnabled && !state.mutedNotificationIds[res.chatId] && state.user.userId != res.data.user.userId) {
-    console.log("NOTIFICATION_USER_TRUE")
+    // // console.log("NOTIFICATION_USER_TRUE")
     state.isNotification = true;
   }
   else {
@@ -205,6 +207,46 @@ const setNotificationEnabled = (state, payload) => {
   localStorage.setItem("isNotificationEnabled", payload)
   return { ...state, isNotificationEnabled: payload }
 }
+
+const removeChatParticipants = (state, payload) => {
+  if (!payload.success) return state
+  let user = getLoggedInUser()
+  let removedChat = payload.data.find(p => user.userId == p.user.userId && p.chatParticipantStatus == 0)
+  if (removedChat) {
+    state.chats = state.chats.filter(c => c.chatId != payload.chatId)
+  }
+  if (state.selectedChat.chatId == payload.chatId && removedChat) {
+    state.selectedChat = {}
+  }
+  else if (state.selectedChat.chatId == payload.chatId) {
+    state.selectedChat.chatParticipants = payload.data
+  }
+
+  state.chats.forEach(c => {
+    if (c.chatId == payload.chatId) {
+      c.chatParticipants = payload.data
+    }
+  })
+
+  return {
+    ...state,
+    selectedChat: { ...state.selectedChat },
+    chats: [...state.chats]
+  }
+}
+
+const addChatParticipants = (state, action) => {
+  // // console.log("addChatParticipants", action)
+  return {
+    ...state,
+    chats: updateChatParticipants(state, action),
+    selectedChat: state.selectedChat.chatId == action.payload.chatId ?
+      { ...state.selectedChat, chatParticipants: action.payload.data }
+      : { ...state.selectedChat },
+  }
+
+}
+
 
 const chatReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -325,6 +367,12 @@ const chatReducer = (state = initialState, action) => {
 
     case GET_ALL_TEACHERS_FAILURE:
       return { ...state, teachersList: [], teachersListError: action.payload, teachersListLoading: false }
+
+    case REMOVE_CHAT_PARTICIPANTS:
+      return removeChatParticipants(state, action.payload)
+
+    case ADD_CHAT_PARTICIPANTS:
+      return addChatParticipants(state, action)
 
     default:
       return state

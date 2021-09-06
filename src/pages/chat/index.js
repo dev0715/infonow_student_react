@@ -52,7 +52,9 @@ import {
   updateAboutFailure,
   setPreviousMessagesLoading,
   createChat,
-  getAllTeachers
+  getAllTeachers,
+  removeChatParticipants,
+  addChatParticipants
 
 } from './store/actions'
 
@@ -100,7 +102,7 @@ const AppChat = (props) => {
   }, [])
 
   useEffect(() => {
-    if (!props.isRoomJoined) {
+    if (!props.isRoomsJoined && props.chats.length > 0) {
       for (var chat of props.chats) {
         socket.emit(IOEvents.JOIN_ROOM, { chatId: chat.chatId })
       }
@@ -191,7 +193,7 @@ const mapStateToProps = (state) => {
     chatError,
     authError,
     isAuthorized,
-    isRoomJoined,
+    isRoomsJoined,
     selectedChat,
     selectedUser,
     messages,
@@ -220,7 +222,7 @@ const mapStateToProps = (state) => {
     chatError,
     authError,
     isAuthorized,
-    isRoomJoined,
+    isRoomsJoined,
     selectedChat,
     selectedUser,
     messages,
@@ -278,6 +280,8 @@ export default withRouter(
     updateAboutFailure,
     setPreviousMessagesLoading,
     createChat,
-    getAllTeachers
+    getAllTeachers,
+    removeChatParticipants,
+    addChatParticipants
   })(AppChat)
 )

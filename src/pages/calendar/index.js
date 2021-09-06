@@ -122,7 +122,7 @@ const CalendarComponent = (props) => {
   }
 
   const handleEvent = (e) => {
-    // console.log("event", e)
+    // // console.log("event", e)
     setEvent(e)
   }
 

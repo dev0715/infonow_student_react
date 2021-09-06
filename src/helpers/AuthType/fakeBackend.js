@@ -35,7 +35,7 @@ const fakeBackend = () => {
   // This sets the mock adapter on the default instance
   const mock = new MockAdapter(axios)
 
-mock.onPost(url.POST_FAKE_REGISTER).reply(config => {
+  mock.onPost(url.POST_FAKE_REGISTER).reply(config => {
     const user = JSON.parse(config["data"])
     users.push(user)
     return new Promise((resolve, reject) => {
@@ -319,7 +319,7 @@ mock.onPost(url.POST_FAKE_REGISTER).reply(config => {
     })
   })
 
-    mock.onGet(url.GET_CART_DATA).reply(() => {
+  mock.onGet(url.GET_CART_DATA).reply(() => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (cartData) {
@@ -374,7 +374,7 @@ mock.onPost(url.POST_FAKE_REGISTER).reply(config => {
   mock.onPost(url.POST_STUDENT_LOGIN).reply(() => {
     console.log("HERERERERERE");
     return new Promise((resolve, reject) => {
-      resolve({username: "ABC"});
+      resolve({ username: "ABC" });
     })
   })
   mock.onGet(new RegExp(`${url.GET_INVOICE_DETAIL}/*`)).reply(config => {
