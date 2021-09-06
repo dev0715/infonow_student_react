@@ -11,6 +11,9 @@ import {
     UPDATE_MEETING,
     UPDATE_MEETING_SUCCESS,
     UPDATE_MEETING_FAILURE,
+    GET_MEETING_TOKEN,
+    GET_MEETING_TOKEN_SUCCESS,
+    GET_MEETING_TOKEN_FAILURE,
 
 } from './actionTypes'
 
@@ -23,6 +26,9 @@ const initialState = {
     meetingsDatesError: null,
     newMeetingLoading: false,
     newMeetingError: null,
+    meetingToken: null,
+    meetingTokenLoading: false,
+    meetingTokenError: null
 }
 
 
@@ -150,6 +156,32 @@ export default (state = initialState, action) => {
             break;
         case UPDATE_MEETING_FAILURE:
             state = updateMeetingFailure(state, action.payload)
+            break;
+
+        case GET_MEETING_TOKEN:
+            state = {
+                ...state,
+                meetingTokenLoading: true,
+                meetingTokenError: null
+            }
+            break;
+
+        case GET_MEETING_TOKEN_SUCCESS:
+            state = {
+                ...state,
+                meetingToken: action.payload,
+                meetingTokenLoading: false,
+                meetingTokenError: null
+            }
+            break;
+
+        case GET_MEETING_TOKEN_FAILURE:
+            state = {
+                ...state,
+                meetingToken: null,
+                meetingTokenLoading: false,
+                meetingTokenError: action.payload
+            }
             break;
 
         default:

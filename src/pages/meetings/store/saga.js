@@ -1,7 +1,13 @@
 import { call, put, takeEvery } from "redux-saga/effects"
 
 // Login Redux States
-import { GET_ALL_MEETINGS, GET_MEETING_DATES, NEW_MEETING, UPDATE_MEETING } from "./actionTypes"
+import {
+    GET_ALL_MEETINGS,
+    GET_MEETING_DATES,
+    NEW_MEETING,
+    UPDATE_MEETING,
+    GET_MEETING_TOKEN
+} from "./actionTypes"
 import {
     getAllMeetingsSuccess,
     getAllMeetingsError,
@@ -10,12 +16,14 @@ import {
     newMeetingFailure,
     newMeetingSuccess,
     updateMeetingSuccess,
-    updateMeetingFailure
+    updateMeetingFailure,
+    getMeetingTokenSuccess,
+    getMeetingTokenFailure
 
 } from "./actions"
 import {
     getLoggedInUser, getStudentAllMeetings, getMeetingDates,
-    newMeeting, updateMeeting
+    newMeeting, updateMeeting, getMeetingToken
 } from '@helpers/backend-helpers'
 
 
@@ -57,12 +65,22 @@ function* updateMeetingHttp({ payload: { id, action, data } }) {
 }
 
 
+function* getMeetingTokenHttp() {
+    try {
+        const response = yield call(getMeetingToken);
+        yield put(getMeetingTokenSuccess(response))
+    } catch (error) {
+        yield put(getMeetingTokenFailure(error.message ? error.message : error))
+    }
+}
+
 
 function* MeetingsSaga() {
     yield takeEvery(GET_ALL_MEETINGS, getAllMeetingsHttp)
     yield takeEvery(GET_MEETING_DATES, getMeetingDatesHttp)
     yield takeEvery(NEW_MEETING, newMeetingHttp)
     yield takeEvery(UPDATE_MEETING, updateMeetingHttp)
+    yield takeEvery(GET_MEETING_TOKEN, getMeetingTokenHttp)
 }
 
 export default MeetingsSaga

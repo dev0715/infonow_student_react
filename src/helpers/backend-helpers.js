@@ -63,6 +63,7 @@ export const forgotAccountPassword = data => post(url.FORGOT_PASSWORD, data);
 export const resetAccountPassword = data => post(url.RESET_PASSWORD, data);
 
 //Meeting
+export const getMeetingToken = () => get(url.MEETING_TOKEN);
 export const newMeeting = data => post(url.NEW_MEETING, data);
 export const getStudentAllMeetings = userId => get(url.GET_ALL_MEETINGS(userId));
 export const getMeetingDates = userId => get(url.GET_MEETING_DATES(userId));

@@ -11,6 +11,9 @@ import {
     UPDATE_MEETING,
     UPDATE_MEETING_SUCCESS,
     UPDATE_MEETING_FAILURE,
+    GET_MEETING_TOKEN,
+    GET_MEETING_TOKEN_SUCCESS,
+    GET_MEETING_TOKEN_FAILURE,
 
 } from "./actionTypes"
 
@@ -94,5 +97,25 @@ export const updateMeetingFailure = ({ id, error }) => {
     return {
         type: UPDATE_MEETING_FAILURE,
         payload: { id, error },
+    }
+}
+
+export const getMeetingToken = () => {
+    return {
+        type: GET_MEETING_TOKEN,
+    }
+}
+
+export const getMeetingTokenSuccess = (data) => {
+    return {
+        type: GET_MEETING_TOKEN_SUCCESS,
+        payload: data
+    }
+}
+
+export const getMeetingTokenFailure = (error) => {
+    return {
+        type: GET_MEETING_TOKEN_FAILURE,
+        payload: error
     }
 }
