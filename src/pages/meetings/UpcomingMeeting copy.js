@@ -1,7 +1,8 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import Avatar from '@components/avatar';
-import { Bell, Calendar } from 'react-feather';
+import { Bell, Calendar, MapPin } from 'react-feather';
+import AvatarGroup from '@components/avatar-group';
 import {
 	Card,
 	CardTitle,
@@ -9,9 +10,12 @@ import {
 	CardText,
 	Media,
 	Button,
+	Row,
+	Col,
 } from 'reactstrap';
 import { useSkin } from '@hooks/useSkin';
 import { DateTime } from '../../components/date-time';
+import { Link } from 'react-router-dom';
 
 import { getMeetingToken } from '@store/actions';
 
@@ -22,7 +26,6 @@ import UILoader from '../../@core/components/ui-loader';
 
 import { MEETING_APP_URL } from '../../helpers/url_helper'
 
-import { AddMeetingToCalenderButton } from './addMeetingToCalender'
 
 const UpcomingMeeting = (props) => {
 
@@ -30,7 +33,6 @@ const UpcomingMeeting = (props) => {
 	const [skin, setSkin] = useSkin();
 
 	const [isActive, setIsActive] = useState(false)
-
 
 	const data = [{
 		title: 'Hello',
@@ -54,8 +56,6 @@ const UpcomingMeeting = (props) => {
 			window.open(url, '_blank');
 		}
 	}, [isActive, props.meetingToken])
-
-
 
 	return (
 		<>
@@ -81,12 +81,22 @@ const UpcomingMeeting = (props) => {
 								</div>
 							</div>
 							<div className='mb-1 mb-md-0 mb-lg-0 float-md-right float-lg-right'>
-								<AddMeetingToCalenderButton className="mr-1" type="button" meeting={meeting} />
+								<Button.Ripple
+									className='mr-1'
+									outline
+									color='primary'
+								>
+									<Bell size={14} />
+									<span className='align-middle ml-25'>
+										Remind Me
+									</span>
+								</Button.Ripple>
 								<a target="_blank" onClick={(e) => handleJoin(e)}>
 									<Button.Ripple className='mr-1' color='primary'>
 										Join
 									</Button.Ripple>
 								</a>
+
 							</div>
 							<Media>
 								<Avatar
