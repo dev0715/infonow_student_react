@@ -375,7 +375,7 @@ const SidebarLeft = props => {
                       .map((s, index) =>
                         <Row key={'non-connected' + index}>
                           <Col sm='12'>
-                            <div className=" new-chat-head-item d-flex justify-content-lg-between align-items-center mb-1">
+                            <div className=" new-chat-head-item d-flex justify-content-between align-items-center mb-1">
                               <div className="d-flex align-items-center">
                                 <Avatar
                                   img={GET_IMAGE_URL(s.profilePicture)} size='sm' />
@@ -393,7 +393,7 @@ const SidebarLeft = props => {
                                     className="btn btn-sm"
                                     onClick={() => startNewChat(s.userId)}
                                   >
-                                    Start Conversation
+                                    Chat
                                   </Button.Ripple>
                                 }
                               </div>
