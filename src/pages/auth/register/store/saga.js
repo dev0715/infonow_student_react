@@ -15,8 +15,8 @@ function* registerAccountHttp({ payload: { data, history } }) {
     try {
         const response = yield call(registerUser, data);
         if (response) {
-            localStorage.setItem("authUser", JSON.stringify(response.user))
-            localStorage.setItem("authToken", JSON.stringify({ token: response.token, tokenType: response.tokenType }))
+            localStorage.setItem("authStudent", JSON.stringify(response.user))
+            localStorage.setItem("authStudentToken", JSON.stringify({ token: response.token, tokenType: response.tokenType }))
             setTimeout(() => {
                 window.location.reload();
             }, 100)

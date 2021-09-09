@@ -14,6 +14,9 @@ import {
     GET_MEETING_TOKEN,
     GET_MEETING_TOKEN_SUCCESS,
     GET_MEETING_TOKEN_FAILURE,
+    GET_CURRENT_TEACHER,
+    GET_CURRENT_TEACHER_SUCCESS,
+    GET_CURRENT_TEACHER_FAILURE,
 
 } from "./actionTypes"
 
@@ -116,6 +119,26 @@ export const getMeetingTokenSuccess = (data) => {
 export const getMeetingTokenFailure = (error) => {
     return {
         type: GET_MEETING_TOKEN_FAILURE,
+        payload: error
+    }
+}
+
+export const getCurrentTeacher = () => {
+    return {
+        type: GET_CURRENT_TEACHER,
+    }
+}
+
+export const getCurrentTeacherSuccess = (data) => {
+    return {
+        type: GET_CURRENT_TEACHER_SUCCESS,
+        payload: data
+    }
+}
+
+export const getCurrentTeacherFailure = (error) => {
+    return {
+        type: GET_CURRENT_TEACHER_FAILURE,
         payload: error
     }
 }

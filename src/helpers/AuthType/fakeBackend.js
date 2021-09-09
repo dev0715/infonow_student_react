@@ -46,10 +46,10 @@ const fakeBackend = () => {
   })
 
   mock.onPost("/post-fake-login").reply(config => {
-    localStorage.setItem("authUser", JSON.stringify(users[0]))
+    localStorage.setItem("authStudent", JSON.stringify(users[0]))
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        localStorage.setItem("authUser", JSON.stringify(users[0]))
+        localStorage.setItem("authStudent", JSON.stringify(users[0]))
         resolve(users[0]);
       })
     })
@@ -78,8 +78,8 @@ const fakeBackend = () => {
             users[objIndex].username = user.username
 
             // Assign a value to locastorage
-            localStorage.removeItem("authUser")
-            localStorage.setItem("authUser", JSON.stringify(users[objIndex]))
+            localStorage.removeItem("authStudent")
+            localStorage.setItem("authStudent", JSON.stringify(users[objIndex]))
 
             resolve([200, "Profile Updated successfully"])
           } else {
@@ -109,8 +109,8 @@ const fakeBackend = () => {
           users[objIndex].username = user.username
 
           // Assign a value to locastorage
-          localStorage.removeItem("authUser")
-          localStorage.setItem("authUser", JSON.stringify(users[objIndex]))
+          localStorage.removeItem("authStudent")
+          localStorage.setItem("authStudent", JSON.stringify(users[objIndex]))
 
           resolve([200, "Profile Updated successfully"])
         } else {

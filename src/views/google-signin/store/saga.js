@@ -12,8 +12,8 @@ function* signInWithGoogleHttp({ payload: { data, history } }) {
     try {
         const response = yield call(signInWithGoogle, data);
         if (response) {
-            localStorage.setItem("authUser", JSON.stringify(response.user))
-            localStorage.setItem("authToken", JSON.stringify({ token: response.token, tokenType: response.tokenType }))
+            localStorage.setItem("authStudent", JSON.stringify(response.user))
+            localStorage.setItem("authStudentToken", JSON.stringify({ token: response.token, tokenType: response.tokenType }))
             setTimeout(() => {
                 response.user.isNotVerified ?
                     history.replace("/setup-password") :

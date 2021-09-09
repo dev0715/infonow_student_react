@@ -6,7 +6,8 @@ import {
     GET_MEETING_DATES,
     NEW_MEETING,
     UPDATE_MEETING,
-    GET_MEETING_TOKEN
+    GET_MEETING_TOKEN,
+    GET_CURRENT_TEACHER
 } from "./actionTypes"
 import {
     getAllMeetingsSuccess,
@@ -18,12 +19,19 @@ import {
     updateMeetingSuccess,
     updateMeetingFailure,
     getMeetingTokenSuccess,
-    getMeetingTokenFailure
+    getMeetingTokenFailure,
+    getCurrentTeacherSuccess,
+    getCurrentTeacherFailure
 
 } from "./actions"
 import {
-    getLoggedInUser, getStudentAllMeetings, getMeetingDates,
-    newMeeting, updateMeeting, getMeetingToken
+    getLoggedInUser,
+    getStudentAllMeetings,
+    getMeetingDates,
+    newMeeting,
+    updateMeeting,
+    getMeetingToken,
+    getCurrentTeacher
 } from '@helpers/backend-helpers'
 
 
@@ -74,6 +82,15 @@ function* getMeetingTokenHttp() {
     }
 }
 
+function* getCurrentTeacherHttp() {
+    try {
+        const response = yield call(getCurrentTeacher);
+        yield put(getCurrentTeacherSuccess(response))
+    } catch (error) {
+        yield put(getCurrentTeacherFailure(error.message ? error.message : error))
+    }
+}
+
 
 function* MeetingsSaga() {
     yield takeEvery(GET_ALL_MEETINGS, getAllMeetingsHttp)
@@ -81,6 +98,7 @@ function* MeetingsSaga() {
     yield takeEvery(NEW_MEETING, newMeetingHttp)
     yield takeEvery(UPDATE_MEETING, updateMeetingHttp)
     yield takeEvery(GET_MEETING_TOKEN, getMeetingTokenHttp)
+    yield takeEvery(GET_CURRENT_TEACHER, getCurrentTeacherHttp)
 }
 
 export default MeetingsSaga

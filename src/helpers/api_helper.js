@@ -13,8 +13,8 @@ const axiosApi = axios.create({
 const DEBUG = false;
 
 function logoutUser() {
-	localStorage.removeItem('authUser');
-	localStorage.removeItem('authToken');
+	localStorage.removeItem('authStudent');
+	localStorage.removeItem('authStudentToken');
 	localStorage.removeItem('adminUser');
 	window.location.href = '/';
 }

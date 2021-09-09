@@ -6,7 +6,7 @@ import { Row, Col, } from 'reactstrap';
 import MeetingList from './MeetingList';
 import UpcomingMeeting from './UpcomingMeeting';
 import UpcomingMeetings from './UpcomingMeetings';
-import { getAllMeetings, getMeetingDates, newMeeting } from '@store/actions';
+import { getAllMeetings, getMeetingDates, newMeeting, getCurrentTeacher } from '@store/actions';
 
 import UILoader from '../../@core/components/ui-loader';
 
@@ -20,6 +20,9 @@ import { GET_IMAGE_URL } from './../../helpers/url_helper';
 import { getLoggedInUser } from './../../helpers/backend-helpers';
 
 import moment from 'moment';
+
+import NotFound from '../../components/not-found';
+import NoNetwork from '../../components/no-network';
 
 import TimePicker from '@components/datepicker/TimePicker';
 import DatePicker from '@components/datepicker/DatePicker';
@@ -70,6 +73,7 @@ function MeetingHome(props) {
 	const addNewMeeting = () => {
 
 		setIsNewMeeting(true)
+		props.getCurrentTeacher()
 		// if (user && user.student) {
 		// 	props.getMeetingDates(user.student.teacher.user.userId)
 		// }
@@ -153,7 +157,7 @@ function MeetingHome(props) {
 					</Row>
 			}
 			<Modal isOpen={isNewMeeting || props.newMeetingLoading} className="pt-5">
-				<UILoader blocking={props.meetingsDatesLoading || props.newMeetingLoading}>
+				<UILoader blocking={props.meetingsDatesLoading || props.currentTeacherLoading || props.newMeetingLoading}>
 					<ModalBody className="pb-1">
 						<div className="text-right">
 							<X
@@ -161,68 +165,80 @@ function MeetingHome(props) {
 								onClick={() => closeMeeting()}
 							/>
 						</div>
-						<div className="text-center">
-							<Avatar className='box-shadow-1 avatar-border'
-								img={GET_IMAGE_URL()}
-								size='xl' />
-							<h5 className="mt-25 pt-1">
-								{user.student && user.student.teacher.user.name}
-							</h5>
-							<div className="text-secondary">
-								Teacher
-							</div>
-						</div>
-						<Form
-							className="mt-1 mb-2"
-							onSubmit={e => requestMeeting(e)}>
-							<Row>
-								<Col lg='12'>
-									<FormGroup>
-										<Label className="ml-25">
-											Agenda
-										</Label>
-										<InputGroup className='input-group-merge'>
-											<Input
-												type="text"
-												placeholder='Meeting Agenda'
-												value={agenda}
-												onChange={e => setAgenda(e.target.value)}
-												required />
-										</InputGroup>
-									</FormGroup>
-								</Col>
-								<Col md='12' lg='6'>
-									<DatePicker
-										value={meetingDate}
-										onChange={setMeetingDate}
-									// disableDates={props.meetingsDates.map(d => d.scheduledAt)}
-									/>
-								</Col>
-								<Col md='12' lg='6'>
-									<TimePicker
-										value={meetingTime}
-										onChange={setMeetingTime}
-									/>
-								</Col>
-								<Col lg="12">
-									<FormGroup>
-										<Label className="ml-25">
-											Personal Message
-										</Label>
-										<InputGroup className='input-group-merge'>
-											<Input
-												type='textarea'
-												rows='4'
-												placeholder='Send a personal message'
-												value={message}
-												onChange={e => setMessage(e.target.value)}
+						{
+							!props.currentTeacherLoading &&
+							props.currentTeacherError &&
+							<NoNetwork message={props.currentTeacherError} />
+						}
+						{
+							!props.currentTeacherLoading &&
+							!props.currentTeacherError &&
+							Object.keys(props.currentTeacher).length > 0 &&
+							<>
+								<div className="text-center">
+									<Avatar className='box-shadow-1 avatar-border'
+										img={GET_IMAGE_URL(props.currentTeacher.student.teacher.user.profilePicture)}
+										size='xl' />
+									<h5 className="mt-25 pt-1">
+										{props.currentTeacher.student.teacher.user.name}
+									</h5>
+									<div className="text-secondary">
+										Teacher
+									</div>
+								</div>
+								<Form
+									className="mt-1 mb-2"
+									onSubmit={e => requestMeeting(e)}>
+									<Row>
+										<Col lg='12'>
+											<FormGroup>
+												<Label className="ml-25">
+													Agenda
+												</Label>
+												<InputGroup className='input-group-merge'>
+													<Input
+														type="text"
+														placeholder='Meeting Agenda'
+														value={agenda}
+														onChange={e => setAgenda(e.target.value)}
+														required />
+												</InputGroup>
+											</FormGroup>
+										</Col>
+										<Col md='12' lg='6'>
+											<DatePicker
+												value={meetingDate}
+												onChange={setMeetingDate}
+											// disableDates={props.meetingsDates.map(d => d.scheduledAt)}
 											/>
-										</InputGroup>
-									</FormGroup>
-								</Col>
-							</Row>
-							<Button.Ripple type="submit" color='primary'>Request Meeting</Button.Ripple>
-						</Form>
+										</Col>
+										<Col md='12' lg='6'>
+											<TimePicker
+												value={meetingTime}
+												onChange={setMeetingTime}
+											/>
+										</Col>
+										<Col lg="12">
+											<FormGroup>
+												<Label className="ml-25">
+													Personal Message
+												</Label>
+												<InputGroup className='input-group-merge'>
+													<Input
+														type='textarea'
+														rows='4'
+														placeholder='Send a personal message'
+														value={message}
+														onChange={e => setMessage(e.target.value)}
+													/>
+												</InputGroup>
+											</FormGroup>
+										</Col>
+									</Row>
+									<Button.Ripple type="submit" color='primary'>Request Meeting</Button.Ripple>
+								</Form>
+							</>
+						}
 					</ModalBody>
 				</UILoader>
 			</Modal>
@@ -240,7 +256,10 @@ const mapStateToProps = (state) => {
 		meetingsDatesLoading,
 		meetingsDatesError,
 		newMeetingLoading,
-		newMeetingError
+		newMeetingError,
+		currentTeacher,
+		currentTeacherLoading,
+		currentTeacherError,
 	} = state.Meetings;
 	return {
 		meetings,
@@ -249,10 +268,18 @@ const mapStateToProps = (state) => {
 		meetingsDatesLoading,
 		meetingsDatesError,
 		newMeetingLoading,
-		newMeetingError
+		newMeetingError,
+		currentTeacher,
+		currentTeacherLoading,
+		currentTeacherError,
 	};
 };
 
 export default withRouter(
-	connect(mapStateToProps, { getAllMeetings, getMeetingDates, newMeeting })(MeetingHome)
+	connect(mapStateToProps, {
+		getAllMeetings,
+		getMeetingDates,
+		newMeeting,
+		getCurrentTeacher
+	})(MeetingHome)
 )

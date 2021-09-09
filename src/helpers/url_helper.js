@@ -2,7 +2,7 @@
 // export const BASE_URL = `http://192.168.10.102:3600`
 // export const DOCUMENT_BASE_URL = `${BASE_URL}/public`
 // export const MEETING_API_URL = `http://192.168.10.104:3900`
-// export const MEETING_APP_URL = `http://192.168.10.104:3001`
+// export const MEETING_APP_URL = `http://192.168.10.104:3002`
 // export const CHAT_API_URL = `http://192.168.10.104:3700`
 // export const CHAT_SOCKET_API_URL = `http://192.168.10.104:3701`
 // export const BLOG_API_URL = `http://192.168.10.102:1337`
@@ -29,7 +29,8 @@ export const GET_STARTED_CONTENT = `${BASE_URL}/api/v1/strapi/content/student_co
 
 
 // Teacher History
-export const All_TEACHERS = (id) => `${BASE_URL}/api/v1/teachers?limit=1000&page=1`;
+export const All_TEACHERS = `${BASE_URL}/api/v1/teachers/all-teachers?limit=1000&page=1`;
+export const TEACHER = `${BASE_URL}/api/v1/teachers`;
 
 // Chats
 

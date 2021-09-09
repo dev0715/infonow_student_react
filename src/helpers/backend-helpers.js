@@ -6,16 +6,16 @@ import * as  url from "./url_helper"
 
 // Gets the logged in user data from local session
 export const getLoggedInUser = () => {
-  const user = localStorage.getItem("authUser")
+  const user = localStorage.getItem("authStudent")
   return user ? JSON.parse(user) : null;
 }
 
 export const setLoggedInUser = (obj = {}) => {
-  localStorage.setItem("authUser", JSON.stringify(obj))
+  localStorage.setItem("authStudent", JSON.stringify(obj))
 }
 
 export const getAuthentication = () => {
-  const tokenInfo = localStorage.getItem("authToken")
+  const tokenInfo = localStorage.getItem("authStudentToken")
   return tokenInfo ? JSON.parse(tokenInfo) : null;
 }
 
@@ -30,7 +30,8 @@ export const getStartedContent = () => get(url.GET_STARTED_CONTENT)
 
 //Teacher History
 
-export const getAllTeachers = (id) => get(url.All_TEACHERS(id))
+export const getAllTeachers = () => get(url.All_TEACHERS)
+export const getCurrentTeacher = () => get(url.TEACHER)
 
 
 // Chats
