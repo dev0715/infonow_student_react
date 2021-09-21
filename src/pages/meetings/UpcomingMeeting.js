@@ -49,7 +49,7 @@ const UpcomingMeeting = (props) => {
 
 	const handleJoin = (e) => {
 		e.preventDefault();
-		if (!meetingUrl) {
+		if (meetingUrl) {
 			window.open(meetingUrl);
 		}
 	}
