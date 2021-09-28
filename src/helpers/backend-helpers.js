@@ -1,4 +1,5 @@
-import { post, del, get, put, postForm } from "./api_helper"
+import { param } from "jquery";
+import { post, del, get, put, postForm, GetFinalUrlWithPagingParams, GetUrlWithPagingParams } from "./api_helper"
 import * as  url from "./url_helper"
 
 
@@ -84,15 +85,31 @@ export const getIncompleteLessonsCount = () => get(url.GET_INCOMPLETE_LESSON_COU
 
 //Test
 
-export const getPastTests = () => get(url.GET_PAST_TESTS);
-export const getUpcomingTests = () => get(url.GET_UPCOMING_TESTS);
+export const getPastTests = (params) => {
+   let endUrl = GetUrlWithPagingParams(url.GET_PAST_TESTS, params)
+   return get(endUrl);
+}
+
+export const getUpcomingTests = (params) => {
+  let endUrl = GetUrlWithPagingParams(url.GET_UPCOMING_TESTS, params)
+  return get(endUrl);
+}
 export const newTestAttempt = (data) => post(url.POST_TEST_ATTEMPT, data);
 export const submitTestAttempt = (data) => put(url.SUBMIT_TEST_ATTEMPT, data);
 export const getTestAttemptDetails = (id) => get(url.GET_TEST_ATTEMPT_DETAILS(id));
 
 // Assignments 
-export const getNewAssignments = () => get(url.NEW_ASSIGNMENTS)
-export const getPastAssignments = () => get(url.PAST_ASSIGNMENTS)
+export const getNewAssignments = (params) =>{
+  let endUrl = GetUrlWithPagingParams(url.NEW_ASSIGNMENTS, params)
+  return get(endUrl);
+} 
+// export const getNewAssignments = () => get(url.NEW_ASSIGNMENTS)
+// export const getPastAssignments = () => get(url.PAST_ASSIGNMENTS)
+export const getPastAssignments = (params) => {
+  let endUrl = GetUrlWithPagingParams(url.PAST_ASSIGNMENTS, params)
+  return get(endUrl);
+}
+
 export const getAssignmentAttempt = (id) => get(url.GET_ASSIGNMENT_ATTEMPT(id))
 export const getAssignment = (id) => get(url.GET_ASSIGNMENT(id))
 export const createAssignmentAttempt = (data) => post(url.ASSIGNMENT_ATTEMPT, data)

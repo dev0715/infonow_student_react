@@ -8,34 +8,28 @@ import {
     TabContent, TabPane, Nav, NavItem, NavLink
 } from 'reactstrap'
 
-
-
 // ** Store & Actions
 import { connect } from 'react-redux'
 import { getPastTests, getUpcomingTests, newTestAttempt, submitTestAttempt } from './store/actions'
-
 import { withRouter } from 'react-router';
-
-
 import UILoader from '../../@core/components/ui-loader';
-
 import { notifyError } from '../../utility/toast'
-
 import NotFound from '../../components/not-found';
 import NoNetwork from '../../components/no-network';
-
-import { DateTime } from '../../components/date-time';
-
-
 import '@styles/base/plugins/extensions/ext-component-sweet-alerts.scss'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import TestList from './TestsList';
+
 
 const MySwal = withReactContent(Swal)
 
 const AppTests = (props) => {
 
     const [active, setActive] = useState('1')
+    const [currentpage, setCurrentpage] = useState(1)
+    const [pastTestsData, setPastTestsData] = useState()
+    const [newTestsData, setNewTestsData] = useState()
 
     const toggle = tab => {
         if (active !== tab) {
@@ -43,7 +37,7 @@ const AppTests = (props) => {
         }
     }
 
-    const handleTestAttempt = (id) => {
+    const onTestAttempt = (id) => {
         return MySwal.fire({
             icon: 'question',
             title: "Confirm",
@@ -67,8 +61,31 @@ const AppTests = (props) => {
         })
     }
 
+    const onPageChange = (index, isNew) => {
+        setCurrentpage(index)
+        let data= {"page": index , "limit" :20}
+        if(isNew){
+            if(props.newTestList[index]) setNewTestsData(props.newTestList[index])
+            else props.getUpcomingTests(data)
+        } else {
+            if(props.pastTestList[index]) setPastTestsData(props.pastTestList[index])
+            else props.getPastTests(data)
+        }
+    }
+
     useEffect(() => {
-        props.getPastTests()
+        if(props.pastTestList && props.pastTestList[currentpage])
+           setPastTestsData(props.pastTestList[currentpage])
+    }, [props.pastTestList])
+
+    useEffect(() => {
+        if(props.newTestList && props.newTestList[currentpage])
+           setNewTestsData(props.newTestList[currentpage])
+    }, [props.newTestList])
+
+    useEffect(() => {
+        let data= {"page": 1 , "limit" :20}
+        props.getPastTests(data)
         props.getUpcomingTests()
     }, [])
 
@@ -84,11 +101,24 @@ const AppTests = (props) => {
         }
     }, [props.attemptTestError])
 
+    const selectPastTest = (id) => {
+        props.history.push(`/attempt-details/${id}`)
+    }
+
+    useEffect(() => {
+        setNewTestsData(props.newTests.data)
+    }, [props.newTests])
+
+    useEffect(() => {    
+        setPastTestsData(props.pastTests.data)
+    }, [props.pastTests])
+
     const newTestsView = () => {
         return <>{
             !props.newTestsLoading &&
             !props.newTestsError &&
-            props.newTests.length === 0 &&
+            props.newTests.data  &&
+            props.newTests.data.length === 0 &&
             <NotFound />
         }
             {
@@ -98,56 +128,31 @@ const AppTests = (props) => {
             {
                 !props.newTestsLoading &&
                 !props.newTestsError &&
-                props.newTests.length > 0 &&
-                <Table responsive hover>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Title</th>
-                            <th>Start Time</th>
-                            <th>End Time</th>
-                            <th>Time Limit</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {props.newTests.map((t, index) =>
-                            <tr key={'test-key' + index}>
-                                <td>{index + 1}</td>
-                                <td>
-                                    <span className='align-middle font-weight-bold'>
-                                        {t.test.title}
-                                    </span>
-                                </td>
-                                <td><DateTime dateTime={t.startTime} type="dateTime" /></td>
-                                <td><DateTime dateTime={t.endTime} type="dateTime" /></td>
-                                <td>{t.test.timeLimit / 60} mins</td>
-                                <td>
-                                    <Button.Ripple
-                                        color='primary' outline
-                                        onClick={() => handleTestAttempt(t.studentTestId)}
-                                    >
-                                        ATTEMPT
-                                    </Button.Ripple>
-                                </td>
-                            </tr>)
-                        }
-                    </tbody>
-                </Table>
+                props.newTests.data &&
+                newTestsData &&
+                newTestsData.length > 0  &&
+                props.newTests.data.length > 0 &&
+                <TestList
+                 testList = {newTestsData}
+                 count= { props.newTests.count}
+                 isNew={true}
+                 onPageChange={onPageChange}
+                 onTestAttempt={onTestAttempt}
+                />
+                
             }
         </>
     }
 
-    const handlePastTest = (id) => {
-        props.history.push(`/attempt-details/${id}`)
-    }
+  
 
     const pastTestsView = () => {
-        return (<div>
+        return (<>
             {
                 !props.pastTestsLoading &&
                 !props.pastTestsError &&
-                props.pastTests.length == 0 &&
+                props.pastTests.data &&
+                props.pastTests.data.length == 0 &&
                 <NotFound />
             }
             {
@@ -157,38 +162,19 @@ const AppTests = (props) => {
             {
                 !props.pastTestsLoading &&
                 !props.pastTestsError &&
-                props.pastTests.length > 0 &&
-                <Table responsive hover>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Title</th>
-                            <th>Start Time</th>
-                            <th>End Time</th>
-                            <th>Time Limit</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {props.pastTests.map((t, index) =>
-                            <tr
-                                key={'past-test-key' + index}
-                                onClick={() => handlePastTest(t.studentTestId)}
-                            >
-                                <td>{index + 1}</td>
-                                <td>
-                                    <span className='align-middle font-weight-bold'>
-                                        {t.test.title}
-                                    </span>
-                                </td>
-                                <td><DateTime dateTime={t.startTime} type="dateTime" /></td>
-                                <td><DateTime dateTime={t.endTime} type="dateTime" /></td>
-                                <td>{t.test.timeLimit / 60} mins</td>
-                            </tr>)
-                        }
-                    </tbody>
-                </Table>
+                props.pastTests.data &&
+                props.pastTests.data.length > 0 &&
+                pastTestsData &&
+                pastTestsData.length > 0 &&
+                <TestList
+                    testList = {pastTestsData}
+                    isNew = {false} 
+                    count = {props.pastTests.count}
+                    onPageChange={onPageChange}
+                    selectPastTest={selectPastTest}
+                />
             }
-        </div>)
+        </>)
     }
 
     return (
@@ -228,6 +214,7 @@ const AppTests = (props) => {
                                 {
                                     newTestsView()
                                 }
+                                 
                             </TabPane>
                         </TabContent>
                     </CardBody>
@@ -240,12 +227,16 @@ const AppTests = (props) => {
 const mapStateToProps = (state) => {
 
     const {
+      
         newTests,
         newTestsLoading,
         newTestsError,
+
+        pastTestList,
         pastTests,
         pastTestsLoading,
         pastTestsError,
+
         attemptTestLoading,
         selectedTest,
         currentIndex,
@@ -257,9 +248,12 @@ const mapStateToProps = (state) => {
         newTests,
         newTestsLoading,
         newTestsError,
+
+        pastTestList,
         pastTests,
         pastTestsLoading,
         pastTestsError,
+
         attemptTestLoading,
         selectedTest,
         currentIndex,

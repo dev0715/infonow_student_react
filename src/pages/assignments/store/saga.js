@@ -38,11 +38,15 @@ import {
   submitAssignment
 } from "../../../helpers/backend-helpers"
 
-function* getNewAssignmentsHttp() {
+function* getNewAssignmentsHttp({payload:data}) {
   try {
-    const response = yield call(getNewAssignments);
+    const response = yield call(getNewAssignments,data);
     if (response) {
-      yield put(getNewAssignmentsSuccess(response))
+      let res = {
+        "res":response,
+        "page":data.page
+      }
+      yield put(getNewAssignmentsSuccess(res))
       return;
     }
     throw "Unknown response received from Server";
@@ -52,11 +56,15 @@ function* getNewAssignmentsHttp() {
   }
 }
 
-function* getPastAssignmentsHttp() {
+function* getPastAssignmentsHttp({payload:data}) {
   try {
-    const response = yield call(getPastAssignments);
+    const response = yield call(getPastAssignments,data);
     if (response) {
-      yield put(getPastAssignmentsSuccess(response))
+      let res ={
+        "res":response,
+        "page":data.page
+      }
+      yield put(getPastAssignmentsSuccess(res))
       return;
     }
     throw "Unknown response received from Server";

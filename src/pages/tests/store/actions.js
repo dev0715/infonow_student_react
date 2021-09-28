@@ -23,9 +23,10 @@ import {
 } from './actionTypes'
 
 
-export const getUpcomingTests = () => {
+export const getUpcomingTests = (data) => {
   return {
     type: GET_UPCOMING_TESTS,
+    payload:{data}
   }
 }
 
@@ -43,9 +44,10 @@ export const getUpcomingTestsFailure = (error) => {
   }
 }
 
-export const getPastTests = () => {
+export const getPastTests = (data) => {
   return {
     type: GET_PAST_TESTS,
+    payload:data
   }
 }
 

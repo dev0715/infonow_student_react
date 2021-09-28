@@ -36,20 +36,36 @@ import moment from 'moment'
 import '@styles/base/plugins/extensions/ext-component-sweet-alerts.scss'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import AssignmentList from './assignment-list';
 
 const MySwal = withReactContent(Swal)
 
 const NewAssignments = (props) => {
 
     const [currentPage, setCurrentPage] = useState(0)
+    const [newAssignmentData, setNewAssignmentData] = useState()
+  
+    useEffect(() => {
+        if(props.newAssignments) setNewAssignmentData(props.newAssignments.data)
+    }, [props.newAssignments])
 
+   
     // ** Function to handle Pagination
+    const onSelectPage = (index) => {
+        let data = {
+            "page":index,
+            "limit":20
+        }
+        if(props.newAssignmentList && props.newAssignmentList[index]) setNewAssignmentData(props.newAssignmentList[index])
+        else  props.getNewAssignments(data)  
+    }
+
     const handlePagination = page => {
         setCurrentPage(page.selected)
     }
 
     useEffect(() => {
-        if (props.newAssignments.length == 0) {
+        if (props.newAssignments && props.newAssignments.data.length == 0) {
             props.getNewAssignments()
         }
     }, [])
@@ -82,12 +98,11 @@ const NewAssignments = (props) => {
     )
 
     const goToAssignment = (a) => {
-        // console.log("Assignment", a)
         props.selectAssignment(a)
         props.history.push(`/assignments/details`)
     }
 
-    const handleAssignmentAttempt = (a) => {
+    const startAssignmentAttempt = (a) => {
         if (moment().isAfter(moment(a.startDate))
             || moment().isSame(moment(a.startDate))
             || moment().isBefore(moment(a.endDate))
@@ -165,8 +180,7 @@ const NewAssignments = (props) => {
                                 || moment().isSame(moment(a.endDate))
                             ) &&
                             <Button.Ripple color='flat-primary'
-                                onClick={() => handleAssignmentAttempt(a)}
-                            >
+                                onClick={() => startAssignmentAttempt(a)} >
                                 Start
                             </Button.Ripple>
                         }
@@ -201,24 +215,36 @@ const NewAssignments = (props) => {
                                 {
                                     !props.newAssignmentsLoading &&
                                     !props.newAssignmentsError &&
-                                    props.newAssignments.length == 0 &&
+                                    newAssignmentData &&
+                                    newAssignmentData.length == 0 &&
                                     <NotFound />
                                 }
                                 {
                                     !props.newAssignmentsLoading &&
                                     !props.newAssignmentsError &&
-                                    props.newAssignments.length > 0 &&
-                                    <DataTable
-                                        noHeader
-                                        pagination
-                                        columns={columns}
-                                        paginationPerPage={10}
-                                        className='react-dataTable'
-                                        sortIcon={<ChevronDown size={10} />}
-                                        paginationDefaultPage={currentPage + 1}
-                                        paginationComponent={CustomPagination}
-                                        data={props.newAssignments}
+                                    newAssignmentData &&
+                                    newAssignmentData.length > 0 &&
+
+                                    <AssignmentList
+                                        assignmentList={newAssignmentData}
+                                        startAssignment={startAssignmentAttempt}
+                                        onSelectPage = {onSelectPage}
+                                        isPagination={true}
+                                        isNew={true}
+                                        count={props.newAssignments.count}
+                                        limit={newAssignmentData.length}
                                     />
+                                    // <DataTable
+                                    //     noHeader
+                                    //     pagination
+                                    //     columns={columns}
+                                    //     paginationPerPage={10}
+                                    //     className='react-dataTable'
+                                    //     sortIcon={<ChevronDown size={10} />}
+                                    //     paginationDefaultPage={currentPage + 1}
+                                    //     paginationComponent={CustomPagination}
+                                    //     data={props.newAssignments}
+                                    // />
                                 }
                             </Col>
                         </Row>
@@ -232,11 +258,13 @@ const NewAssignments = (props) => {
 const mapStateToProps = (state) => {
 
     const {
+        newAssignmentList,
         newAssignments,
         newAssignmentsLoading,
         newAssignmentsError,
     } = state.Assignments;
     return {
+        newAssignmentList,
         newAssignments,
         newAssignmentsLoading,
         newAssignmentsError,

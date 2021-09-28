@@ -2,6 +2,7 @@ import {
   GET_NEW_ASSIGNMENTS,
   GET_NEW_ASSIGNMENTS_SUCCESS,
   GET_NEW_ASSIGNMENTS_FAILURE,
+  
   GET_PAST_ASSIGNMENTS,
   GET_PAST_ASSIGNMENTS_SUCCESS,
   GET_PAST_ASSIGNMENTS_FAILURE,
@@ -23,9 +24,10 @@ import {
 } from './actionTypes'
 
 
-export const getNewAssignments = () => {
+export const getNewAssignments = (data) => {
   return {
     type: GET_NEW_ASSIGNMENTS,
+    payload:data
   }
 }
 
@@ -43,9 +45,10 @@ export const getNewAssignmentsFailure = (error) => {
   }
 }
 
-export const getPastAssignments = () => {
+export const getPastAssignments = (data) => {
   return {
     type: GET_PAST_ASSIGNMENTS,
+    payload:data
   }
 }
 

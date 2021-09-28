@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 // ** React Imports
 import { Fragment } from 'react'
 
@@ -32,6 +32,9 @@ import './style.scss'
 
 const Dashboard = (props) => {
 
+    const [upcomingAssignmentsData, setUpcomingAssignmentsData] = useState([])
+    const [upcomingTestData, setUpcomingTestsData] = useState([])
+
     useEffect(() => {
         props.getUpcomingTests();
         props.getNewAssignments();
@@ -52,6 +55,19 @@ const Dashboard = (props) => {
         props.history.push('/lessons')
     }
 
+    useEffect(() => {
+        if (props.newAssignments.data) setUpcomingAssignmentsData(props.newAssignments.data)
+    }, [props.newAssignments])
+
+    useEffect(() => {
+        setUpcomingTestsData(props.newTests.data)
+    }, [props.newTests])
+
+
+    useEffect(() => {
+        console.log("CHEK ", upcomingAssignmentsData);
+
+    }, [upcomingAssignmentsData])
     return (
         <Fragment >
             <UILoader
@@ -72,11 +88,15 @@ const Dashboard = (props) => {
                                     <div className="heading">
                                         Upcoming <br /> Tests
                                     </div>
-                                    <div className="count text-primary">
-                                        {
-                                            props.newTests.length
-                                        }
-                                    </div>
+                                    {
+                                        upcomingTestData &&
+                                        <div className="count text-primary">
+                                            {
+                                                upcomingTestData.length
+                                            }
+                                        </div>
+                                    }
+
                                 </div>
                             </Col>
                             <Col sm='12' md='6' lg='3'>
@@ -85,11 +105,14 @@ const Dashboard = (props) => {
                                     <div className="heading">
                                         Upcoming <br /> Assignments
                                     </div>
-                                    <div className="count text-primary">
-                                        {
-                                            props.newAssignments.length
-                                        }
-                                    </div>
+                                    {
+                                        upcomingAssignmentsData &&
+                                        <div className="count text-primary">
+                                            {
+                                                upcomingAssignmentsData.length
+                                            }
+                                        </div>
+                                    }
                                 </div>
                             </Col>
                             <Col sm='12' md='6' lg='3'>
@@ -155,7 +178,9 @@ const Dashboard = (props) => {
                                     {
                                         !props.newAssignmentsLoading &&
                                         !props.newAssignmentsError &&
-                                        props.newAssignments.length == 0 &&
+                                        upcomingAssignmentsData &&
+                                        upcomingAssignmentsData.length == 0 &&
+                                    
                                         <div className="text-center p-1">
                                             No assignment found
                                         </div>
@@ -163,10 +188,11 @@ const Dashboard = (props) => {
                                     {
                                         !props.newAssignmentsLoading &&
                                         !props.newAssignmentsError &&
-                                        props.newAssignments.length > 0 &&
+                                        upcomingAssignmentsData &&
+                                        upcomingAssignmentsData.length > 0 &&
                                         <Table responsive hover >
                                             <tbody>
-                                                {props.newAssignments.filter((na, i) => i < 9).map((a, index) =>
+                                                {upcomingAssignmentsData.filter((na, i) => i < 9).map((a, index) =>
                                                     <tr key={"recent-lesson" + index}>
                                                         <td>
                                                             <div
@@ -204,7 +230,8 @@ const Dashboard = (props) => {
                                     {
                                         !props.newTestsLoading &&
                                         !props.newTestsError &&
-                                        props.newTests.length == 0 &&
+                                        upcomingTestData &&
+                                        upcomingTestData.length == 0 &&
                                         <div className="text-center pb-1">
                                             No test found
                                         </div>
@@ -212,7 +239,8 @@ const Dashboard = (props) => {
                                     {
                                         !props.newTestsLoading &&
                                         !props.newTestsError &&
-                                        props.newTests.length > 0 &&
+                                        upcomingTestData &&
+                                        upcomingTestData.length > 0 &&
                                         <Table responsive hover>
                                             <thead>
                                                 <tr>
@@ -222,7 +250,7 @@ const Dashboard = (props) => {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {props.newTests.map((t, index) =>
+                                                {upcomingTestData.map((t, index) =>
                                                     <tr key={'test-key' + index}>
                                                         <td>
                                                             <span className='align-middle font-weight-bold'>
@@ -333,15 +361,19 @@ const mapStateToProps = (state) => {
         meetings,
         meetingsLoading,
         meetingsError,
+
         newAssignments,
         newAssignmentsLoading,
         newAssignmentsError,
+
         newTests,
         newTestsLoading,
         newTestsError,
+
         recentLessons,
         recentLessonsLoading,
         recentLessonsError,
+
         incompleteLessons,
         incompleteLessonsLoading,
         incompleteLessonsError,

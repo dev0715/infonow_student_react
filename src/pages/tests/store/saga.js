@@ -34,11 +34,16 @@ import {
   getTestAttemptDetails
 } from "../../../helpers/backend-helpers"
 
-function* getUpcomingTestsHttp() {
+function* getUpcomingTestsHttp({payload:data}) {
   try {
-    const response = yield call(getUpcomingTests);
+   
+    const response = yield call(getUpcomingTests,data);
     if (response) {
-      yield put(getUpcomingTestsSuccess(response))
+      let res = {
+        "res":response,
+        "page":data.page
+      }
+      yield put(getUpcomingTestsSuccess(res))
       return;
     }
     throw "Unknown response received from Server";
@@ -48,11 +53,16 @@ function* getUpcomingTestsHttp() {
   }
 }
 
-function* getPastTestsHttp() {
+function* getPastTestsHttp({payload:data}) {
   try {
-    const response = yield call(getPastTests);
+  
+    const response = yield call(getPastTests,data);
     if (response) {
-      yield put(getPastTestsSuccess(response))
+      let res = {
+        "res":response,
+        "page":data.page
+      }
+      yield put(getPastTestsSuccess(res))
       return;
     }
     throw "Unknown response received from Server";

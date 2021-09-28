@@ -7,17 +7,22 @@ import {
   GET_UPCOMING_TESTS,
   GET_UPCOMING_TESTS_SUCCESS,
   GET_UPCOMING_TESTS_FAILURE,
+
   GET_PAST_TESTS,
   GET_PAST_TESTS_SUCCESS,
   GET_PAST_TESTS_FAILURE,
+
   NEW_TEST_ATTEMPT,
   NEW_TEST_ATTEMPT_SUCCESS,
   NEW_TEST_ATTEMPT_FAILURE,
+
   SUBMIT_TEST_ATTEMPT,
   SUBMIT_TEST_ATTEMPT_SUCCESS,
   SUBMIT_TEST_ATTEMPT_FAILURE,
+
   UPDATE_OBJECTIVE_QUESTION,
   UPDATE_SUBJECTIVE_QUESTION,
+  
   NEXT_QUESTION,
   PREVIOUS_QUESTION,
   SELECT_QUESTION,
@@ -34,12 +39,16 @@ let testObj = JSON.parse(localStorage.getItem(TEST_KEY) || "{}")
 
 
 const initialState = {
+  newTestList:{},
   newTests: [],
   newTestsLoading: false,
   newTestsError: null,
+
+  pastTestList:{},
   pastTests: [],
   pastTestsLoading: false,
   pastTestsError: null,
+
   attemptTestLoading: false,
   selectedTest: testObj.test || {},
   currentIndex: testObj.currentIndex || 0,
@@ -180,19 +189,19 @@ const testReducer = (state = initialState, action) => {
   switch (action.type) {
 
     case GET_UPCOMING_TESTS:
-      return { ...state, newTests: [], newTestsLoading: true }
+     return { ...state, newTests: [], newTestsLoading: true }
 
     case GET_UPCOMING_TESTS_SUCCESS:
-      return { ...state, newTests: action.payload, newTestsLoading: false, newTestsError: null }
+      return { ...state, newTestList:{...state.newTestList ,[action.payload.page]: action.payload.res.data}, newTests: action.payload.res, newTestsLoading: false, newTestsError: null }
 
     case GET_UPCOMING_TESTS_FAILURE:
       return { ...state, newTests: [], newTestsLoading: false, newTestsError: action.payload }
 
     case GET_PAST_TESTS:
-      return { ...state, pastTests: [], pastTestsLoading: true }
+     return { ...state, pastTests: [], pastTestsLoading: true }
 
-    case GET_PAST_TESTS_SUCCESS:
-      return { ...state, pastTests: action.payload, pastTestsLoading: false, pastTestsError: null }
+    case GET_PAST_TESTS_SUCCESS:  
+      return { ...state, pastTestList:{...state.pastTestList ,[action.payload.page]: action.payload.res.data}, pastTests: action.payload.res, pastTestsLoading: false, pastTestsError: null }
 
     case GET_PAST_TESTS_FAILURE:
       return { ...state, pastTests: [], pastTestsLoading: false, pastTestsError: action.payload }

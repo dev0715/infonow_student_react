@@ -30,23 +30,40 @@ import { DateTime } from '../../components/date-time';
 // ** Styles
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 import './style.scss'
+import AssignmentList from './assignment-list';
 const PastAssignments = (props) => {
 
+    const [pastAssignmentData, setPastAssignmentData] = useState()
     const [currentPage, setCurrentPage] = useState(0)
 
+    useEffect(() => {
+        console.log("props.pastAssignments ==>", props.pastAssignments);
+        if(props.pastAssignments) setPastAssignmentData(props.pastAssignments.data)
+     }, [props.pastAssignments])
+
     // ** Function to handle Pagination
+    const onSelectPage = (index) => {
+        let data = {
+            "page":index,
+            "limit":20
+        }
+        if(props.pastAssignmentList && props.pastAssignmentList[index]) setPastAssignmentData(props.pastAssignmentList[index])
+        else props.getPastAssignments(data)
+       
+    }
+
     const handlePagination = page => {
         setCurrentPage(page.selected)
     }
 
     useEffect(() => {
-        if (props.pastAssignments.length == 0) {
+        if (props.pastAssignments  && props.pastAssignments.data.length == 0) {
             props.getPastAssignments()
         }
     }, [])
 
 
-    const goToAssignment = (a) => {
+    const assignmentDetail = (a) => {
         props.selectAssignment(a)
         props.history.push(`/assignments/details`)
     }
@@ -137,7 +154,7 @@ const PastAssignments = (props) => {
             minWidth: '250px',
             cell: a => {
                 return (
-                    <Button.Ripple color="flat-primary" onClick={() => goToAssignment(a)} >
+                    <Button.Ripple color="flat-primary" onClick={() => assignmentDetail(a)} >
                         View
                     </Button.Ripple>
                 )
@@ -170,24 +187,36 @@ const PastAssignments = (props) => {
                                 {
                                     !props.pastAssignmentsLoading &&
                                     !props.pastAssignmentsError &&
-                                    props.pastAssignments.length == 0 &&
+                                    pastAssignmentData &&
+                                    pastAssignmentData.length == 0 &&
                                     <NotFound />
                                 }
                                 {
                                     !props.pastAssignmentsLoading &&
                                     !props.pastAssignmentsError &&
-                                    props.pastAssignments.length > 0 &&
-                                    <DataTable
-                                        noHeader
-                                        pagination
-                                        columns={columns}
-                                        paginationPerPage={10}
-                                        className='react-dataTable '
-                                        sortIcon={<ChevronDown size={10} />}
-                                        paginationDefaultPage={currentPage + 1}
-                                        paginationComponent={CustomPagination}
-                                        data={props.pastAssignments}
+                                    pastAssignmentData &&
+                                    pastAssignmentData.length > 0 &&
+                                    
+                                    <AssignmentList
+                                        assignmentList={pastAssignmentData}
+                                        startAssignment={assignmentDetail}
+                                        onSelectPage ={onSelectPage}
+                                        isPagination={true}
+                                        isNew={false}
+                                        count={props.pastAssignments.count}
+                                        limit={pastAssignmentData.length}
                                     />
+                                    // <DataTable
+                                    //     noHeader
+                                    //     pagination
+                                    //     columns={columns}
+                                    //     paginationPerPage={10}
+                                    //     className='react-dataTable '
+                                    //     sortIcon={<ChevronDown size={10} />}
+                                    //     paginationDefaultPage={currentPage + 1}
+                                    //     paginationComponent={CustomPagination}
+                                    //     data={props.pastAssignments}
+                                    // />
                                 }
                             </Col>
                         </Row>
@@ -201,11 +230,13 @@ const PastAssignments = (props) => {
 const mapStateToProps = (state) => {
 
     const {
+        pastAssignmentList,
         pastAssignments,
         pastAssignmentsLoading,
         pastAssignmentsError,
     } = state.Assignments;
     return {
+        pastAssignmentList,
         pastAssignments,
         pastAssignmentsLoading,
         pastAssignmentsError,

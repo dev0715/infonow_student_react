@@ -29,12 +29,16 @@ import {
 const ASSIGNMENT_ANSWERS_KEY = "ASSIGNMENT_ANSWERS_KEY"
 
 const initialState = {
+  newAssignmentList: {},
   newAssignments: [],
   newAssignmentsLoading: false,
   newAssignmentsError: null,
+
+  pastAssignmentsList: {},
   pastAssignments: [],
   pastAssignmentsLoading: false,
   pastAssignmentsError: null,
+
   selectedAssignment: {},
   attempt: {},
   attemptLoading: false,
@@ -104,16 +108,27 @@ const assignmentReducer = (state = initialState, action) => {
       return { ...state, newAssignments: [], newAssignmentsLoading: true }
 
     case GET_NEW_ASSIGNMENTS_SUCCESS:
-      return { ...state, newAssignments: action.payload, newAssignmentsLoading: false, newAssignmentsError: null }
+      return {
+        ...state,
+        newAssignmentList: { ...state.newAssignmentList, [action.payload.page]: action.payload.res.data },
+        newAssignments: action.payload.res,
+        newAssignmentsLoading: false
+      }
 
     case GET_NEW_ASSIGNMENTS_FAILURE:
-      return { ...state, newAssignments: [], newAssignmentsLoading: false, newAssignmentsError: action.payload }
+      return { ...state, newAssignmentsLoading: false, newAssignmentsError: action.payload }
 
     case GET_PAST_ASSIGNMENTS:
       return { ...state, pastAssignments: [], pastAssignmentsLoading: true }
 
     case GET_PAST_ASSIGNMENTS_SUCCESS:
-      return { ...state, pastAssignments: action.payload, pastAssignmentsLoading: false, pastAssignmentsError: null }
+      return {
+        ...state,
+        pastAssignmentsList: { ...state.pastAssignmentsList, [action.payload.page]: action.payload.res.data },
+        pastAssignments: action.payload.res,
+        pastAssignmentsLoading: false,
+        pastAssignmentsError: null
+      }
 
     case GET_PAST_ASSIGNMENTS_FAILURE:
       return { ...state, pastAssignments: [], pastAssignmentsLoading: false, pastAssignmentsError: action.payload }

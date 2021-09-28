@@ -28,15 +28,29 @@ import moment from 'moment'
 import '@styles/base/plugins/extensions/ext-component-sweet-alerts.scss'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import AssignmentList from './assignment-list';
+
 
 const MySwal = withReactContent(Swal)
 
 
 const AppAssignments = (props) => {
 
+    const [newAssignmentData, setNewAssignmentData] = useState()
+    const [pastAssignmentData, setPastAssignmentData] = useState()
+
     useEffect(() => {
-        props.getNewAssignments();
-        props.getPastAssignments();
+        if(props.newAssignments) setNewAssignmentData(props.newAssignments.data)
+    }, [props.newAssignments])
+
+    useEffect(() => {
+        if(props.pastAssignments) setPastAssignmentData(props.pastAssignments.data)
+     }, [props.pastAssignments])
+
+    useEffect(() => {
+        let data = {"page":1, "limit" :20}
+        props.getNewAssignments(data);
+        props.getPastAssignments(data);
     }, [])
 
     const goToNewAssignmentList = () => {
@@ -47,7 +61,7 @@ const AppAssignments = (props) => {
         props.history.push("/past-assignments")
     }
 
-    const goToAssignment = (a) => {
+    const viewAssignmentDetail = (a) => {
         props.selectAssignment(a)
         props.history.push(`/assignments/details`)
     }
@@ -108,48 +122,24 @@ const AppAssignments = (props) => {
                                         {
                                             !props.newAssignmentsLoading &&
                                             !props.newAssignmentsError &&
-                                            props.newAssignments.length == 0 &&
+                                            newAssignmentData &&
+                                            newAssignmentData.length == 0 &&
                                             <NotFound />
                                         }
                                         {
                                             !props.newAssignmentsLoading &&
                                             !props.newAssignmentsError &&
-                                            props.newAssignments.length > 0 &&
-                                            <Table responsive hover className="pb-2">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Name</th>
-                                                        <th>Start Date</th>
-                                                        <th>Due Date</th>
-                                                        <th>Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {props.newAssignments.filter((as, index) => index < 5).map((a, index) =>
-                                                        <tr key={"new-assign" + index} >
-                                                            <td>
-                                                                {a.assignment.title}
-                                                            </td>
-                                                            <td><DateTime dateTime={a.startDate} type="date" /></td>
-                                                            <td><DateTime dateTime={a.endDate} type="date" /></td>
-                                                            <td>
-                                                                {
-                                                                    (moment().isAfter(moment(a.startDate))
-                                                                        || moment().isSame(moment(a.startDate))
-                                                                        || moment().isBefore(moment(a.endDate))
-                                                                        || moment().isSame(moment(a.endDate))
-                                                                    ) &&
-                                                                    <Button.Ripple color='flat-primary'
-                                                                        onClick={() => goToAssignment(a)}
-                                                                    >
-                                                                        Start
-                                                                    </Button.Ripple>
-                                                                }
-                                                            </td>
-                                                        </tr>
-                                                    )}
-                                                </tbody>
-                                            </Table>
+                                            newAssignmentData &&
+                                            newAssignmentData.length > 0 &&
+
+                                            <AssignmentList 
+                                                assignmentList = {newAssignmentData}
+                                                startAssignment={viewAssignmentDetail}
+                                                isPagination ={false}
+                                                isNew={true}
+                                                count = {6}
+                                                limit={5}
+                                            />
                                         }
                                     </Col>
                                 </Row>
@@ -181,55 +171,24 @@ const AppAssignments = (props) => {
                                         {
                                             !props.pastAssignmentsLoading &&
                                             !props.pastAssignmentsError &&
-                                            props.pastAssignments.length == 0 &&
+                                            pastAssignmentData &&
+                                            pastAssignmentData.length == 0 &&
                                             <NotFound />
                                         }
                                         {
                                             !props.pastAssignmentsLoading &&
                                             !props.pastAssignmentsError &&
-                                            props.pastAssignments.length > 0 &&
-                                            <Table responsive hover className="mb-">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Name</th>
-                                                        <th>Submission Date</th>
-                                                        <th>Marks</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {props.pastAssignments.filter((as, index) => index < 5).map((a, index) =>
-                                                        <tr key={"new-assign" + index}
-                                                            onClick={() => goToAssignment(a)}
-                                                        >
-                                                            <td>
-                                                                {a.assignment.title}
-                                                            </td>
-                                                            <td>
-                                                                {
-                                                                    a.assignmentAttempt ?
-                                                                        <DateTime dateTime={a.assignmentAttempt.submittedAt} type="date" />
-                                                                        : "..."
-                                                                }
-                                                            </td>
-                                                            <td>
-                                                                {
-                                                                    a.assignmentAttempt ?
-                                                                        <div>
-                                                                            {
-                                                                                a.assignmentAttempt.obtainedMarks || "..."
-                                                                            }
-                                                                            /
-                                                                            {
-                                                                                a.assignment.totalMarks
-                                                                            }
-                                                                        </div>
-                                                                        : "..."
-                                                                }
-                                                            </td>
-                                                        </tr>
-                                                    )}
-                                                </tbody>
-                                            </Table>
+                                            pastAssignmentData &&
+                                            pastAssignmentData.length > 0 &&
+
+                                            <AssignmentList 
+                                                assignmentList = {pastAssignmentData}
+                                                startAssignment={viewAssignmentDetail}
+                                                isPagination ={false}
+                                                isNew={false}
+                                                count = {1}
+                                                limit={5}
+                                            />
                                         }
                                     </Col>
                                 </Row>
@@ -245,17 +204,23 @@ const AppAssignments = (props) => {
 const mapStateToProps = (state) => {
 
     const {
+        newAssignmentList,
         newAssignments,
         newAssignmentsLoading,
         newAssignmentsError,
+
+        pastAssignmentList,
         pastAssignments,
         pastAssignmentsLoading,
         pastAssignmentsError,
     } = state.Assignments;
     return {
+        newAssignmentList,
         newAssignments,
         newAssignmentsLoading,
         newAssignmentsError,
+
+        pastAssignmentList,
         pastAssignments,
         pastAssignmentsLoading,
         pastAssignmentsError,
