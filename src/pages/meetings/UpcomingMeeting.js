@@ -28,7 +28,7 @@ const UpcomingMeeting = (props) => {
 
 	const { meeting } = props
 	const [skin, setSkin] = useSkin();
-
+	const [meetingUrl, setMeetingUrl] = useState(null);
 	const [isActive, setIsActive] = useState(false)
 
 
@@ -40,20 +40,26 @@ const UpcomingMeeting = (props) => {
 		skin === 'dark' ? 'upcoming-meeting-dark.svg' : 'upcoming-meeting.svg';
 	const illustration = require(`@src/assets/images/illustrations/${illus}`);
 
-	const handleJoin = (e) => {
-		e.preventDefault();
-		setIsActive(true)
+	
+
+	useEffect(() => {
 		if (!props.meetingToken || props.meetingTokenError)
 			props.getMeetingToken()
+	}, []);
+
+	const handleJoin = (e) => {
+		e.preventDefault();
+		if (meetingUrl) {
+			window.open(meetingUrl);
+		}
 	}
 
 	useEffect(() => {
-		if (props.meetingToken && isActive) {
-			setIsActive(false)
+		if (props.meetingToken) {
 			let url = `${MEETING_APP_URL}/${meeting.meetingId}/${encodeURIComponent("JWT " + props.meetingToken)}`
-			window.open(url, '_blank');
+			setMeetingUrl(url);
 		}
-	}, [isActive, props.meetingToken])
+	}, [props.meetingToken])
 
 
 
