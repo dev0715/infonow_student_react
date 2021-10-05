@@ -41,10 +41,18 @@ import { DateTimeFunction } from '../../components/date-time'
 const CalendarComponent = (props) => {
 
   const [event, setEvent] = useState(null)
-
   const [leftSidebarOpen, setLeftSidebarOpen] = useState(false)
-
   const [selectedFilters, setSelectedFilters] = useState(filters.map(f => f.type))
+  const [upcomingTestData, setUpcomingTestData] = useState([])
+  const [upcomingAssignmentData, setUpcomingAssignmentData] = useState([])
+
+  useEffect(() => {
+    if(props.newTests && props.newTests.data)setUpcomingTestData(props.newTests.data)
+  }, [props.newTests])
+
+  useEffect(() => {
+    if(props.upcomingAssignments && props.upcomingAssignments.data) setUpcomingAssignmentData(props.upcomingAssignments.data)
+  }, [props.upcomingAssignments])
 
   useEffect(() => {
     props.getUpcomingTests();
@@ -77,7 +85,7 @@ const CalendarComponent = (props) => {
             data: mt
           }
         }),
-      ...props.newTests.map(t => {
+       upcomingTestData && upcomingTestData.map(t => {
         return {
           type: 'test',
           title: t.test.title,
@@ -85,7 +93,8 @@ const CalendarComponent = (props) => {
           data: t
         }
       }),
-      ...props.newAssignments.map(a => {
+
+      upcomingAssignmentData && upcomingAssignmentData.map(a => {
         return {
           type: 'assignment',
           title: a.assignment.title,
