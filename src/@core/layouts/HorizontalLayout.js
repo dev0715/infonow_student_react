@@ -181,7 +181,7 @@ const HorizontalLayout = props => {
         />
       ) : null}
       <footer
-        className={classnames(`footer footer-light ${footerClasses[footerType] || 'footer-static'}`, {
+        className={classnames(`footer footer-light footer-cutom ${footerClasses[footerType] || 'footer-static'}`, {
           'd-none': footerType === 'hidden'
         })}
       >
