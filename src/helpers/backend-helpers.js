@@ -120,3 +120,6 @@ export const submitAssignment = (data) => put(url.ASSIGNMENT_ATTEMPT, data)
 export const updateProfileData = (id, data) => put(url.UPDATE_PROFILE_DATA(id), data);
 export const uploadProfilePicture = (id, data) => postForm(url.UPLOAD_PROFILE_PICTURE(id), data);
 export const updatePassword = (id, data) => put(url.UPDATE_PASSWORD(id), data);
+
+//Counties
+export const getCounties = () => get(url.GET_COUNTIES)

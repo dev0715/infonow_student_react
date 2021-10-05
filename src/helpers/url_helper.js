@@ -104,3 +104,6 @@ export const GET_ASSIGNMENT = id => `${BASE_URL}/api/v1/assignments/${id}`
 export const UPDATE_PROFILE_DATA = id => `${BASE_URL}/api/v1/students/${id}/profile`
 export const UPLOAD_PROFILE_PICTURE = id => `${BASE_URL}/api/v1/students/${id}/profile-picture`
 export const UPDATE_PASSWORD = id => `${BASE_URL}/api/v1/students/${id}/password`
+
+//Counties
+export const GET_COUNTIES = `${BASE_URL}/counties`

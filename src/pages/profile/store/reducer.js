@@ -11,8 +11,11 @@ import {
   UPDATE_PASSWORD,
   UPDATE_PASSWORD_SUCCESS,
   UPDATE_PASSWORD_FAILURE,
-  SET_PROFILE_USER
+  SET_PROFILE_USER,
 
+  GET_COUNTIES,
+  GET_COUNTIES_SUCCESS,
+  GET_COUNTIES_FAILURE,
 } from './actionTypes'
 
 import { setLoggedInUser } from '../../../helpers/backend-helpers'
@@ -25,6 +28,10 @@ const initialState = {
   updateProfilePictureError: null,
   updatePasswordLoading: false,
   updatePasswordError: null,
+
+  countiesData: [],
+  countiesLoading: false,
+  countiesError: false
 }
 
 
@@ -88,7 +95,18 @@ const profileSaga = (state = initialState, action) => {
     case UPDATE_PASSWORD_FAILURE:
       return { ...state, updatePasswordLoading: false, updatePasswordError: action.payload }
 
+    case GET_COUNTIES:
+      return { ...state, countiesLoading: true }
 
+    case GET_COUNTIES_SUCCESS:
+      return {
+        ...state,
+        countiesData: action.payload,
+        countiesLoading: false,
+      }
+
+    case GET_COUNTIES_FAILURE:
+      return { ...state, countiesLoading: false, countiesError: action.payload }
     default:
       return state
   }

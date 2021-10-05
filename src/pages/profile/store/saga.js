@@ -5,7 +5,8 @@ import { call, put, takeEvery } from "redux-saga/effects"
 import {
   UPDATE_PASSWORD,
   UPDATE_PROFILE_DATA,
-  UPLOAD_PROFILE_PICTURE
+  UPLOAD_PROFILE_PICTURE,
+  GET_COUNTIES
 } from "./actionTypes"
 
 
@@ -15,7 +16,9 @@ import {
   updatePasswordSuccess,
   updatePasswordFailure,
   updateProfileDataFailure,
-  updateProfileDataSuccess
+  updateProfileDataSuccess,
+
+  getCountiesFailure, getCountiesSuccess
 } from "./actions"
 
 //Include Both Helper File with needed methods
@@ -24,6 +27,8 @@ import {
   uploadProfilePicture,
   updatePassword,
   getLoggedInUser,
+
+  getCounties
 
 } from "../../../helpers/backend-helpers"
 
@@ -74,11 +79,25 @@ function* updateProfileDataHttp({ payload }) {
   }
 }
 
+function* getCountiesHttp() {
+  try {
+    const response = yield call(getCounties);
+    if (response) {
+      yield put(getCountiesSuccess(response))
+      return;
+    }
+    throw "Unknown response received from Server";
+
+  } catch (error) {
+    yield put(getCountiesFailure(error.message ? error.message : error))
+  }
+}
 
 function* profileSaga() {
   yield takeEvery(UPDATE_PASSWORD, updatePasswordHttp)
   yield takeEvery(UPLOAD_PROFILE_PICTURE, uploadProfilePictureHttp)
   yield takeEvery(UPDATE_PROFILE_DATA, updateProfileDataHttp)
+  yield takeEvery(GET_COUNTIES, getCountiesHttp)
 }
 
 export default profileSaga

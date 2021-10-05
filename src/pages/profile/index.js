@@ -11,7 +11,7 @@ import { connect } from 'react-redux'
 
 import { withRouter } from 'react-router';
 
-import { setProfileUser } from './store/actions'
+import { setProfileUser , getCounties } from './store/actions'
 
 import UILoader from '../../@core/components/ui-loader';
 
@@ -28,6 +28,7 @@ const AccountSettings = (props) => {
 
   useEffect(() => {
     props.setProfileUser(getLoggedInUser() || {})
+    props.getCounties()
   }, [])
 
   return (
@@ -84,6 +85,7 @@ const mapStateToProps = (state) => {
 
 export default withRouter(
   connect(mapStateToProps, {
-    setProfileUser
+    setProfileUser,
+    getCounties,
   })(AccountSettings)
 )
