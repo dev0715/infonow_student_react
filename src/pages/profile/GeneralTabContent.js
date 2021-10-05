@@ -138,7 +138,7 @@ const GeneralTabs = (props) => {
         onSubmit={e => handleSubmit(e)}
       >
         <Row>
-          <Col sm='12'>
+          <Col md='6'>
             <FormGroup>
               <Label className="ml-25">
                 Name
@@ -154,7 +154,7 @@ const GeneralTabs = (props) => {
               </InputGroup>
             </FormGroup>
           </Col>
-          <Col sm='12'>
+          <Col  md='6'>
             <FormGroup>
               <Label className="ml-25">
                 Email
@@ -186,7 +186,7 @@ const GeneralTabs = (props) => {
               </InputGroup>
             </FormGroup>
           </Col>
-          <Col sm='12'>
+          <Col  md='6'>
             <FormGroup>
               <Label className="ml-25">
                 City
@@ -203,7 +203,7 @@ const GeneralTabs = (props) => {
               </InputGroup>
             </FormGroup>
           </Col>
-          <Col sm='12'>
+          <Col  md='6'>
             <FormGroup>
               <Label className="ml-25">
                 County
@@ -220,7 +220,7 @@ const GeneralTabs = (props) => {
               </InputGroup>
             </FormGroup>
           </Col>
-          <Col sm='12'>
+          <Col  md='6'>
             <FormGroup>
               <Label className="ml-25">
                 Country
