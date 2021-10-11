@@ -1,24 +1,18 @@
 import React from 'react';
 import {
-    CardBody,
-    Card,
-    CardHeader,
-    Button,
-    Row,
-    Col,
-    CardText
+    CardBody, Card, Button, Row, Col, CardText
 } from 'reactstrap';
 import { DateTime } from '../../components/date-time';
 import PropTypes from 'prop-types';
 import { ArrowLeft, Edit } from 'react-feather'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
+import { useTranslation } from 'react-i18next';
 
 const TestDetail = (props) => {
 
+    const { t } = useTranslation()
     const { test, obtainedMarks, totalMarks } = props;
-
-
 
     return (
         <>
@@ -34,7 +28,7 @@ const TestDetail = (props) => {
                                 >
                                     <ArrowLeft size={16} />
                                 </Button.Ripple>
-                                <h3 className='ml-2 d-inline m-0'>Test</h3>
+                                <h3 className='ml-2 d-inline m-0'>{t('Test')}</h3>
                             </Col>
                         </Row>
                         <Card>
@@ -48,17 +42,17 @@ const TestDetail = (props) => {
                                                         <h4 className=''>{test.title}</h4>
                                                         <Row>
                                                             <CardText tag='span' className='ml-1'>
-                                                                Created At: <strong>{<DateTime dateTime={test.createdAt} type="datetime" />}</strong>
+                                                                {t('Created At')}: <strong>{<DateTime dateTime={test.createdAt} type="datetime" />}</strong>
                                                             </CardText>
                                                         </Row>
                                                         <Row>
                                                             <CardText tag='span' className='ml-1'>
-                                                                Duration: <strong>{test.timeLimit / 60} mins</strong>
+                                                                {t('Duration')}: <strong>{test.timeLimit / 60} mins</strong>
                                                             </CardText>
                                                         </Row>
                                                         <Row>
                                                             <CardText tag='span' className='ml-1'>
-                                                                Marks: <strong>{obtainedMarks}/ {totalMarks} </strong>
+                                                                {t('Marks')}: <strong>{obtainedMarks}/ {totalMarks} </strong>
                                                             </CardText>
                                                         </Row>
                                                     </div>

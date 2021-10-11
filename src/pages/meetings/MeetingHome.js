@@ -26,10 +26,9 @@ import NoNetwork from '../../components/no-network';
 
 import TimePicker from '@components/datepicker/TimePicker';
 import DatePicker from '@components/datepicker/DatePicker';
+import { useTranslation } from 'react-i18next';
 
 const newMeetingImg = require("../../assets/images/illustrations/new-meeting.svg")
-
-
 
 const close = (
 	<button type='button' className='ml-1 close'>
@@ -39,6 +38,7 @@ const close = (
 
 function MeetingHome(props) {
 
+	const { t } = useTranslation();
 	const getUpcomingMeetings = () => {
 		const meetingList = props.meetings || [];
 		return meetingList.filter(x => moment(x.scheduledAt).isSameOrAfter(moment()) && x.status === 'accepted');
@@ -62,10 +62,10 @@ function MeetingHome(props) {
 	useEffect(() => {
 		if (isNewMeeting && !props.newMeetingLoading && !props.newMeetingError) {
 			closeMeeting()
-			notifySuccess("New Meeting", "Meeting scheduled successfully")
+			notifySuccess(t("New Meeting"), t("Meeting scheduled successfully"))
 		}
 		else if (isNewMeeting && !props.newMeetingLoading && props.newMeetingError) {
-			notifyError("New Meeting", props.newMeetingError)
+			notifyError(t("New Meeting"), props.newMeetingError)
 		}
 
 	}, [props.newMeetingLoading])
@@ -109,10 +109,10 @@ function MeetingHome(props) {
 					<div className=" mt-3 d-flex flex-column justify-content-center align-items-center">
 						<img src={newMeetingImg} className="img w-25" />
 						<h3>
-							It’s too lonely here
+							{t('It’s too lonely here')}
 						</h3>
 						<div>
-							Get started by scheduling your first meeting
+							{t('Get started by scheduling your first meeting')}
 						</div>
 						<Button.Ripple
 							color="primary"
@@ -120,7 +120,7 @@ function MeetingHome(props) {
 							onClick={() => addNewMeeting()}
 						>
 							<Plus size={14} />
-							New Meeting
+							{t('New Meeting')}
 						</Button.Ripple>
 					</div>
 					:
@@ -131,13 +131,13 @@ function MeetingHome(props) {
 									&& moment(m.scheduledAt).isSameOrAfter(moment())).length == 0 ?
 								<Col lg={12} className="mb-1">
 									<div className="d-flex  align-items-center justify-content-between">
-										<h3>Meetings</h3>
+										<h3>{t('Meetings')}</h3>
 										<Button.Ripple
 											color="primary"
 											onClick={() => addNewMeeting()}
 										>
 											<Plus size={14} />
-											New Meeting
+											{t('New Meeting')}
 										</Button.Ripple>
 									</div>
 								</Col>
@@ -183,7 +183,7 @@ function MeetingHome(props) {
 										{props.currentTeacher.student.teacher.user.name}
 									</h5>
 									<div className="text-secondary">
-										Teacher
+										{t('Teacher')}
 									</div>
 								</div>
 								<Form
@@ -193,12 +193,12 @@ function MeetingHome(props) {
 										<Col lg='12'>
 											<FormGroup>
 												<Label className="ml-25">
-													Agenda
+													{t('Agenda')}
 												</Label>
 												<InputGroup className='input-group-merge'>
 													<Input
 														type="text"
-														placeholder='Meeting Agenda'
+														placeholder={t('Meeting Agenda')}
 														value={agenda}
 														onChange={e => setAgenda(e.target.value)}
 														required />
@@ -221,13 +221,13 @@ function MeetingHome(props) {
 										<Col lg="12">
 											<FormGroup>
 												<Label className="ml-25">
-													Personal Message
+													{t('Personal Message')}
 												</Label>
 												<InputGroup className='input-group-merge'>
 													<Input
 														type='textarea'
 														rows='4'
-														placeholder='Send a personal message'
+														placeholder={t('Send a personal message')}
 														value={message}
 														onChange={e => setMessage(e.target.value)}
 													/>
@@ -235,7 +235,7 @@ function MeetingHome(props) {
 											</FormGroup>
 										</Col>
 									</Row>
-									<Button.Ripple type="submit" color='primary'>Request Meeting</Button.Ripple>
+									<Button.Ripple type="submit" color='primary'>{t('Request Meeting')}</Button.Ripple>
 								</Form>
 							</>
 						}

@@ -13,6 +13,7 @@ import {
     Input
 
 } from 'reactstrap'
+import { useTranslation } from 'react-i18next';
 
 // ** Store & Actions
 import { connect } from 'react-redux'
@@ -24,19 +25,11 @@ import {
     previousQuestion,
     selectQuestion
 } from './store/actions'
-
 import { withRouter } from 'react-router';
-
 import { ArrowLeft, ArrowRight, X } from 'react-feather'
-
 import UILoader from '../../@core/components/ui-loader';
-
 import { GET_DOCUMENT_URL } from '../../helpers/url_helper'
-
-
 import moment from 'moment';
-
-
 import { notifyError, notifySuccess } from '../../utility/toast'
 
 import '@styles/base/plugins/extensions/ext-component-sweet-alerts.scss'
@@ -52,6 +45,7 @@ const MySwal = withReactContent(Swal)
 
 const AttemptTest = (props) => {
 
+    const {t} = useTranslation()
     const [isTimeOver, setIsTimeOver] = useState(false)
     const [isTestSubmitted, setIsTestSubmitted] = useState(false)
 
@@ -72,8 +66,8 @@ const AttemptTest = (props) => {
 
     const handleTimeOver = () => {
         return MySwal.fire({
-            title: "Test Over",
-            text: 'Test is submitted',
+            title: t("Test Over"),
+            text: t('Test is submitted'),
             timer: 2000,
             customClass: {
                 confirmButton: 'btn btn-primary'
@@ -88,8 +82,8 @@ const AttemptTest = (props) => {
     const handleTestSubmit = () => {
         return MySwal.fire({
             icon: 'question',
-            title: "Confirm",
-            text: `You have attempted ${(getAttemptedQuestions()).length}/${props.selectedTest.test.questions.length} questions. Are you sure to submit this test?`,
+            title: t("Confirm"),
+            text: `${t('You have attempted')} ${(getAttemptedQuestions()).length}/${props.selectedTest.test.questions.length} ${t('questions')}. ${t('Are you sure to submit this test?')}`,
             customClass: {
                 confirmButton: 'btn btn-primary'
             },
@@ -133,10 +127,10 @@ const AttemptTest = (props) => {
 
     useEffect(() => {
         if (!props.submitTestLoading && isTestSubmitted && props.submitTestError) {
-            notifyError("Test Submit", props.submitTestError)
+            notifyError(t("Test Submit"), props.submitTestError)
         }
         else if (!props.submitTestLoading && isTestSubmitted && !props.submitTestError) {
-            notifySuccess("Test Submit", 'Test Submitted Successfully')
+            notifySuccess(t("Test Submit"), t('Test Submitted Successfully'))
         }
     }, [props.submitTestLoading])
 
@@ -223,7 +217,7 @@ const AttemptTest = (props) => {
                             className='mb-2'
                             type='textarea'
                             rows='4'
-                            placeholder='Write answer here'
+                            placeholder={t('Write answer here')}
                             value={question.answerText}
                             onChange={e => props.updateSubjectiveQuestion({ value: e.target.value })}
                             required
@@ -264,7 +258,7 @@ const AttemptTest = (props) => {
                                 {props.selectedTest.test.title}
                             </CardTitle>
                             <div className="text-right">
-                                TimeLeft
+                                {t('TimeLeft')}
                                 <h3>{timeLeft ? timeLeft : '00:00:00'}</h3>
                             </div>
                         </CardHeader>
@@ -319,7 +313,7 @@ const AttemptTest = (props) => {
                                                 color='primary'
                                                 onClick={handleTestSubmit}
                                             >
-                                                Submit
+                                                {t('Submit')}
                                             </Button.Ripple>
                                         </div>
                                     </Col>

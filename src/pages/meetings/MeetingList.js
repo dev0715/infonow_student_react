@@ -24,7 +24,7 @@ import {
 
 
 import { MoreVertical, X, AlertCircle } from 'react-feather'
-
+import { useTranslation } from 'react-i18next';
 import CardReload from '../../@core/components/card-reload';
 
 import { titleCase } from '@utils';
@@ -54,6 +54,7 @@ import NotFound from '../../components/not-found';
 
 const MeetingList = (props) => {
 
+	const {t} = useTranslation()
 	const [user, setUser] = useState({})
 	const [updateMeetingId, setUpdateMeetingId] = useState({})
 	const [meetingAction, setMeetingAction] = useState("Updated")
@@ -87,9 +88,9 @@ const MeetingList = (props) => {
 		if (meeting) {
 			if (!meeting.loading && !meeting.error) {
 				setUpdateMeetingId(null)
-				notifySuccess("Update Meeting", `Meeting ${meetingAction} successfully`)
+				notifySuccess(t("Update Meeting"), t(`${t('Meeting')} ${meetingAction} ${t('successfully')}`))
 			} else if (!meeting.loading && meeting.error) {
-				notifyError("Update Meeting", meeting.error)
+				notifyError(t("Update Meeting"), meeting.error)
 			}
 		}
 
@@ -97,9 +98,9 @@ const MeetingList = (props) => {
 		if (meeting) {
 			if (!meeting.loading && !meeting.error) {
 				setViewMeetingId(null)
-				notifySuccess("Update Meeting", `Meeting ${meetingAction} successfully`)
+				notifySuccess(t("Update Meeting"), t(`${t('Meeting')} ${meetingAction} ${t('successfully')}`))
 			} else if (!meeting.loading && meeting.error) {
-				notifyError("Update Meeting", meeting.error)
+				notifyError(t("Update Meeting"), meeting.error)
 			}
 		}
 
@@ -145,7 +146,7 @@ const MeetingList = (props) => {
 								onClick={() => closeRescheduleMeeting()}
 							/>
 						</div>
-						<h3 className="mb-2">Reschedule Meeting</h3>
+						<h3 className="mb-2">{t('Reschedule Meeting')}</h3>
 						<div className="text-center">
 							<Avatar className='box-shadow-1 avatar-border'
 								img={GET_IMAGE_URL(meeting.participants.find(u => u.user.userId != user.userId).user.profilePicture)}
@@ -171,21 +172,21 @@ const MeetingList = (props) => {
 							</Row>
 							<FormGroup>
 								<Label className="ml-25">
-									Personal Message
+									{t('Personal Message')}
 								</Label>
 								<InputGroup className='input-group-merge'>
 									<Input
 										type='textarea'
 										rows='4'
-										placeholder='Send a personal message'
+										placeholder={t('Send a personal message')}
 										value={message}
 										onChange={e => setMessage(e.target.value)}
 									/>
 								</InputGroup>
 							</FormGroup>
 							<div className="text-right">
-								<Button.Ripple className="mr-1" color='primary' outline onClick={() => closeRescheduleMeeting()}>Cancel</Button.Ripple>
-								<Button.Ripple type="submit" color='primary'>Submit</Button.Ripple>
+								<Button.Ripple className="mr-1" color='primary' outline onClick={() => closeRescheduleMeeting()}>{t('Cancel')}</Button.Ripple>
+								<Button.Ripple type="submit" color='primary'>{t('Submit')}</Button.Ripple>
 							</div>
 						</Form>
 					</ModalBody>
@@ -206,7 +207,7 @@ const MeetingList = (props) => {
 								onClick={() => setViewMeetingId(null)}
 							/>
 						</div>
-						<h3 className="mb-2">Meeting Details</h3>
+						<h3 className="mb-2">{t('Meeting Details')}</h3>
 						<MeetingPreview meeting={meeting} user={user} />
 						<div className="mt-3 text-right">
 							{
@@ -214,7 +215,7 @@ const MeetingList = (props) => {
 									meeting.status == "rescheduled") &&
 								<UncontrolledButtonDropdown>
 									<DropdownToggle outline color='primary' caret>
-										Actions
+										{t('Actions')}
 									</DropdownToggle>
 									<DropdownMenu>
 										{
@@ -226,7 +227,7 @@ const MeetingList = (props) => {
 													href='/' tag='a'
 													onClick={e => onMeetingAction(e, viewMeetingId, MeetingActions.Reject)}
 												>
-													Reject
+													{t('Reject')}
 												</DropdownItem>
 												<DropdownItem
 													href='/' tag='a'
@@ -236,7 +237,7 @@ const MeetingList = (props) => {
 														setViewMeetingId(null)
 													}}
 												>
-													Reschedule
+													{t('Reschedule')}
 												</DropdownItem>
 											</>
 										}
@@ -249,7 +250,7 @@ const MeetingList = (props) => {
 												href='/' tag='a'
 												onClick={e => onMeetingAction(e, viewMeetingId, MeetingActions.Cancel)}
 											>
-												Cancel
+												{t('Cancel')}
 											</DropdownItem>
 										}
 									</DropdownMenu>
@@ -266,7 +267,7 @@ const MeetingList = (props) => {
 									className="ml-2"
 									onClick={e => onMeetingAction(e, viewMeetingId, MeetingActions.Accept)}
 								>
-									Accept
+									{t('Accept')}
 								</Button.Ripple>
 							}
 						</div>
@@ -279,24 +280,24 @@ const MeetingList = (props) => {
 	return (
 		<>
 			<CardReload
-				title='My Meetings'
+				title={t('My Meetings')}
 				onReload={fetchMeetings}
 				isReloading={props.meetingsLoading}
 			>
 				<CardBody className="meeting-table-body">
 					{
 						props.meetings.filter(m => m.status != 'accepted').length == 0 ?
-							<NotFound message="No more meetings found" />
+							<NotFound message={t("No more meetings found")} />
 							:
 							<Table responsive hover >
 								<thead>
 									<tr>
 										<th>#</th>
-										<th>Subject</th>
-										<th>Date</th>
-										<th>Time</th>
-										<th>Status</th>
-										<th>Action</th>
+										<th>{t('SUBJECT')}</th>
+										<th>{t('DATE')}</th>
+										<th>{t('TIME')}</th>
+										<th>{t('STATUS')}</th>
+										<th>{t('ACTIONS')}</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -335,7 +336,7 @@ const MeetingList = (props) => {
 																			setViewMeetingId(m.meetingId)
 																		}}
 																	>
-																		<span className='align-middle ml-50'>View</span>
+																		<span className='align-middle ml-50'>{t('View')}</span>
 																	</DropdownItem>
 																	{
 																		m.status == "rescheduled" &&
@@ -344,7 +345,7 @@ const MeetingList = (props) => {
 																			tag='a' href='/' className='w-100'
 																			onClick={e => onMeetingAction(e, m.meetingId, MeetingActions.Accept)}
 																		>
-																			<span className='align-middle ml-50'>Accept</span>
+																			<span className='align-middle ml-50'>{t('Accept')}</span>
 																		</DropdownItem>
 																	}
 																	{
@@ -354,13 +355,13 @@ const MeetingList = (props) => {
 																				tag='a' href='/' className='w-100'
 																				onClick={e => onMeetingAction(e, m.meetingId, MeetingActions.Accept)}
 																			>
-																				<span className='align-middle ml-50'>Accept</span>
+																				<span className='align-middle ml-50'>{t('Accept')}</span>
 																			</DropdownItem>
 																			<DropdownItem
 																				tag='a' href='/' className='w-100'
 																				onClick={e => onMeetingAction(e, m.meetingId, MeetingActions.Reject)}
 																			>
-																				<span className='align-middle ml-50'>Reject</span>
+																				<span className='align-middle ml-50'>{t('Reject')}</span>
 																			</DropdownItem>
 																			<DropdownItem
 																				tag='a' href='/' className='w-100'
@@ -369,7 +370,7 @@ const MeetingList = (props) => {
 																					setUpdateMeetingId(m.meetingId)
 																				}}
 																			>
-																				<span className='align-middle ml-50'>Reschedule</span>
+																				<span className='align-middle ml-50'>{t('Reschedule')}</span>
 																			</DropdownItem>
 																		</>
 																	}
@@ -379,7 +380,7 @@ const MeetingList = (props) => {
 																			tag='a' href='/' className='w-100'
 																			onClick={e => onMeetingAction(e, m.meetingId, MeetingActions.Cancel)}
 																		>
-																			<span className='align-middle ml-50'>Cancel</span>
+																			<span className='align-middle ml-50'>{t('Cancel')}</span>
 																		</DropdownItem>
 																	}
 																</DropdownMenu>

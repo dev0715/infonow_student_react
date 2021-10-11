@@ -52,9 +52,11 @@ import moment from 'moment'
 import ReactMarkdown from 'react-markdown'
 import { render } from 'react-dom'
 import { getCategoryBadgeColor } from '../util'
+import { useTranslation } from 'react-i18next';
 
 const BlogDetails = (props) => {
 
+  const { t } = useTranslation()
   let { id } = useParams();
   const { selectedBlog } = props
 
@@ -93,7 +95,6 @@ const BlogDetails = (props) => {
 
   const postComment = (e) => {
     e.preventDefault()
-    // console.log("COMMENT ==> ", comment)
     props.commentOnBlog({ blogId: props.selectedBlog.id, text: comment })
     setComment("");
 
@@ -157,7 +158,7 @@ const BlogDetails = (props) => {
                   {
                     props.blogComments.length > 0 &&
                     <Col sm='12'>
-                      <h6 className='section-label'>Comment</h6>
+                      <h6 className='section-label'>{t('Comment')}</h6>
                       <Card>
                         <CardBody>
                           {renderComments()}
@@ -166,7 +167,7 @@ const BlogDetails = (props) => {
                     </Col>
                   }
                   <Col sm='12'>
-                    <h6 className='section-label'>Leave a Comment</h6>
+                    <h6 className='section-label'>{t('Leave a Comment')}</h6>
                     <Card>
                       <CardBody>
                         <Form className='form' onSubmit={e => postComment(e)}>
@@ -185,7 +186,7 @@ const BlogDetails = (props) => {
                               </FormGroup>
                             </Col>
                             <Col sm='12'>
-                              <Button.Ripple type="submit" color='primary'>Post Comment</Button.Ripple>
+                              <Button.Ripple type="submit" color='primary'>{t('Post Comment')}</Button.Ripple>
                             </Col>
                           </Row>
                         </Form>

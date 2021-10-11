@@ -3,19 +3,21 @@ import { Table, Button } from "reactstrap"
 import CustomPagination from "../pagination"
 import moment from "moment";
 import { DateTime } from '../../components/date-time';
+import { useTranslation } from "react-i18next";
 
 const AssignmentList = (props) => {
 
+    const { t } = useTranslation()
     const { assignmentList, startAssignment, count, isNew,
-        isPagination, onSelectPage ,limit} = props
+        isPagination, onSelectPage, limit } = props
 
-    const  onSelectStartAssignment = (a) => {
+    const onSelectStartAssignment = (a) => {
         if (startAssignment)
             startAssignment(a)
     }
 
     const onSelectePageChange = (index) => {
-        if(onSelectPage)
+        if (onSelectPage)
             onSelectPage(index)
     }
 
@@ -24,20 +26,20 @@ const AssignmentList = (props) => {
             <Table responsive hover className="pb-2">
                 <thead>
                     <tr>
-                        <th>Name</th>
+                        <th>{t('Name')}</th>
                         {
                             isNew &&
-                            <>    
-                                <th>Start Date</th>
-                                <th>Due Date</th>
-                                <th>Action</th>
+                            <>
+                                <th>{t('Start Date')}</th>
+                                <th>{t('Due Date')}</th>
+                                <th>{t('Action')}</th>
                             </>
                         }
                         {
                             !isNew &&
                             <>
-                                <th>Submission Date</th>
-                                <th>Marks</th>
+                                <th>{t('SUBMISSION DATE')}</th>
+                                <th>{t('MARKS')}</th>
                             </>
                         }
 
@@ -48,7 +50,7 @@ const AssignmentList = (props) => {
                     {
                         assignmentList.filter((as, index) => index < limit).map((a, index) =>
                             <tr key={"new-assign" + index}
-                              onClick ={!isNew ? () => onSelectStartAssignment(a) : () => {} } >
+                                onClick={!isNew ? () => onSelectStartAssignment(a) : () => { }} >
                                 <td>
                                     {a.assignment.title}
                                 </td>
@@ -67,7 +69,7 @@ const AssignmentList = (props) => {
                                                 <Button.Ripple color='flat-primary'
                                                     onClick={() => onSelectStartAssignment(a)}
                                                 >
-                                                    Start
+                                                    {t('Start')}
                                                 </Button.Ripple>
                                             }
                                         </td>

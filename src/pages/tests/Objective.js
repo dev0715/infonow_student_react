@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 import { Card, CardBody, Row, Col } from 'reactstrap';
 import { DOCUMENT_BASE_URL } from '../../helpers/url_helper';
 import { CheckCircle, XCircle } from 'react-feather';
+import { useTranslation } from 'react-i18next';
+
 export const Objective = (props) => {
+    const { t } = useTranslation()
     const {
         question,
         answer,
@@ -38,7 +41,7 @@ export const Objective = (props) => {
                                 <img src={`${DOCUMENT_BASE_URL}/${question.image}`} />
                             </div>}
                         <div className="text-right">
-                            <p className="text-muted text-right">Marks: {question.marks}</p>
+                            <p className="text-muted text-right">{t('Marks')}: {question.marks}</p>
                         </div>
                     </Col>
                 </Row>

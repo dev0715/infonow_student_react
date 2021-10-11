@@ -16,22 +16,18 @@ import {
   CardText, InputGroup, InputGroupAddon,
   Input, InputGroupText, CustomInput, Button, Modal, ModalBody, Row, Col
 } from 'reactstrap'
-
-
+import { useTranslation } from 'react-i18next';
 import NotFound from '../../components/not-found';
 import NoNetwork from '../../components/no-network';
-
 import { notifyError, notifySuccess } from '../../utility/toast'
-
 import UILoader from '../../@core/components/ui-loader';
-
 import { GET_IMAGE_URL } from './../../helpers/url_helper';
-
 import { getPreviousMessages } from './socket/events'
 
 
 const SidebarLeft = props => {
   // ** Props & Store
+  const { t } = useTranslation()
   const { sidebar, handleUserSidebarLeft, handleSidebar, userSidebarLeft, socket, store } = props
 
   const {
@@ -72,7 +68,7 @@ const SidebarLeft = props => {
       if (query.length && !filteredChat.length) {
         return (
           <li className='no-results show'>
-            <h6 className='mb-0'>No Chats Found</h6>
+            <h6 className='mb-0'>{t("No Chats Found")}</h6>
           </li>
         )
       } else {
@@ -154,12 +150,12 @@ const SidebarLeft = props => {
   useEffect(() => {
     if (isNewChat && !newChatLoading && newChatError) {
       setIsNewChat(false)
-      notifyError("New Chat", newChatError)
+      notifyError(t("New Chat"), newChatError)
     }
     else if (isNewChat && !newChatLoading && !newChatError) {
       setIsNewChat(false)
       if (chats.length > 0) handleUserClick(chats[chats.length - 1], socket)
-      notifySuccess("New Chat", 'Chat started Successfully')
+      notifySuccess(t("New Chat"), t('Chat started Successfully'))
     }
   }, [newChatLoading])
 
@@ -206,7 +202,7 @@ const SidebarLeft = props => {
             </div>
           </header>
           <PerfectScrollbar className='profile-sidebar-area' options={{ wheelPropagation: false }}>
-            <h6 className='section-label mb-1'>About</h6>
+            <h6 className='section-label mb-1'>{t('About')}</h6>
             <div className='about-user'>
               <Input
                 rows='5'
@@ -222,14 +218,14 @@ const SidebarLeft = props => {
                 <span className='char-count'>{user.about ? user.about.length : 0}</span>/ 120
               </small>
             </div>
-            <h6 className='section-label mb-1 mt-3'>Status</h6>
+            <h6 className='section-label mb-1 mt-3'>{t('Status')}</h6>
             <ul className='list-unstyled user-status'>
               <li className='pb-1'>
                 <CustomInput
                   type='radio'
                   className='custom-control-primary'
                   id='online'
-                  label='Online'
+                  label={t('Online')}
                   onChange={e => setStatus('online')}
                   checked={status === 'online'}
                 />
@@ -239,7 +235,7 @@ const SidebarLeft = props => {
                   type='radio'
                   className='custom-control-danger'
                   id='busy'
-                  label='Do Not Disturb'
+                  label={t('Do Not Disturb')}
                   onChange={e => setStatus('busy')}
                   checked={status === 'busy'}
                 />
@@ -249,7 +245,7 @@ const SidebarLeft = props => {
                   type='radio'
                   className='custom-control-warning'
                   id='away'
-                  label='Away'
+                  label={t('Away')}
                   onChange={e => setStatus('away')}
                   checked={status === 'away'}
                 />
@@ -259,18 +255,18 @@ const SidebarLeft = props => {
                   type='radio'
                   className='custom-control-secondary'
                   id='offline'
-                  label='Offline'
+                  label={t('Offline')}
                   onChange={e => setStatus('offline')}
                   checked={status === 'offline'}
                 />
               </li>
             </ul>
-            <h6 className='section-label mb-1 mt-2'>Settings</h6>
+            <h6 className='section-label mb-1 mt-2'>{t('Settings')}</h6>
             <ul className='list-unstyled'>
               <li className='d-flex justify-content-between align-items-center mb-1'>
                 <div className='d-flex align-items-center'>
                   <Bell className='mr-75' size='18' />
-                  <span className='align-middle'>Notification</span>
+                  <span className='align-middle'>{t('Notification')}</span>
                 </div>
                 <CustomInput
                   type='switch'
@@ -313,7 +309,7 @@ const SidebarLeft = props => {
                 <Input
                   value={query}
                   className='round'
-                  placeholder='Search chat'
+                  placeholder={t('Search chat')}
                   onChange={handleFilter}
                 />
               </InputGroup>
@@ -331,7 +327,7 @@ const SidebarLeft = props => {
 
           </div>
           <PerfectScrollbar className='chat-user-list-wrapper list-group' options={{ wheelPropagation: false }}>
-            <h4 className='chat-list-title'>Chats</h4>
+            <h4 className='chat-list-title'>{t('Chats')}</h4>
             <ul className='chat-users-list chat-list media-list'>
               <UILoader blocking={chatLoading}>
                 {renderChats()}
@@ -344,7 +340,7 @@ const SidebarLeft = props => {
         <UILoader blocking={newChatLoading || teachersListLoading}>
           <ModalBody className="p-2">
             <div className="d-flex justify-content-between align-items-center">
-              <h3 className="m-0">New Chat</h3>
+              <h3 className="m-0">{t('New Chat')}</h3>
               <X
                 size={16}
                 onClick={() => setIsNewChat(false)}
@@ -352,7 +348,7 @@ const SidebarLeft = props => {
             </div>
             <div className="mt-2">
               <InputGroup className='input-group-merge'>
-                <Input placeholder='Search here' value={userQuery} onChange={e => setUserQuery(e.target.value)} />
+                <Input placeholder={t('Search here')} value={userQuery} onChange={e => setUserQuery(e.target.value)} />
                 <InputGroupAddon addonType='append'>
                   <InputGroupText>
                     {
@@ -393,7 +389,7 @@ const SidebarLeft = props => {
                                     className="btn btn-sm"
                                     onClick={() => startNewChat(s.userId)}
                                   >
-                                    Chat
+                                    {t('Chat')}
                                   </Button.Ripple>
                                 }
                               </div>

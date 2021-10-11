@@ -10,26 +10,18 @@ import {
 	Col
 } from 'reactstrap';
 
-
+import { useTranslation } from 'react-i18next';
 import Fade from 'reactstrap/lib/Fade';
 import { DateTime } from '../../components/date-time'
 import CardReload from '@components/card-reload'
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-
 import { AddMeetingToCalenderButton } from './addMeetingToCalender'
-
-import {
-
-} from '@store/actions';
-
-
-
-
 import moment from 'moment';
 
 
 const UpcomingMeetingItem = ({ meeting }) => {
+	
 	return (
 		<Row className='upcoming-meeting-item'>
 			<Col xs={10}>
@@ -58,7 +50,7 @@ const UpcomingMeetingItem = ({ meeting }) => {
 };
 
 const UpcomingMeetings = props => {
-
+	const {t} = useTranslation()
 	const { addNewMeeting } = props
 
 	return (
@@ -84,7 +76,7 @@ const UpcomingMeetings = props => {
 								color='primary'
 								onClick={() => addNewMeeting(true)}
 							>
-								<Plus size={14} /> New Meeting
+								<Plus size={14} /> {t('New Meeting')}
 							</Button.Ripple>
 						</CardBody>
 					</CardReload>

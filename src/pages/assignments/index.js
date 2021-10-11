@@ -29,6 +29,7 @@ import '@styles/base/plugins/extensions/ext-component-sweet-alerts.scss'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import AssignmentList from './assignment-list';
+import { useTranslation } from 'react-i18next';
 
 
 const MySwal = withReactContent(Swal)
@@ -36,19 +37,20 @@ const MySwal = withReactContent(Swal)
 
 const AppAssignments = (props) => {
 
+    const { t } = useTranslation()
     const [newAssignmentData, setNewAssignmentData] = useState()
     const [pastAssignmentData, setPastAssignmentData] = useState()
 
     useEffect(() => {
-        if(props.newAssignments) setNewAssignmentData(props.newAssignments.data)
+        if (props.newAssignments) setNewAssignmentData(props.newAssignments.data)
     }, [props.newAssignments])
 
     useEffect(() => {
-        if(props.pastAssignments) setPastAssignmentData(props.pastAssignments.data)
-     }, [props.pastAssignments])
+        if (props.pastAssignments) setPastAssignmentData(props.pastAssignments.data)
+    }, [props.pastAssignments])
 
     useEffect(() => {
-        let data = {"page":1, "limit" :20}
+        let data = { "page": 1, "limit": 20 }
         props.getNewAssignments(data);
         props.getPastAssignments(data);
     }, [])
@@ -104,12 +106,12 @@ const AppAssignments = (props) => {
                                     <Col sm='12'>
                                         <div className="d-flex align-items-center justify-content-between">
                                             <h5 >
-                                                New Assignments
+                                               {t('New Assignments')}
                                             </h5>
                                             <Button.Ripple color='flat-primary'
                                                 onClick={() => goToNewAssignmentList()}
                                             >
-                                                View All
+                                                {t('View All')}
                                             </Button.Ripple>
                                         </div>
                                     </Col>
@@ -132,12 +134,12 @@ const AppAssignments = (props) => {
                                             newAssignmentData &&
                                             newAssignmentData.length > 0 &&
 
-                                            <AssignmentList 
-                                                assignmentList = {newAssignmentData}
+                                            <AssignmentList
+                                                assignmentList={newAssignmentData}
                                                 startAssignment={viewAssignmentDetail}
-                                                isPagination ={false}
+                                                isPagination={false}
                                                 isNew={true}
-                                                count = {6}
+                                                count={6}
                                                 limit={5}
                                             />
                                         }
@@ -153,12 +155,12 @@ const AppAssignments = (props) => {
                                     <Col sm='12'>
                                         <div className="d-flex align-items-center justify-content-between">
                                             <h5 >
-                                                Past Assignments
+                                               {t('Past Assignments')}
                                             </h5>
                                             <Button.Ripple color='flat-primary'
                                                 onClick={() => goToPastAssignmentList()}
                                             >
-                                                View All
+                                                {t('View All')}
                                             </Button.Ripple>
                                         </div>
                                     </Col>
@@ -181,12 +183,12 @@ const AppAssignments = (props) => {
                                             pastAssignmentData &&
                                             pastAssignmentData.length > 0 &&
 
-                                            <AssignmentList 
-                                                assignmentList = {pastAssignmentData}
+                                            <AssignmentList
+                                                assignmentList={pastAssignmentData}
                                                 startAssignment={viewAssignmentDetail}
-                                                isPagination ={false}
+                                                isPagination={false}
                                                 isNew={false}
-                                                count = {1}
+                                                count={1}
                                                 limit={5}
                                             />
                                         }

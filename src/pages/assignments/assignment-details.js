@@ -19,16 +19,10 @@ import {
 } from './store/actions'
 
 import { withRouter, } from 'react-router';
-
-
+import { useTranslation } from 'react-i18next';
 import CodeEditor from 'react-simple-code-editor';
 import { highlight, languages } from 'prismjs/components/prism-core';
-import 'prismjs/components/prism-clike';
-import 'prismjs/components/prism-javascript';
-
 import UILoader from '../../@core/components/ui-loader';
-
-
 import NotFound from '../../components/not-found';
 import NoNetwork from '../../components/no-network';
 import { DateTime } from '../../components/date-time';
@@ -37,28 +31,25 @@ import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js';
 import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg'
 
-import '@styles/react/libs/editor/editor.scss'
-
-import './style.scss'
-
-
 import ReactMarkdown from 'react-markdown'
 import { render } from 'react-dom'
-
 import { notifyError, notifySuccess, } from '../../utility/toast';
 import moment from 'moment'
-
 import '@styles/base/plugins/extensions/ext-component-sweet-alerts.scss'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 
+import '@styles/react/libs/editor/editor.scss'
+import './style.scss'
+
+import 'prismjs/components/prism-clike';
+import 'prismjs/components/prism-javascript';
 const MySwal = withReactContent(Swal)
-
-
 
 
 const AssignmentsDetails = (props) => {
 
+    const { t } = useTranslation()
     const [isCreateAssignment, setIsCreateAssignment] = useState(false)
 
     const THEORETICAL = "theoretical"
@@ -103,8 +94,8 @@ const AssignmentsDetails = (props) => {
         ) {
             return MySwal.fire({
                 icon: 'question',
-                title: "Confirm",
-                text: 'Are you sure you want to start the assignment?',
+                title: t("Confirm"),
+                text: t('Are you sure you want to start the assignment?'),
                 customClass: {
                     confirmButton: 'btn btn-primary',
                     cancelButton: 'btn btn-outline-danger ml-1'
@@ -146,7 +137,7 @@ const AssignmentsDetails = (props) => {
     useEffect(() => {
         if (isCreateAssignment && props.createAttemptError) {
             setIsCreateAssignment(false)
-            notifyError("Assignment Attempt", props.createAttemptError)
+            notifyError(t("Assignment Attempt"), props.createAttemptError)
         }
     }, [props.createAttemptError])
 
@@ -155,8 +146,8 @@ const AssignmentsDetails = (props) => {
         if (!props.assignmentsAnswers[props.attempt.assignmentAttemptId]) {
             MySwal.fire({
                 icon: 'warning',
-                title: "Submit Assignment",
-                text: 'Answer can not be empty',
+                title: t("Submit Assignment"),
+                text: t('Answer can not be empty'),
                 customClass: {
                     confirmButton: 'btn btn-primary',
                 },
@@ -168,8 +159,8 @@ const AssignmentsDetails = (props) => {
             setIsSubmitted(true)
             MySwal.fire({
                 icon: 'question',
-                title: "Confirm",
-                text: 'Are you sure you want to submit the assignment?',
+                title: t("Confirm"),
+                text: t('Are you sure you want to submit the assignment?'),
                 customClass: {
                     confirmButton: 'btn btn-primary',
                     cancelButton: 'btn btn-outline-danger ml-1'
@@ -194,11 +185,11 @@ const AssignmentsDetails = (props) => {
     useEffect(() => {
         if (isSubmitted && !props.assignmentSubmitLoading && !props.assignmentSubmitError) {
             setIsSubmitted(false)
-            notifySuccess("Submit Assignment", 'Assignment submitted successfully')
+            notifySuccess(t("Submit Assignment"), t('Assignment submitted successfully'))
         }
         else if (isSubmitted && !props.assignmentSubmitLoading && props.assignmentSubmitError) {
             setIsSubmitted(false)
-            notifyError("Submit Assignment", props.assignmentSubmitError)
+            notifyError(t("Submit Assignment"), props.assignmentSubmitError)
         }
     }, [props.assignmentSubmitLoading])
 
@@ -278,7 +269,7 @@ const AssignmentsDetails = (props) => {
                             !props.assignmentLoading &&
                             !props.assignmentError &&
                             !isAssignment() &&
-                            < NotFound message={"Assignment not found"} />
+                            < NotFound message={t("Assignment not found")} />
                         }
                         {
                             !props.assignmentLoading &&
@@ -290,7 +281,7 @@ const AssignmentsDetails = (props) => {
                                         <div className="d-md-flex d-lg-flex ">
                                             <div className="bold text-dark d-flex d-md-block d-lg-block align-items-center justify-content-between">
                                                 <h6 className="mb-0" >
-                                                    Start Time
+                                                   {t('START TIME')}
                                                 </h6>
                                                 <div className=" d-inline d-md-block d-lg-block">
                                                     <small>
@@ -302,7 +293,7 @@ const AssignmentsDetails = (props) => {
                                                 className="bold text-dark ml-0 ml-md-2 ml-lg-2 mt-1 mt-md-0 mt-lg-0 d-flex d-md-block d-lg-block align-items-center justify-content-between"
                                             >
                                                 <h6 className="mb-0">
-                                                    Deadline
+                                                    {t('Deadline')}
                                                 </h6>
                                                 <div className="d-inline d-md-block d-lg-block">
                                                     <small>
@@ -318,14 +309,14 @@ const AssignmentsDetails = (props) => {
                                                 className="mt-1 mt-md-0 mt-lg-0"
                                                 onClick={() => handleSubmit()}
                                             >
-                                                Submit
+                                                {t('Submit')}
                                             </Button.Ripple>
                                         }
                                         {
                                             props.attempt.obtainedMarks != null &&
                                             <div className="d-flex flex-column ">
                                                 <h6>
-                                                    Marks
+                                                    {t('Marks')}
                                                 </h6>
                                                 <h5>
                                                     {props.attempt.obtainedMarks}
@@ -409,7 +400,7 @@ const AssignmentsDetails = (props) => {
                                                 }
                                             </>
                                             :
-                                            <NotFound message="Assignment not attempted" />
+                                            <NotFound message={t("Assignment not attempted")} />
                                     }
                                 </Col>
                             </Row>

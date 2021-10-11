@@ -7,7 +7,7 @@ import ReactDOM from 'react-dom'
 import Avatar from '@components/avatar'
 import AvatarGroup from '@components/avatar-group'
 import { getShortNameForDocument } from '@utils';
-
+import { useTranslation } from 'react-i18next';
 // ** Store & Actions
 
 // ** Third Party Components
@@ -50,6 +50,7 @@ import { DateTime } from '../../components/date-time'
 import { useDropzone } from 'react-dropzone'
 
 const ChatLog = props => {
+  const {t} = useTranslation()
   // ** Props & Store
   const {
     store,
@@ -161,9 +162,6 @@ const ChatLog = props => {
               <Calendar size={16} />
               &nbsp;&nbsp;
               <DateTime type="date" dateTime={item.createdAt} />
-              {/* {
-                moment(item.createdAt).format("DD MMM YYYY")
-              } */}
             </div>
           }
 
@@ -236,12 +234,10 @@ const ChatLog = props => {
                       ""
                       : <div className="msg-time" >
                         <DateTime type="time" dateTime={item.createdAt} />
-                        {/* {moment(item.createdAt).format("hh:mm a")} */}
                       </div>
                   }
                 </>
                 : <div className="msg-time" >
-                  {/* {moment(item.createdAt).format("hh:mm a")} */}
                   <DateTime type="time" dateTime={item.createdAt} />
                 </div>
             }
@@ -329,12 +325,10 @@ const ChatLog = props => {
   }
 
   const onDrop = files => {
-    // Do something with the files
     setDropZoneVisible(false)
 
     let count = 0;
     files.forEach(file => {
-      // console.log("DROPZONE FILE", file)
       if (count < 5) uploadFile(file)
       count++
     });
@@ -347,7 +341,6 @@ const ChatLog = props => {
     let count = 0;
     for (let key in e.target.files) {
       if (e.target.files.hasOwnProperty(key)) {
-        // console.log("SELECTED FILE ", e.target.files[key])
         uploadFile(e.target.files[key])
         if (count == 5) {
           break;
@@ -360,12 +353,10 @@ const ChatLog = props => {
 
 
   const captureDragOver = (e) => {
-    // console.log("DRAG", e)
     setDropZoneVisible(true)
 
   }
   const captureDragLeave = (e) => {
-    // console.log("RELEASE", e)
     setDropZoneVisible(false)
 
   }
@@ -377,7 +368,7 @@ const ChatLog = props => {
           <MessageSquare />
         </div>
         <h4 className='sidebar-toggle start-chat-text' onClick={handleStartConversation}>
-          Start Conversation
+         {t('Start Conversation')}
         </h4>
       </div>
 
@@ -423,8 +414,6 @@ const ChatLog = props => {
                 </h6>
               </div>
               <div className='d-flex align-items-center'>
-                {/* <PhoneCall size={18} className='cursor-pointer d-sm-block d-none mr-1' />
-                <Video size={18} className='cursor-pointer d-sm-block d-none mr-1' /> */}
                 <div className="d-none d-md-block">
                   <InputGroup className='input-group-merge '>
                     <Input placeholder='Search here'
@@ -453,39 +442,39 @@ const ChatLog = props => {
                       e.preventDefault()
                       handleUserSidebarRight()
                     }}>
-                      View Contact
+                      {t('View Contact')}
                     </DropdownItem>
                     {
                       mutedNotificationIds && !mutedNotificationIds[selectedChat.chatId]
                       &&
                       <DropdownItem href='/' onClick={muteNotification}>
-                        Mute Notifications
+                       {t('Mute Notifications')}
                       </DropdownItem>
                     }
                     {
                       mutedNotificationIds && mutedNotificationIds[selectedChat.chatId]
                       &&
                       <DropdownItem href='/' onClick={unmuteNotification}>
-                        Unmute Notifications
+                        {t('Unmute Notifications')}
                       </DropdownItem>
                     }
                     {
                       selectedChat.chatParticipants.find(u => u.user.userId == user.userId && !u.blockedAt) &&
                       <DropdownItem href='/' onClick={blockChat}>
-                        Block Chat
+                        {t('Block Chat')}
                       </DropdownItem>
                     }
                     {
                       selectedChat.chatParticipants.find(u => u.user.userId == user.userId && u.blockedAt) &&
                       <DropdownItem href='/' onClick={unBlockChat}>
-                        Unblock Chat
+                        {t('Unblock Chat')}
                       </DropdownItem>
                     }
                     <DropdownItem href='/' onClick={clearChat}>
-                      Clear Chat
+                      {t('Clear Chat')}
                     </DropdownItem>
                     <DropdownItem href='/' onClick={e => e.preventDefault()}>
-                      Report
+                      {t('Report')}
                     </DropdownItem>
                   </DropdownMenu>
                 </UncontrolledDropdown>
@@ -607,12 +596,12 @@ const ChatLog = props => {
                   onClick={handleSendMsg}
                 >
                   <Send size={14} className='d-lg-none' />
-                  <span className='d-none d-lg-block'>Send</span>
+                  <span className='d-none d-lg-block'>{t('Send')}</span>
                 </Button>
               </Form>
               : <>
                 <div className="text-center pt-1">
-                  You can not reply to this conversation
+                  {t('You can not reply to this conversation')}
                 </div>
               </>
           }

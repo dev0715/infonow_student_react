@@ -23,8 +23,6 @@ import { Fragment } from 'react';
 const AttemptDetails = (props) => {
 
     let { id } = useParams();
-
-
     useEffect(() => {
         props.getTestAttemptDetails(id)
     }, []);

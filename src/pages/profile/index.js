@@ -4,7 +4,7 @@ import GeneralTabContent from './GeneralTabContent'
 import InfoTabContent from './InfoTabContent'
 import PasswordTabContent from './PasswordTabContent'
 import { Row, Col, TabContent, TabPane, Card, CardBody } from 'reactstrap'
-
+import { useTranslation } from 'react-i18next'
 // ** Store & Actions
 import { connect } from 'react-redux'
 // import { getUserTopics, getUserTopicLessons, selectTopic, selectLesson, getLesson, completedLesson } from './store/actions'
@@ -21,7 +21,7 @@ import { getLoggedInUser } from '../../helpers/backend-helpers'
 
 const AccountSettings = (props) => {
   const [activeTab, setActiveTab] = useState('1')
-
+  const {t}= useTranslation()
   const toggleTab = tab => {
     setActiveTab(tab)
   }
@@ -34,7 +34,7 @@ const AccountSettings = (props) => {
   return (
     <Fragment>
       <h3 className="mb-2">
-        Account Settings
+        {t('Account Settings')}
       </h3>
       <UILoader blocking={
         props.updateProfileLoading ||

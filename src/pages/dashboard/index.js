@@ -27,11 +27,12 @@ import { GET_BLOG_IMAGE_URL } from '../../helpers/url_helper'
 
 import UpcomingMeeting from '../meetings/UpcomingMeeting';
 import moment from 'moment'
-
+import { useTranslation } from 'react-i18next';
 import './style.scss'
 
 const Dashboard = (props) => {
 
+    const { t } = useTranslation()
     const [upcomingAssignmentsData, setUpcomingAssignmentsData] = useState([])
     const [upcomingTestData, setUpcomingTestsData] = useState([])
 
@@ -64,10 +65,6 @@ const Dashboard = (props) => {
     }, [props.newTests])
 
 
-    useEffect(() => {
-        console.log("CHEK ", upcomingAssignmentsData);
-
-    }, [upcomingAssignmentsData])
     return (
         <Fragment >
             <UILoader
@@ -86,7 +83,7 @@ const Dashboard = (props) => {
                                 <div
                                     className=" dashboard-stats-item">
                                     <div className="heading">
-                                        Upcoming <br /> Tests
+                                        {t('Upcoming')} <br /> {t('Tests')}
                                     </div>
                                     {
                                         upcomingTestData &&
@@ -103,7 +100,7 @@ const Dashboard = (props) => {
                                 <div
                                     className=" dashboard-stats-item">
                                     <div className="heading">
-                                        Upcoming <br /> Assignments
+                                        {t("Upcoming")} <br /> {t('Assignments')}
                                     </div>
                                     {
                                         upcomingAssignmentsData &&
@@ -119,7 +116,7 @@ const Dashboard = (props) => {
                                 <div
                                     className=" dashboard-stats-item">
                                     <div className="heading">
-                                        Incomplete <br /> Lessons
+                                        {t('Incomplete')} <br /> {t('Lessons')}
                                     </div>
                                     <div className="count text-primary">
                                         {
@@ -132,7 +129,7 @@ const Dashboard = (props) => {
                                 <div
                                     className=" dashboard-stats-item">
                                     <div className="heading">
-                                        Upcoming <br /> Meetings
+                                        {t('Upcoming')} <br /> {t('Meetings')}
                                     </div>
                                     <div className="count text-primary">
                                         {
@@ -159,13 +156,13 @@ const Dashboard = (props) => {
                                 <div className={`h-100 w-100 shadow-container  ${getUpcomingMeeting() ? 'ml-lg-2' : ''}`}>
                                     <div className={`d-flex align-items-center justify-content-between p-1`}>
                                         <h5 className='m-0'>
-                                            Upcoming Assignments
+                                            {t('Upcoming')} {t('Assignments')}
                                         </h5>
                                         <Button.Ripple
                                             color='flat-primary'
                                             onClick={() => props.history.push("/assignments")}
                                         >
-                                            View All
+                                            {t('View All')}
                                         </Button.Ripple>
                                     </div>
                                     {
@@ -180,9 +177,9 @@ const Dashboard = (props) => {
                                         !props.newAssignmentsError &&
                                         upcomingAssignmentsData &&
                                         upcomingAssignmentsData.length == 0 &&
-                                    
+
                                         <div className="text-center p-1">
-                                            No assignment found
+                                            {t('No Assignment found')}
                                         </div>
                                     }
                                     {
@@ -218,7 +215,7 @@ const Dashboard = (props) => {
                             <Col lg='12'>
                                 <div className="shadow-container">
                                     <h5 className="p-1 m-0">
-                                        Upcoming Tests
+                                        {t('Upcoming')} {t('Tests')}
                                     </h5>
                                     {
                                         !props.newTestsLoading &&
@@ -233,7 +230,7 @@ const Dashboard = (props) => {
                                         upcomingTestData &&
                                         upcomingTestData.length == 0 &&
                                         <div className="text-center pb-1">
-                                            No test found
+                                            {t('No test found')}
                                         </div>
                                     }
                                     {
@@ -244,9 +241,9 @@ const Dashboard = (props) => {
                                         <Table responsive hover>
                                             <thead>
                                                 <tr>
-                                                    <th>Test</th>
-                                                    <th>Start Time</th>
-                                                    <th>Duration</th>
+                                                    <th>{t('Test')}</th>
+                                                    <th>{t('Start Time')}</th>
+                                                    <th>{t('Duration')}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -270,7 +267,7 @@ const Dashboard = (props) => {
 
                         <div className="pt-3">
                             <h5>
-                                Recent Lessons
+                                {t('Recent Lessons')}
                             </h5>
                             <Row>
                                 {
@@ -278,7 +275,7 @@ const Dashboard = (props) => {
                                     !props.recentLessonsError &&
                                     props.recentLessons.length == 0 &&
                                     <Col lg='12' className='text-center'>
-                                        No lesson found
+                                        {t('No lesson found')}
                                     </Col>
                                 }
                                 {

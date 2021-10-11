@@ -20,12 +20,13 @@ import '@styles/base/plugins/extensions/ext-component-sweet-alerts.scss'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import TestList from './TestsList';
-
+import { useTranslation } from 'react-i18next';
 
 const MySwal = withReactContent(Swal)
 
 const AppTests = (props) => {
 
+    const { t } = useTranslation()
     const [active, setActive] = useState('1')
     const [currentpage, setCurrentpage] = useState(1)
     const [pastTestsData, setPastTestsData] = useState()
@@ -63,28 +64,28 @@ const AppTests = (props) => {
 
     const onPageChange = (index, isNew) => {
         setCurrentpage(index)
-        let data= {"page": index , "limit" :20}
-        if(isNew){
-            if(props.newTestList[index]) setNewTestsData(props.newTestList[index])
+        let data = { "page": index, "limit": 20 }
+        if (isNew) {
+            if (props.newTestList[index]) setNewTestsData(props.newTestList[index])
             else props.getUpcomingTests(data)
         } else {
-            if(props.pastTestList[index]) setPastTestsData(props.pastTestList[index])
+            if (props.pastTestList[index]) setPastTestsData(props.pastTestList[index])
             else props.getPastTests(data)
         }
     }
 
     useEffect(() => {
-        if(props.pastTestList && props.pastTestList[currentpage])
-           setPastTestsData(props.pastTestList[currentpage])
+        if (props.pastTestList && props.pastTestList[currentpage])
+            setPastTestsData(props.pastTestList[currentpage])
     }, [props.pastTestList])
 
     useEffect(() => {
-        if(props.newTestList && props.newTestList[currentpage])
-           setNewTestsData(props.newTestList[currentpage])
+        if (props.newTestList && props.newTestList[currentpage])
+            setNewTestsData(props.newTestList[currentpage])
     }, [props.newTestList])
 
     useEffect(() => {
-        let data= {"page": 1 , "limit" :20}
+        let data = { "page": 1, "limit": 20 }
         props.getPastTests(data)
         props.getUpcomingTests()
     }, [])
@@ -109,7 +110,7 @@ const AppTests = (props) => {
         setNewTestsData(props.newTests.data)
     }, [props.newTests])
 
-    useEffect(() => {    
+    useEffect(() => {
         setPastTestsData(props.pastTests.data)
     }, [props.pastTests])
 
@@ -117,7 +118,7 @@ const AppTests = (props) => {
         return <>{
             !props.newTestsLoading &&
             !props.newTestsError &&
-            props.newTests.data  &&
+            props.newTests.data &&
             props.newTests.data.length === 0 &&
             <NotFound />
         }
@@ -130,21 +131,21 @@ const AppTests = (props) => {
                 !props.newTestsError &&
                 props.newTests.data &&
                 newTestsData &&
-                newTestsData.length > 0  &&
+                newTestsData.length > 0 &&
                 props.newTests.data.length > 0 &&
                 <TestList
-                 testList = {newTestsData}
-                 count= { props.newTests.count}
-                 isNew={true}
-                 onPageChange={onPageChange}
-                 onTestAttempt={onTestAttempt}
+                    testList={newTestsData}
+                    count={props.newTests.count}
+                    isNew={true}
+                    onPageChange={onPageChange}
+                    onTestAttempt={onTestAttempt}
                 />
-                
+
             }
         </>
     }
 
-  
+
 
     const pastTestsView = () => {
         return (<>
@@ -167,9 +168,9 @@ const AppTests = (props) => {
                 pastTestsData &&
                 pastTestsData.length > 0 &&
                 <TestList
-                    testList = {pastTestsData}
-                    isNew = {false} 
-                    count = {props.pastTests.count}
+                    testList={pastTestsData}
+                    isNew={false}
+                    count={props.pastTests.count}
                     onPageChange={onPageChange}
                     selectPastTest={selectPastTest}
                 />
@@ -190,7 +191,7 @@ const AppTests = (props) => {
                                         toggle('1')
                                     }}
                                 >
-                                    Past Test
+                                   {t('Past Tests')}
                                 </NavLink>
                             </NavItem>
                             <NavItem>
@@ -200,7 +201,7 @@ const AppTests = (props) => {
                                         toggle('2')
                                     }}
                                 >
-                                    Upcoming Test
+                                    {t('Upcoming Tests')}
                                 </NavLink>
                             </NavItem>
                         </Nav>
@@ -214,7 +215,7 @@ const AppTests = (props) => {
                                 {
                                     newTestsView()
                                 }
-                                 
+
                             </TabPane>
                         </TabContent>
                     </CardBody>
@@ -227,7 +228,7 @@ const AppTests = (props) => {
 const mapStateToProps = (state) => {
 
     const {
-      
+
         newTests,
         newTestsLoading,
         newTestsError,

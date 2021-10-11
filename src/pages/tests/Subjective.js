@@ -4,12 +4,12 @@ import {
 } from 'reactstrap';
 import { DOCUMENT_BASE_URL } from '../../helpers/url_helper';
 import { useState } from 'react';
-
+import { useTranslation } from 'react-i18next';
 
 export const Subjective = (props) => {
 
     const { question } = props
-
+    const { t } = useTranslation()
     const number = props.number || '';
     const answer = props.answer || '';
     let obtMarks = answer.obtainedMarks || 0
@@ -41,7 +41,7 @@ export const Subjective = (props) => {
                             </div>
                         }
                         <div className="text-right">
-                            <p className="text-muted text-right">Marks: {question.marks}</p>
+                            <p className="text-muted text-right">{t('Marks')}: {question.marks}</p>
                         </div>
                     </Col>
                 </Row>

@@ -19,8 +19,6 @@ import { Menu, Check } from 'react-feather'
 
 // ** Custom Hooks
 import { useRTL } from '@hooks/useRTL'
-
-
 import { calendarsColor } from './util'
 
 // ** Toast Component

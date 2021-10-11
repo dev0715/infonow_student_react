@@ -1,24 +1,21 @@
 import React from 'react'
-
 import {
     Badge,
     Row,
     Col,
     Media
 } from 'reactstrap';
-
 import { Calendar } from 'react-feather'
 import { getMeetingStatusColor } from './util';
-
 import { DateTime } from '../../components/date-time';
-
 import { titleCase } from '@utils';
-
+import { useTranslation } from 'react-i18next';
 import Avatar from '@components/avatar'
 import { GET_IMAGE_URL } from './../../helpers/url_helper';
 
 export const MeetingPreview = (props) => {
     const { meeting, user } = props
+    const {t} = useTranslation()
     return meeting && user &&
         <>
             <Row>
@@ -59,7 +56,7 @@ export const MeetingPreview = (props) => {
             </Row>
             <Row className="mt-4">
                 <Col sm={12} md={2}>
-                    <h6>Agenda</h6>
+                    <h6>{t('Agenda')}</h6>
                 </Col>
                 <Col sm={12} md={10}>
                     {meeting.agenda}
@@ -69,7 +66,7 @@ export const MeetingPreview = (props) => {
                 meeting.message &&
                 <Row className="mt-2">
                     <Col sm={12} md={2}>
-                        <h6>Personal Message</h6>
+                        <h6>{t('Personal Message')}</h6>
                     </Col>
                     <Col sm={12} md={10} >
                         {meeting.message}

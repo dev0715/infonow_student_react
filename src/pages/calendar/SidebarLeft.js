@@ -4,13 +4,14 @@ import React, { Fragment, useState } from 'react'
 
 // ** Custom Components
 import { CardBody, CustomInput } from 'reactstrap'
-
+import { useTranslation } from 'react-i18next'
 // ** illustration import
 import illustration from '@src/assets/images/pages/calendar-illustration.png'
 
 
 const SidebarLeft = props => {
 
+  const {t} = useTranslation()
   // ** Props
   const {
     filters,
@@ -26,12 +27,12 @@ const SidebarLeft = props => {
 
         <CardBody>
           <h5 className='section-label mb-1'>
-            <span className='align-middle'>Filter</span>
+            <span className='align-middle'>{t('Filter')}</span>
           </h5>
           <CustomInput
             type='checkbox'
             className='mb-1'
-            label='View All'
+            label={t('View All')}
             id='view-all'
             checked={selectedFilters.length == filters.length}
             onChange={e => {
@@ -46,7 +47,7 @@ const SidebarLeft = props => {
                     type='checkbox'
                     key={filter.label}
                     id={filter.label}
-                    label={filter.label}
+                    label={t(`${filter.label}s`)}
                     checked={selectedFilters.find(f => f == filter.type) != undefined}
                     className={filter.className}
                     onChange={e => toggleFilter(filter.type)}

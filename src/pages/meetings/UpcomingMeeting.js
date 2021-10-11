@@ -21,11 +21,12 @@ import { withRouter } from 'react-router-dom';
 import UILoader from '../../@core/components/ui-loader';
 
 import { MEETING_APP_URL } from '../../helpers/url_helper'
-
+import { useTranslation } from 'react-i18next';
 import { AddMeetingToCalenderButton } from './addMeetingToCalender'
 
 const UpcomingMeeting = (props) => {
 
+	const { t } = useTranslation()
 	const { meeting } = props
 	const [skin, setSkin] = useSkin();
 	const [meetingUrl, setMeetingUrl] = useState(null);
@@ -40,7 +41,7 @@ const UpcomingMeeting = (props) => {
 		skin === 'dark' ? 'upcoming-meeting-dark.svg' : 'upcoming-meeting.svg';
 	const illustration = require(`@src/assets/images/illustrations/${illus}`);
 
-	
+
 
 	useEffect(() => {
 		if (!props.meetingToken || props.meetingTokenError)
@@ -79,7 +80,7 @@ const UpcomingMeeting = (props) => {
 								</div>
 								<div className='my-auto'>
 									<CardTitle tag='h4' className='mb-25'>
-										Upcoming Meeting
+										{t('Upcoming Meeting')}
 									</CardTitle>
 									<CardText className='mb-0'>
 										{meeting.agenda}
@@ -90,7 +91,7 @@ const UpcomingMeeting = (props) => {
 								<AddMeetingToCalenderButton className="mr-1" type="button" meeting={meeting} />
 								<a target="_blank" onClick={(e) => handleJoin(e)}>
 									<Button.Ripple className='mr-1' color='primary'>
-										Join
+										{t('Join')}
 									</Button.Ripple>
 								</a>
 							</div>

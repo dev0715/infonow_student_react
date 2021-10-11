@@ -17,11 +17,13 @@ import { notifyError, notifySuccess, notifyWarning } from '../../../utility/toas
 
 
 import GoogleSignIn from '../../../views/google-signin';
+import { useTranslation } from 'react-i18next';
 
 
 const Register = (props) => {
     const [skin, setSkin] = useSkin()
 
+    const {t} = useTranslation()
     const illustration = skin === 'dark' ? 'register-dark.svg' : 'register-light.svg',
         source = require(`@src/assets/images/illustrations/${illustration}`)
 
@@ -34,11 +36,11 @@ const Register = (props) => {
     useEffect(() => {
         if (processing && !props.loading && props.error) {
             setProcessing(false)
-            notifyError("Register Account", props.error)
+            notifyError(t("Register Account"), props.error)
         }
         else if (processing && !props.loading && !props.error) {
             setProcessing(false)
-            notifySuccess("Register Account", "Account registered successfully")
+            notifySuccess(t("Register Account"), t("Account registered successfully"))
         }
 
     }, [props.loading])
@@ -46,7 +48,7 @@ const Register = (props) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (password != confirmPassword)
-            return notifyWarning("Register Account", "Confirm password is not same")
+            return notifyWarning(t("Register Account"), t("Confirm password is not same"))
         setProcessing(true)
         props.registerAccount({
             data: {
@@ -75,15 +77,15 @@ const Register = (props) => {
                 <Col className='d-flex align-items-center auth-bg px-2 p-lg-5' lg='4' sm='12'>
                     <Col className='px-xl-2 mx-auto' sm='8' md='6' lg='12'>
                         <CardTitle tag='h2' className='font-weight-bold mb-1'>
-                            Register Account
+                            {t('Register Account')}
                         </CardTitle>
-                        <CardText className='mb-2'>Please fill up the form</CardText>
+                        <CardText className='mb-2'>{t('Please fill up the form')}</CardText>
                         <Form
                             onSubmit={e => handleSubmit(e)}
                         >
                             <FormGroup>
                                 <Label className="ml-25">
-                                    Name
+                                    {t('Name')}
                                 </Label>
                                 <InputGroup className='input-group-merge'>
                                     <Input
@@ -96,12 +98,12 @@ const Register = (props) => {
                             </FormGroup>
                             <FormGroup>
                                 <Label className="ml-25">
-                                    Email
+                                    {t('Email')}
                                 </Label>
                                 <InputGroup className='input-group-merge'>
                                     <Input
                                         type="mail"
-                                        placeholder='Enter Email'
+                                        placeholder={t('Enter Email')}
                                         value={email}
                                         onChange={e => setEmail(e.target.value)}
                                         required />
@@ -114,7 +116,7 @@ const Register = (props) => {
                                 <InputGroup className='input-group-merge'>
                                     <Input
                                         type="password"
-                                        placeholder='Enter Password'
+                                        placeholder={t('Enter Password')}
                                         value={password}
                                         onChange={e => setPassword(e.target.value)}
                                         required />
@@ -123,12 +125,12 @@ const Register = (props) => {
                             <FormGroup>
                                 <InputGroup className='input-group-merge'>
                                     <Label className="ml-25">
-                                        Confirm Password
+                                        {t('Confirm Password')}
                                     </Label>
                                     <InputGroup>
                                         <Input
                                             type="password"
-                                            placeholder='Enter Password'
+                                            placeholder={t('Enter Password')}
                                             value={confirmPassword}
                                             onChange={e => setConfirmPassword(e.target.value)}
                                             required />
@@ -142,13 +144,13 @@ const Register = (props) => {
                                 disabled={props.loading || processing}
                             >
                                 {props.loading && <><i className="las la-spinner la-spin"></i>&nbsp;&nbsp;</>}
-                                Submit
+                                {t('Submit')}
                             </Button.Ripple>
                         </Form>
                         <p className='text-center mt-2'>
-                            <span className='mr-25'>Already have an account?</span>
+                            <span className='mr-25'>{t('Already have an account?')}</span>
                             <Link to='/login'>
-                                <span>Login</span>
+                                <span>{t('Login')}</span>
                             </Link>
                         </p>
                         <div className='divider my-2'>

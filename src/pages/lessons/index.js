@@ -11,27 +11,24 @@ import {
     CardTitle,
     CardHeader, Badge
 } from 'reactstrap'
-
+import { useTranslation } from 'react-i18next';
 // ** Store & Actions
 import { connect } from 'react-redux'
 import { getUserTopics, getUserTopicLessons, selectTopic, selectLesson, getLesson, completedLesson } from './store/actions'
-
 import { withRouter } from 'react-router';
 import { GET_BLOG_IMAGE_URL } from '../../helpers/url_helper'
 import './style.scss'
 import ReactMarkdown from 'react-markdown'
 import { render } from 'react-dom'
-
 import { PlayCircle, Menu, X, ChevronUp, ChevronDown } from 'react-feather'
-
 import UILoader from '../../@core/components/ui-loader';
-
 import NotFound from '../../components/not-found';
 import NoNetwork from '../../components/no-network';
 import { BLOG_API_URL } from '../../helpers/url_helper'
 
 const AppLessons = (props) => {
 
+    const {t} = useTranslation()
     const lessonRef = React.createRef()
     const lessonContentRef = React.createRef()
     const [isFullScreen, setFullScreen] = useState(false)
@@ -172,10 +169,10 @@ const AppLessons = (props) => {
                                                 })
                                             }}
                                         >
-                                            Mark As Completed
+                                           {t('Mark As Completed')}
                                         </Button.Ripple> :
                                         <Badge color='success'>
-                                            Completed
+                                            {t('Completed')}
                                         </Badge>
                                 }
                             </div>
@@ -188,7 +185,7 @@ const AppLessons = (props) => {
                 <div className={`other-lessons ${isOpenLessons ? 'active' : 'm-2'}`}>
                     <div className="heading" onClick={toggleLessons}>
                         <h4 className="p-2 m-0">
-                            Other Lessons
+                            {t('Other Lessons')}
                         </h4>
                         <div className="mr-1">
                             {
@@ -282,7 +279,7 @@ const AppLessons = (props) => {
                                                     <Collapse isOpen={isOpen || isFullScreen} navbar>
                                                         <Card>
                                                             <CardHeader>
-                                                                <CardTitle>Topics</CardTitle>
+                                                                <CardTitle>{t('Topics')}</CardTitle>
                                                                 {
                                                                     !props.topicsLoading
                                                                     &&

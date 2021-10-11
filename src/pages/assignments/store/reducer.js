@@ -105,12 +105,12 @@ const assignmentReducer = (state = initialState, action) => {
   switch (action.type) {
 
     case GET_NEW_ASSIGNMENTS:
-      return { ...state, newAssignments: [], newAssignmentsLoading: true }
+      return { ...state, newAssignments: [], newAssignmentsLoading: true , newAssignmentsError:null }
 
     case GET_NEW_ASSIGNMENTS_SUCCESS:
       return {
         ...state,
-        newAssignmentList: { ...state.newAssignmentList, [action.payload.page]: action.payload.res.data },
+        newAssignmentList: { ...state.newAssignmentList, [action.payload.page]: action.payload.res.data ,newAssignmentsError:null },
         newAssignments: action.payload.res,
         newAssignmentsLoading: false
       }

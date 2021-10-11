@@ -11,8 +11,8 @@ import BrandLogo from '../../../components/brand-logo'
 import { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { useEffect } from 'react';
-
 import GoogleSignIn from '../../../views/google-signin';
+import { useTranslation } from 'react-i18next';
 
 const ToastContent = ({ name, role }) => (
     <Fragment>
@@ -29,6 +29,7 @@ const ToastContent = ({ name, role }) => (
 )
 
 const Login = (props) => {
+    const {t} = useTranslation()
     const [skin, setSkin] = useSkin()
 
     const [isSigningIn, setIsSigningIn] = useState(false)
@@ -69,9 +70,9 @@ const Login = (props) => {
                 <Col className='d-flex align-items-center auth-bg px-2 p-lg-5' lg='4' sm='12'>
                     <Col className='px-xl-2 mx-auto' sm='8' md='6' lg='12'>
                         <CardTitle tag='h2' className='font-weight-bold mb-1'>
-                            LOGIN
+                            {t('LOGIN')}
                         </CardTitle>
-                        <CardText className='mb-2'>Welcome back! Please sign-in to your account</CardText>
+                        <CardText className='mb-2'>{t('Welcome back! Please sign-in to your account')}</CardText>
 
                         <AvForm
                             className='auth-login-form mt-2'
@@ -90,7 +91,7 @@ const Login = (props) => {
 
                             <AvField
                                 name='email'
-                                label={'Email'}
+                                label={t('Email')}
                                 value={'student@mail.com'}
                                 className='form-control'
                                 placeholder='john@example.com'
@@ -101,19 +102,19 @@ const Login = (props) => {
 
                             <div className='d-flex justify-content-between'>
                                 <Label className='form-label' for='password'>
-                                    Password
+                                    {t('Password')}
                                 </Label>
                                 <Link to='/forgot-password'>
-                                    <small>Forgot Password?</small>
+                                    <small>{t('Forgot Password?')}</small>
                                 </Link>
                             </div>
                             <AvField
                                 name='password'
-                                label=''
+                                label={t('Password')}
                                 value='12345678'
                                 type='password'
                                 required
-                                placeholder='Enter Password'
+                                placeholder={t('Enter Password')}
                             />
 
                             <FormGroup>
@@ -130,9 +131,9 @@ const Login = (props) => {
 
                         </AvForm>
                         <p className='text-center mt-2'>
-                            <span className='mr-25'>New on our platform?</span>
+                            <span className='mr-25'>{t('New on our platform?')}</span>
                             <Link to='/register'>
-                                <span>Create an account</span>
+                                <span>{t('Create an account')}</span>
                             </Link>
                         </p>
 

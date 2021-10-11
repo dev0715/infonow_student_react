@@ -1,32 +1,21 @@
 import React from 'react';
-import { useState, Fragment } from 'react';
 
 import {
-    CardBody,
     Card,
-    CardText,
-    Row,
-    Col,
-    CardHeader, CardTitle, Label, Input,
     Table
 } from 'reactstrap';
-import { Pagination, PaginationItem, PaginationLink } from 'reactstrap'
-import { ChevronLeft, ChevronRight } from 'react-feather'
+import { useTranslation } from 'react-i18next';
 
 import { DateTime } from '../../components/date-time';
-
-import { ChevronDown, LogIn, RefreshCcw } from 'react-feather'
-import ReactPaginate from 'react-paginate'
-import DataTable from 'react-data-table-component'
 import { Button } from 'reactstrap';
 // ** Styles
 import '@styles/react/libs/tables/react-dataTable-component.scss'
-import CardReload from '../../@core/components/card-reload';
 import CustomPagination from '../pagination';
 
 
 const TestList = (props) => {
 
+    const {t} = useTranslation()
     const { testList, count, isNew, selectPastTest, onTestAttempt , onPageChange} = props
 
     const onAttemptTest = (stdTest) => {
@@ -49,10 +38,10 @@ const TestList = (props) => {
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Title</th>
-                        <th>Start Time</th>
-                        <th>End Time</th>
-                        <th>Time Limit</th>
+                        <th>{t('TITLE')}</th>
+                        <th>{t('START TIME')}</th>
+                        <th>{t('END TIME')}</th>
+                        <th>{t('TIME LIMIT')}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -78,7 +67,7 @@ const TestList = (props) => {
                                             color='primary' outline
                                             onClick={() => onAttemptTest(t)}
                                         >
-                                            ATTEMPT
+                                            {t('ATTEMPT')}
                                         </Button.Ripple>
                                     </td>
                                 }
