@@ -1,19 +1,19 @@
 
-export const BASE_URL = `http://192.168.10.102:3600`
-export const DOCUMENT_BASE_URL = `${BASE_URL}/public`
-export const MEETING_API_URL = `http://192.168.10.104:3900`
-export const MEETING_APP_URL = `http://192.168.10.104:3002`
-export const CHAT_API_URL = `http://192.168.10.104:3700`
-export const CHAT_SOCKET_API_URL = `http://192.168.10.104:3701`
-export const BLOG_API_URL = `http://192.168.10.102:1337`
-
-// export const BASE_URL = `https://api.infonow.ro/`
+// export const BASE_URL = `http://192.168.10.102:3600`
 // export const DOCUMENT_BASE_URL = `${BASE_URL}/public`
-// export const MEETING_API_URL = `https://meet.infonow.ro/api`
-// export const MEETING_APP_URL = `https://meet.infonow.ro`
-// export const CHAT_API_URL = `https://chat.infonow.ro/`
-// export const CHAT_SOCKET_API_URL = `https://live-chat.infonow.ro/`
-// export const BLOG_API_URL = `https://cms.infonow.ro/`
+// export const MEETING_API_URL = `http://192.168.10.104:3900`
+// export const MEETING_APP_URL = `http://192.168.10.104:3002`
+// export const CHAT_API_URL = `http://192.168.10.104:3700`
+// export const CHAT_SOCKET_API_URL = `http://192.168.10.104:3701`
+// export const BLOG_API_URL = `http://192.168.10.102:1337`
+
+export const BASE_URL = `https://api.infonow.ro/`
+export const DOCUMENT_BASE_URL = `${BASE_URL}/public`
+export const MEETING_API_URL = `https://meet.infonow.ro/api`
+export const MEETING_APP_URL = `https://meet.infonow.ro`
+export const CHAT_API_URL = `https://chat.infonow.ro/`
+export const CHAT_SOCKET_API_URL = `https://live-chat.infonow.ro/`
+export const BLOG_API_URL = `https://cms.infonow.ro/`
 
 export const GET_IMAGE_URL = url => url ? DOCUMENT_BASE_URL + url : DOCUMENT_BASE_URL + "/profile-pictures/default.png"
 
