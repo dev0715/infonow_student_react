@@ -7,9 +7,11 @@ import ReactCountryFlag from 'react-country-flag'
 import { UncontrolledDropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap'
 
 import i18next from "i18next";
+import { getLocalizedLang, setLocalizedLang } from '../../../../helpers/HelperFunctions';
 const LangDropdown = () => {
    
-    const [locale, setLocale] = useState('ro')
+    const lang = getLocalizedLang()
+    const [locale, setLocale] = useState(lang)
     // ** Vars
     const langObj = {
         ro: 'Romanian',
@@ -20,6 +22,7 @@ const LangDropdown = () => {
     const handleLangUpdate = (e, lang) => {
         e.preventDefault()
         setLocale(lang)
+        setLocalizedLang(lang)
         i18next.changeLanguage(lang)
     }
 
