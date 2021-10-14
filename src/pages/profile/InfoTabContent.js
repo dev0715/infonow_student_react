@@ -183,14 +183,14 @@ const InfoTabContent = (props) => {
             </Col>
             <Col className='mt-2' sm='12'>
               <Button.Ripple type='submit' className='mr-1' color='primary'>
-                Save changes
+                {t('Save changes')}
               </Button.Ripple>
               <Button.Ripple
                 type={'button'}
                 color='secondary' outline
                 onClick={() => cancelEditing()}
               >
-                Cancel
+                {t('Cancel')}
               </Button.Ripple>
             </Col>
           </Row>
