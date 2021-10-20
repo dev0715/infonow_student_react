@@ -227,6 +227,10 @@
   "Please setup new password":"Please setup new password",
   "Comment":"Comment",
   "Leave a Comment":"Leave a Comment",
-  "Post Comment":"Post Comment"
-
+  "Post Comment":"Post Comment",
+  "Your ticket has been created successfully with ticket ID:": "Your ticket has been created successfully with ticket ID:",
+  "Cannot register your support ticket at the moment": "Cannot register your support ticket at the moment",
+  "Please provide a valid subject and message.": "Please provide a valid subject and message.",
+  "Subject": "Subject",
+  "Message": "Message"
 }

@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react'
 import {
     Card,
     CardHeader,
@@ -11,50 +12,87 @@ import {
     CustomInput,
     Label
 } from 'reactstrap'
-import React from 'react'
 
-const Feedback = () => {
+import { withRouter } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { postFeedback } from '@store/actions'
+import { useTranslation } from 'react-i18next';
+import { errorAlertDialog, successAlertDialog } from '../../helpers/HelperFunctions';
+
+const Feedback = (props) => {
+
+    const { t } = useTranslation();
+    const [subject, setSubject] = useState("")
+    const [message, setMessage] = useState("")
+
+    useEffect(() => {
+        if (props.success, props.feedbackResponse) {
+            successAlertDialog(`${t('Your ticket has been created successfully with ticket ID:')} ${props.feedbackResponse.ticketId}`)
+        }
+        if (props.error) {
+            errorAlertDialog(t('Cannot register your support ticket at the moment'))
+        }
+    })
+
+    const subjectFeedback = () => {
+        if (subject && message) {
+            props.postFeedback({ subject, message })
+        }
+        else {
+            errorAlertDialog(t('Please provide a valid subject and message.'))
+        }
+    }
+
+
     return (
         <Card>
             <CardHeader>
-                <CardTitle tag='h4'>Feedback</CardTitle>
+                <CardTitle tag='h4'>{t('Feedback')}</CardTitle>
             </CardHeader>
 
             <CardBody>
                 <Form>
-                    <FormGroup row>
-                        <Label sm='3' for='name'>
-                            Name
+                    <FormGroup>
+                        <Label sm='3' for='subject'>
+                            {t('Subject')}
                         </Label>
                         <Col sm='9'>
-                            <Input type='text' name='name' id='name' placeholder=' Name' />
+                            <Input
+                                value={subject}
+                                onChange={e => setSubject(e.target.value)}
+                                type='text'
+                                name='subject'
+                                id='subject'
+                                placeholder={t('Subject')}
+                            />
                         </Col>
                     </FormGroup>
 
-                    <FormGroup row>
-                        <Label sm='3' for='Email'>
-                            Email
+                    <FormGroup>
+                        <Label sm='3' for='message'>
+                            {t('Message')}
                         </Label>
                         <Col sm='9'>
-                            <Input type='email' name='Email' id='Email' placeholder='Email' />
+                            <textarea
+                                className="form-control"
+                                onChange={e => setMessage(e.target.value)}
+                                rows="6"
+                                name='message'
+                                id='message'
+                                placeholder={t('Message')}
+                            >{message}</textarea>
                         </Col>
                     </FormGroup>
 
-                    <FormGroup row>
-                        <Label sm='3' for='mobile'>
-                            Reviews
-                        </Label>
-                        <Col sm='9'>
-                            <Input type='text' name='review' id='review' placeholder='Review' />
-                        </Col>
-                    </FormGroup>
 
 
-
-                    <FormGroup className='mb-0' row>
-                        <Col className='d-flex' md={{ size: 9, offset: 3 }}>
-                            <Button.Ripple className='mr-1' color='primary' type='submit' onClick={e => e.preventDefault()}>
-                                Submit
+                    <FormGroup >
+                        <Col>
+                            <Button.Ripple
+                                className='mr-1'
+                                color='primary'
+                                onClick={e => subjectFeedback()}>
+                                {t('Submit')}
                             </Button.Ripple>
                         </Col>
                     </FormGroup>
@@ -63,4 +101,12 @@ const Feedback = () => {
         </Card>
     )
 }
-export default Feedback
+
+const mapStateToProps = (state) => {
+    const { success, error, feedbackResponse } = state.Feedback;
+    return { success, error, feedbackResponse }
+}
+
+export default withRouter(
+    connect(mapStateToProps, { postFeedback })(Feedback)
+)

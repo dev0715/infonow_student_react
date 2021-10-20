@@ -3,8 +3,6 @@ import { post, del, get, put, postForm, GetFinalUrlWithPagingParams, GetUrlWithP
 import * as  url from "./url_helper"
 
 
-
-
 // Gets the logged in user data from local session
 export const getLoggedInUser = () => {
   const user = localStorage.getItem("authStudent")
@@ -86,8 +84,8 @@ export const getIncompleteLessonsCount = () => get(url.GET_INCOMPLETE_LESSON_COU
 //Test
 
 export const getPastTests = (params) => {
-   let endUrl = GetUrlWithPagingParams(url.GET_PAST_TESTS, params)
-   return get(endUrl);
+  let endUrl = GetUrlWithPagingParams(url.GET_PAST_TESTS, params)
+  return get(endUrl);
 }
 
 export const getUpcomingTests = (params) => {
@@ -99,10 +97,10 @@ export const submitTestAttempt = (data) => put(url.SUBMIT_TEST_ATTEMPT, data);
 export const getTestAttemptDetails = (id) => get(url.GET_TEST_ATTEMPT_DETAILS(id));
 
 // Assignments 
-export const getNewAssignments = (params) =>{
+export const getNewAssignments = (params) => {
   let endUrl = GetUrlWithPagingParams(url.NEW_ASSIGNMENTS, params)
   return get(endUrl);
-} 
+}
 // export const getNewAssignments = () => get(url.NEW_ASSIGNMENTS)
 // export const getPastAssignments = () => get(url.PAST_ASSIGNMENTS)
 export const getPastAssignments = (params) => {
@@ -123,3 +121,6 @@ export const updatePassword = (id, data) => put(url.UPDATE_PASSWORD(id), data);
 
 //Counties
 export const getCounties = () => get(url.GET_COUNTIES)
+
+// Feedback
+export const postFeedback = (feedback) => post(url.POST_FEEDBACK, feedback);

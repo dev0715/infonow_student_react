@@ -121,14 +121,6 @@ const Register = (props) => {
                                     className='input-group-merge'
                                     onChange={e => setPassword(e.target.value)}
                                 />
-                                {/* <InputGroup className='input-group-merge'>
-                                    <Input
-                                        type="password"
-                                        placeholder={t('Enter Password')}
-                                        value={password}
-                                        onChange={e => setPassword(e.target.value)}
-                                        required />
-                                </InputGroup> */}
                             </FormGroup>
                             <FormGroup>
                                 <InputGroup className='input-group-merge'>
@@ -143,15 +135,10 @@ const Register = (props) => {
                                         className='input-group-merge'
                                         onChange={e => setConfirmPassword(e.target.value)}
                                     />
-                                    {/* <InputGroup>
-                                        <Input
-                                            type="password"
-                                            placeholder={t('Enter Password')}
-                                            value={confirmPassword}
-                                            onChange={e => setConfirmPassword(e.target.value)}
-                                            required />
-                                    </InputGroup> */}
                                 </InputGroup>
+                            </FormGroup>
+                            <FormGroup>
+                                <p>By continuing you confirm that you have read and agree with the <a target="_blank" href="https://infonow.ro/terms-of-services">Terms of Services</a> and <a target="_blank" href="https://infonow.ro/privacy-policy">Privacy Policy</a>.</p>
                             </FormGroup>
                             <Button.Ripple
                                 type="submit"
