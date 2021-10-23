@@ -31,6 +31,7 @@ import { connect } from 'react-redux'
 
 import { withRouter } from 'react-router';
 import {
+    getUserData,
     getAdminMeeting,
     newAdminMeeting,
     updateAdminMeeting,
@@ -79,6 +80,7 @@ const GetStartedPage = (props) => {
     useEffect(() => {
         setUser(getLoggedInUser())
         // props.getAdminMeeting()
+        props.getUserData()
         props.getStartedContent()
     }, [])
 
@@ -499,6 +501,7 @@ const mapStateToProps = (state) => {
 
 export default withRouter(
     connect(mapStateToProps, {
+        getUserData,
         getAdminMeeting,
         newAdminMeeting,
         updateAdminMeeting,

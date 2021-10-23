@@ -20,6 +20,9 @@ export const getAuthentication = () => {
   return tokenInfo ? JSON.parse(tokenInfo) : null;
 }
 
+
+export const getUserData = (userId) => get(url.GET_USER_DATA(userId))
+
 //is user is logged in
 export const isUserAuthenticated = () => {
   return getAuthentication() !== null

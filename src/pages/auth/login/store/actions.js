@@ -4,6 +4,9 @@ import {
     LOGIN_ERROR,
     LOGOUT_USER,
     LOGOUT_USER_SUCCESS,
+    GET_USER_DATA,
+  GET_USER_DATA_SUCCESS,
+  GET_USER_DATA_FAILURE,
 
   } from "./actionTypes"
   
@@ -42,4 +45,24 @@ export const logoutUser = history => {
     }
   }
 
+  export const getUserData = () => {
+    return {
+      type: GET_USER_DATA,
+    };
+  };
+  
+  export const getUserDataSuccess = (data) => {
+    return {
+      type: GET_USER_DATA_SUCCESS,
+      payload: data,
+    };
+  };
+  
+  export const getUserDataFailure = (error) => {
+    return {
+      type: GET_USER_DATA_FAILURE,
+      payload: error,
+    };
+  };
+  
   
