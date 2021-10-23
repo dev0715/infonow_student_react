@@ -13,6 +13,7 @@ import { connect } from 'react-redux'
 import { useEffect } from 'react';
 import GoogleSignIn from '../../../views/google-signin';
 import { useTranslation } from 'react-i18next';
+import PasswordToggle from '../../../components/password-toggle'
 
 const ToastContent = ({ name, role }) => (
     <Fragment>
@@ -107,14 +108,10 @@ const Login = (props) => {
                                     <small>{t('Forgot Password?')}</small>
                                 </Link>
                             </div>
-                            <AvField
-                                name='password'
-                                label={t('Password')}
-                                type='password'
-                                required
-                                placeholder={t('Enter Password')}
+                            <PasswordToggle
+                                name="password"
+                                label={t('Enter Password')}
                             />
-
                             <FormGroup>
                                 <CustomInput type='checkbox' className='custom-control-Primary' id='remember-me' label='Remember Me' />
                             </FormGroup>

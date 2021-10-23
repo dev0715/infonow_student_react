@@ -14,7 +14,7 @@ import BrandLogo from '../../../components/brand-logo'
 import { connect } from 'react-redux'
 
 import { notifyError, notifySuccess, notifyWarning } from '../../../utility/toast'
-
+import InputPasswordToggle from '../../../@core/components/input-password-toggle'
 
 import GoogleSignIn from '../../../views/google-signin';
 import { useTranslation } from 'react-i18next';
@@ -23,7 +23,7 @@ import { useTranslation } from 'react-i18next';
 const Register = (props) => {
     const [skin, setSkin] = useSkin()
 
-    const {t} = useTranslation()
+    const { t } = useTranslation()
     const illustration = skin === 'dark' ? 'register-dark.svg' : 'register-light.svg',
         source = require(`@src/assets/images/illustrations/${illustration}`)
 
@@ -113,29 +113,32 @@ const Register = (props) => {
                                 <Label className="ml-25">
                                     Password
                                 </Label>
-                                <InputGroup className='input-group-merge'>
-                                    <Input
-                                        type="password"
-                                        placeholder={t('Enter Password')}
-                                        value={password}
-                                        onChange={e => setPassword(e.target.value)}
-                                        required />
-                                </InputGroup>
+                                <InputPasswordToggle
+                                    value={password}
+                                    id='password'
+                                    name='password'
+                                    placeholder={t('Enter Password')}
+                                    className='input-group-merge'
+                                    onChange={e => setPassword(e.target.value)}
+                                />
                             </FormGroup>
                             <FormGroup>
                                 <InputGroup className='input-group-merge'>
                                     <Label className="ml-25">
                                         {t('Confirm Password')}
                                     </Label>
-                                    <InputGroup>
-                                        <Input
-                                            type="password"
-                                            placeholder={t('Enter Password')}
-                                            value={confirmPassword}
-                                            onChange={e => setConfirmPassword(e.target.value)}
-                                            required />
-                                    </InputGroup>
+                                    <InputPasswordToggle
+                                        value={confirmPassword}
+                                        id='password'
+                                        name='confirmPassword'
+                                        placeholder={t('Enter Password')}
+                                        className='input-group-merge'
+                                        onChange={e => setConfirmPassword(e.target.value)}
+                                    />
                                 </InputGroup>
+                            </FormGroup>
+                            <FormGroup>
+                                <p>By continuing you confirm that you have read and agree with the <a target="_blank" href="https://infonow.ro/terms-of-services">Terms of Services</a> and <a target="_blank" href="https://infonow.ro/privacy-policy">Privacy Policy</a>.</p>
                             </FormGroup>
                             <Button.Ripple
                                 type="submit"

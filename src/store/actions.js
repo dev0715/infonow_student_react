@@ -48,3 +48,6 @@ export * from './../pages/get-started/store/actions'
 
 //Profile
 export * from './../pages/profile/store/actions'
+
+// Feedback
+export * from './../pages/feedback/store/actions'

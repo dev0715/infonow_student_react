@@ -227,5 +227,10 @@
   "Please setup new password":"Please setup new password",
   "Comment":"Comment",
   "Leave a Comment":"Leave a Comment",
-  "Post Comment":"Post Comment"
+  "Post Comment":"Post Comment",
+  "Your ticket has been created successfully with ticket ID:": "Biletul dvs. a fost creat cu succes cu ID-ul biletului:",
+  "Cannot register your support ticket at the moment": "Momentan nu vă puteți înregistra biletul de asistență",
+  "Please provide a valid subject and message.": "Vă rugăm să furnizați un subiect și un mesaj valid.",
+  "Subject": "Subiectul e-mailului",
+  "Message": "Mesaj"
 }

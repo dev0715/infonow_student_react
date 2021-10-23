@@ -106,5 +106,8 @@ export const UPDATE_PROFILE_DATA = id => `${BASE_URL}/api/v1/students/${id}/prof
 export const UPLOAD_PROFILE_PICTURE = id => `${BASE_URL}/api/v1/students/${id}/profile-picture`
 export const UPDATE_PASSWORD = id => `${BASE_URL}/api/v1/students/${id}/password`
 
-//Counties
+// Counties
 export const GET_COUNTIES = `${BASE_URL}/counties`
+
+// Feedback
+export const POST_FEEDBACK = `${BASE_URL}/api/v1/osticket`
