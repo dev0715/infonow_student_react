@@ -54,7 +54,7 @@ import NotFound from '../../components/not-found';
 
 const MeetingList = (props) => {
 
-	const {t} = useTranslation()
+	const { t } = useTranslation()
 	const [user, setUser] = useState({})
 	const [updateMeetingId, setUpdateMeetingId] = useState({})
 	const [meetingAction, setMeetingAction] = useState("Updated")
@@ -223,12 +223,17 @@ const MeetingList = (props) => {
 												meeting.user.userId != user.userId)
 											&&
 											<>
-												<DropdownItem
+												{meetingDropDownItem(
+													viewMeetingId,
+													MeetingActions.Reject,
+													"Reject"
+												)}
+												{/* <DropdownItem
 													href='/' tag='a'
 													onClick={e => onMeetingAction(e, viewMeetingId, MeetingActions.Reject)}
 												>
 													{t('Reject')}
-												</DropdownItem>
+												</DropdownItem> */}
 												<DropdownItem
 													href='/' tag='a'
 													onClick={e => {
@@ -246,12 +251,17 @@ const MeetingList = (props) => {
 												(meeting.status == "pending"
 													&& meeting.user.userId == user.userId))
 											&&
-											<DropdownItem
-												href='/' tag='a'
-												onClick={e => onMeetingAction(e, viewMeetingId, MeetingActions.Cancel)}
-											>
-												{t('Cancel')}
-											</DropdownItem>
+											meetingDropDownItem(
+												viewMeetingId,
+												MeetingActions.Cancel,
+												"Cancel"
+											)
+											// <DropdownItem
+											// 	href='/' tag='a'
+											// 	onClick={e => onMeetingAction(e, viewMeetingId, MeetingActions.Cancel)}
+											// >
+											// 	{t('Cancel')}
+											// </DropdownItem>
 										}
 									</DropdownMenu>
 								</UncontrolledButtonDropdown>
@@ -277,6 +287,25 @@ const MeetingList = (props) => {
 			: null
 	}
 
+	const meetingDropDownItem = (meetingId, meetingAction, labelText) => {
+		return (
+			<DropdownItem
+				tag="a"
+				href="/"
+				className="w-100"
+				onClick={(e) => {
+					e.preventDefault()
+					meetingAction == "rescheduled"
+						? setUpdateMeetingId(meetingId)
+						: onMeetingAction(e, meetingId, meetingAction)
+				}
+				}
+			>
+				<span className="align-middle ml-50">{t(labelText)}</span>
+			</DropdownItem>
+		);
+	};
+
 	return (
 		<>
 			<CardReload
@@ -301,7 +330,7 @@ const MeetingList = (props) => {
 									</tr>
 								</thead>
 								<tbody>
-									{props.meetings && props.meetings.filter(m => m.status != 'accepted').map((m, index) =>
+									{props.meetings && props.meetings.map((m, index) =>
 										<tr key={m.meetingId} >
 											<td>{index + 1}</td>
 											<td>
@@ -341,17 +370,24 @@ const MeetingList = (props) => {
 																	{
 																		m.status == "rescheduled" &&
 																		m.user.userId == user.userId &&
-																		<DropdownItem
-																			tag='a' href='/' className='w-100'
-																			onClick={e => onMeetingAction(e, m.meetingId, MeetingActions.Accept)}
-																		>
-																			<span className='align-middle ml-50'>{t('Accept')}</span>
-																		</DropdownItem>
+																		meetingDropDownItem(m.meetingId, MeetingActions.Accept, "Accept")
+																		// <DropdownItem
+																		// 	tag='a' href='/' className='w-100'
+																		// 	onClick={e => onMeetingAction(e, m.meetingId, MeetingActions.Accept)}
+																		// >
+																		// 	<span className='align-middle ml-50'>{t('Accept')}</span>
+																		// </DropdownItem>
 																	}
 																	{
 																		m.status == "pending" && m.user.userId != user.userId &&
 																		<>
-																			<DropdownItem
+																			{
+																			moment(m.scheduledAt).isSameOrAfter(new Date()) &&
+																			meetingDropDownItem(m.meetingId, MeetingActions.Accept, "Accept")
+																			}
+																			{meetingDropDownItem(m.meetingId, MeetingActions.Reject, "Reject")}
+																			{meetingDropDownItem(m.meetingId, MeetingActions.Reschedule, "Reschedule")}
+																			{/* <DropdownItem
 																				tag='a' href='/' className='w-100'
 																				onClick={e => onMeetingAction(e, m.meetingId, MeetingActions.Accept)}
 																			>
@@ -371,17 +407,18 @@ const MeetingList = (props) => {
 																				}}
 																			>
 																				<span className='align-middle ml-50'>{t('Reschedule')}</span>
-																			</DropdownItem>
+																			</DropdownItem> */}
 																		</>
 																	}
 																	{
 																		(m.status == 'rescheduled' || (m.status == "pending" && m.user.userId == user.userId)) &&
-																		< DropdownItem
-																			tag='a' href='/' className='w-100'
-																			onClick={e => onMeetingAction(e, m.meetingId, MeetingActions.Cancel)}
-																		>
-																			<span className='align-middle ml-50'>{t('Cancel')}</span>
-																		</DropdownItem>
+																		meetingDropDownItem(m.meetingId, MeetingActions.Cancel, "Cancel")
+																		// < DropdownItem
+																		// 	tag='a' href='/' className='w-100'
+																		// 	onClick={e => onMeetingAction(e, m.meetingId, MeetingActions.Cancel)}
+																		// >
+																		// 	<span className='align-middle ml-50'>{t('Cancel')}</span>
+																		// </DropdownItem>
 																	}
 																</DropdownMenu>
 															</UncontrolledDropdown>

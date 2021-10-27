@@ -18,7 +18,7 @@ const TimePicker = (props) => {
         options={{
           enableTime: true,
           noCalendar: true,
-          dateFormat: 'G:i K',
+          dateFormat: 'G:i',
           time_24hr: false,
           defaultMinute: 0,
           minuteIncrement: 15
