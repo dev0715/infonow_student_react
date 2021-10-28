@@ -150,6 +150,9 @@ const Routes = [
     path: '/setup-password',
     component: lazy(() => import('../../pages/auth/setup-password')),
     layout: 'BlankLayout',
+    meta: {
+      newUserAccessible: true
+    }
 
   },
   {
