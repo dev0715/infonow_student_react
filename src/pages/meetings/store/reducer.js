@@ -2,18 +2,23 @@ import {
     GET_ALL_MEETINGS,
     GET_ALL_MEETINGS_SUCCESS,
     GET_ALL_MEETINGS_ERROR,
+
     GET_MEETING_DATES,
     GET_MEETING_DATES_SUCCESS,
     GET_MEETING_DATES_FAILURE,
+
     NEW_MEETING,
     NEW_MEETING_FAILURE,
     NEW_MEETING_SUCCESS,
+
     UPDATE_MEETING,
     UPDATE_MEETING_SUCCESS,
     UPDATE_MEETING_FAILURE,
+
     GET_MEETING_TOKEN,
     GET_MEETING_TOKEN_SUCCESS,
     GET_MEETING_TOKEN_FAILURE,
+
     GET_CURRENT_TEACHER,
     GET_CURRENT_TEACHER_SUCCESS,
     GET_CURRENT_TEACHER_FAILURE,
@@ -21,9 +26,11 @@ import {
 } from './actionTypes'
 
 const initialState = {
-    meetings: [],
+    meetings: {},
+    meetingListData:{},
     meetingsLoading: false,
     meetingsError: null,
+
     meetingsDates: [],
     meetingsDatesLoading: false,
     meetingsDatesError: null,
@@ -39,9 +46,9 @@ const initialState = {
 
 
 const updateMeeting = (state, payload) => {
-    for (let meetingIndex in state.meetings) {
-        if (state.meetings[meetingIndex].meetingId === payload.id) {
-            state.meetings[meetingIndex].loading = true;
+    for (let meetingIndex in state.meetings.data) {
+        if (state.meetings.data[meetingIndex].meetingId === payload.id) {
+            state.meetings.data[meetingIndex].loading = true;
             break;
         }
     }
@@ -53,9 +60,9 @@ const updateMeeting = (state, payload) => {
 
 const updateMeetingSuccess = (state, payload) => {
 
-    for (let meetingIndex in state.meetings) {
-        if (state.meetings[meetingIndex].meetingId === payload.id) {
-            state.meetings[meetingIndex] = payload.data;
+    for (let meetingIndex in state.meetings.data) {
+        if (state.meetings.data[meetingIndex].meetingId === payload.id) {
+            state.meetings.data[meetingIndex] = payload.data;
             break;
         }
     }
@@ -67,10 +74,10 @@ const updateMeetingSuccess = (state, payload) => {
 
 const updateMeetingFailure = (state, payload) => {
 
-    for (let meetingIndex in state.meetings) {
-        if (state.meetings[meetingIndex].meetingId === payload.id) {
-            state.meetings[meetingIndex] = {
-                ...state.meetings[meetingIndex],
+    for (let meetingIndex in state.meetings.data) {
+        if (state.meetings.data[meetingIndex].meetingId === payload.id) {
+            state.meetings.data[meetingIndex] = {
+                ...state.meetings.data[meetingIndex],
                 loading: false,
                 error: payload.error
             };
@@ -96,7 +103,8 @@ export default (state = initialState, action) => {
         case GET_ALL_MEETINGS_SUCCESS:
             state = {
                 ...state,
-                meetings: action.payload,
+                meetingListData:{...state.meetingListData ,[action.payload.page]: action.payload.res.data},
+                meetings: action.payload.res,
                 meetingsLoading: false,
                 meetingsError: null,
             }

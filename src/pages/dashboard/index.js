@@ -43,16 +43,19 @@ const Dashboard = (props) => {
     useEffect(() => {
         props.getUserData();
         props.getUpcomingTests();
-        props.getNewAssignments({page:1,limit:20});
-        props.getAllMeetings();
+        props.getNewAssignments({ page: 1, limit: 20 });
+        props.getAllMeetings({ page: 1, limit: 100 });
         props.getRecentLessons();
         props.getIncompleteLessonsCount();
     }, [])
 
     const getUpcomingMeeting = () => {
-        let upcomingMeetings = props.meetings.filter(m => m.status == 'accepted' && moment(m.scheduledAt).isSameOrAfter(moment()))
-        if (upcomingMeetings.length == 0) return null
-        return upcomingMeetings[0]
+        if (props.meetings && props.meetings.data) {
+            let upcomingMeetings = props.meetings.data.filter(m => m.status == 'accepted' && moment(m.scheduledAt).isSameOrAfter(moment()))
+            if (upcomingMeetings.length == 0) return null
+            return upcomingMeetings[0]
+        }
+        return null
     }
 
     const handleLesson = (lesson) => {
@@ -70,8 +73,8 @@ const Dashboard = (props) => {
     }, [props.newTests])
 
     useEffect(() => {
-        if (props.meetings && props.meetings) {
-            let pendingMeetings = props.meetings.filter(
+        if (props.meetings && props.meetings.data) {
+            let pendingMeetings = props.meetings.data.filter(
                 (m) =>
                     m.status == "pending" && moment(m.scheduledAt).isSameOrAfter(moment())
             );
@@ -95,7 +98,7 @@ const Dashboard = (props) => {
                         <Row>
                             <Col sm='12' md='6' lg='3'>
                                 <div
-                                    className=" dashboard-stats-item">
+                                    className="dashboard-stats-item shadow-container">
                                     <div className="heading">
                                         {t('Upcoming')} <br /> {t('Tests')}
                                     </div>
@@ -112,7 +115,7 @@ const Dashboard = (props) => {
                             </Col>
                             <Col sm='12' md='6' lg='3'>
                                 <div
-                                    className=" dashboard-stats-item">
+                                    className=" dashboard-stats-item shadow-container">
                                     <div className="heading">
                                         {t("Upcoming")} <br /> {t('Assignments')}
                                     </div>
@@ -128,7 +131,7 @@ const Dashboard = (props) => {
                             </Col>
                             <Col sm='12' md='6' lg='3'>
                                 <div
-                                    className=" dashboard-stats-item">
+                                    className=" dashboard-stats-item shadow-container">
                                     <div className="heading">
                                         {t('Incomplete')} <br /> {t('Lessons')}
                                     </div>
@@ -141,15 +144,18 @@ const Dashboard = (props) => {
                             </Col>
                             <Col sm='12' md='6' lg='3'>
                                 <div
-                                    className=" dashboard-stats-item">
+                                    className=" dashboard-stats-item shadow-container">
                                     <div className="heading">
                                         {t('Upcoming')} <br /> {t('Meetings')}
                                     </div>
-                                    <div className="count text-primary">
-                                        {
-                                            props.meetings.filter(m => m.status == 'accepted' && moment(m.scheduledAt).isSameOrAfter(moment())).length
-                                        }
-                                    </div>
+                                    {
+                                        props.meetings && props.meetings.data &&
+                                        <div className="count text-primary">
+                                            {
+                                                props.meetings.data.filter(m => m.status == 'accepted' && moment(m.scheduledAt).isSameOrAfter(moment())).length
+                                            }
+                                        </div>
+                                    }
                                 </div>
                             </Col>
                         </Row>
@@ -243,9 +249,8 @@ const Dashboard = (props) => {
                         <Row className="mt-3 ">
                             <Col sm='12' md='12' lg='6'>
                                 <div className="shadow-container">
-
                                     <div className={`d-flex align-items-center justify-content-between p-1`}>
-                                        <h5 className="p-1 m-0">
+                                        <h5>
                                             {t('Upcoming')} {t('Tests')}
                                         </h5>
                                         <Button.Ripple
@@ -258,7 +263,7 @@ const Dashboard = (props) => {
                                     {
                                         !props.newTestsLoading &&
                                         props.newTestsError &&
-                                        <div className="text-center pb-1">
+                                        <div className="text-center pb-4 pt-4">
                                             {props.newTestsError}
                                         </div>
                                     }
@@ -267,7 +272,7 @@ const Dashboard = (props) => {
                                         !props.newTestsError &&
                                         upcomingTestData &&
                                         upcomingTestData.length == 0 &&
-                                        <div className="text-center pb-1">
+                                        <div className="text-center pb-4 pt-4">
                                             {t('No test found')}
                                         </div>
                                     }
@@ -301,8 +306,8 @@ const Dashboard = (props) => {
                                     }
                                 </div>
                             </Col>
-                            <Col sm='12' md='12' lg='6' >
-                                <div className='h-100 w-100 shadow-container'>
+                            <Col sm='12' md='12' lg='6'>
+                                <div className='shadow-container'>
                                     <div className={`d-flex align-items-center justify-content-between p-1`}>
                                         <h5 className='m-0'>
                                             {t('Upcoming')} {t('Assignments')}
@@ -317,7 +322,7 @@ const Dashboard = (props) => {
                                     {
                                         !props.newAssignmentsLoading &&
                                         props.newAssignmentsError &&
-                                        <div className="text-center p-1">
+                                        <div className="text-center pb-4 pt-4">
                                             {props.newAssignmentsError}
                                         </div>
                                     }
@@ -327,7 +332,7 @@ const Dashboard = (props) => {
                                         upcomingAssignmentsData &&
                                         upcomingAssignmentsData.length == 0 &&
 
-                                        <div className="text-center p-1">
+                                        <div className="text-center pb-4 pt-4">
                                             {t('No Assignment found')}
                                         </div>
                                     }

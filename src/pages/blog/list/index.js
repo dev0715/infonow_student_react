@@ -112,13 +112,14 @@ const BlogList = (props) => {
                 }
               </div>
               <CardText className='blog-content-truncate'>{item.description}</CardText>
+
               <Media>
-                <Avatar className='mr-50' img={GET_IMAGE_URL(item.infonowUser.profilePicture)} imgHeight='24' imgWidth='24' />
+                <Avatar className='mr-50' img={GET_IMAGE_URL(item.infonowUser ? item.infonowUser.profilePicture : null)} imgHeight='24' imgWidth='24' />
                 <Media body>
                   <small className='text-muted mr-25'>by</small>
                   <small>
                     <a className='text-body' href='/' onClick={e => e.preventDefault()}>
-                      {item.infonowUser.name}
+                      {item.infonowUser ? item.infonowUser.name : ''}
                     </a>
                   </small>
                   <span className='text-muted ml-50 mr-25'>|</span>

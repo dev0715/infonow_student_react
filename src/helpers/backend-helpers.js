@@ -68,7 +68,11 @@ export const resetAccountPassword = data => post(url.RESET_PASSWORD, data);
 //Meeting
 export const getMeetingToken = () => get(url.MEETING_TOKEN);
 export const newMeeting = data => post(url.NEW_MEETING, data);
-export const getStudentAllMeetings = userId => get(url.GET_ALL_MEETINGS(userId));
+export const getStudentAllMeetings = params =>{
+  let endUrl = GetUrlWithPagingParams(url.GET_ALL_MEETINGS(params.userId), params)
+  return get(endUrl);
+}
+  
 export const getMeetingDates = userId => get(url.GET_MEETING_DATES(userId));
 export const updateMeeting = (id, action, data) => put(url.UPDATE_MEETING(id, action), data);
 export const getMeetingWithAdmin = userId => get(url.GET_ADMIN_MEETING(userId));

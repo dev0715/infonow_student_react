@@ -51,6 +51,7 @@ import moment from 'moment'
 
 
 import NotFound from '../../components/not-found';
+import CustomPagination from '../pagination';
 
 const MeetingList = (props) => {
 
@@ -62,7 +63,7 @@ const MeetingList = (props) => {
 	const [message, setMessage] = useState("")
 	const [meetingDate, setMeetingDate] = useState(new Date())
 	const [meetingTime, setMeetingTime] = useState(new Date("1970-01-01 10:00:00"))
-
+	const [currentPage, setCurrentPage] = useState(1)
 
 	useEffect(() => {
 		if (updateMeetingId) {
@@ -74,35 +75,39 @@ const MeetingList = (props) => {
 		}
 	}, [updateMeetingId])
 
-	const fetchMeetings = () => {
-		props.getAllMeetings();
+	const fetchMeetings = (page) => {
+		let data = { page, limit: 10 }
+		props.getAllMeetings(data);
 	}
 
 	useEffect(() => {
 		setUser(getLoggedInUser())
-		fetchMeetings();
+		fetchMeetings(currentPage);
 	}, []);
 
 	useEffect(() => {
-		let meeting = props.meetings.find(m => m.meetingId == updateMeetingId)
-		if (meeting) {
-			if (!meeting.loading && !meeting.error) {
-				setUpdateMeetingId(null)
-				notifySuccess(t("Update Meeting"), t(`${t('Meeting')} ${meetingAction} ${t('successfully')}`))
-			} else if (!meeting.loading && meeting.error) {
-				notifyError(t("Update Meeting"), meeting.error)
+		if(props.meetings && props.meetings.data){
+			let meeting = props.meetings.data.find(m => m.meetingId == updateMeetingId)
+			if (meeting) {
+				if (!meeting.loading && !meeting.error) {
+					setUpdateMeetingId(null)
+					notifySuccess(t("Update Meeting"), t(`${t('Meeting')} ${meetingAction} ${t('successfully')}`))
+				} else if (!meeting.loading && meeting.error) {
+					notifyError(t("Update Meeting"), meeting.error)
+				}
+			}
+	
+			meeting = props.meetings.data.find(m => m.meetingId == viewMeetingId)
+			if (meeting) {
+				if (!meeting.loading && !meeting.error) {
+					setViewMeetingId(null)
+					notifySuccess(t("Update Meeting"), t(`${t('Meeting')} ${meetingAction} ${t('successfully')}`))
+				} else if (!meeting.loading && meeting.error) {
+					notifyError(t("Update Meeting"), meeting.error)
+				}
 			}
 		}
-
-		meeting = props.meetings.find(m => m.meetingId == viewMeetingId)
-		if (meeting) {
-			if (!meeting.loading && !meeting.error) {
-				setViewMeetingId(null)
-				notifySuccess(t("Update Meeting"), t(`${t('Meeting')} ${meetingAction} ${t('successfully')}`))
-			} else if (!meeting.loading && meeting.error) {
-				notifyError(t("Update Meeting"), meeting.error)
-			}
-		}
+		
 
 	}, [props.meetings])
 
@@ -114,7 +119,7 @@ const MeetingList = (props) => {
 	}
 
 	const getMeetingById = (id) => {
-		return props.meetings.find(m => m.meetingId == id)
+		if( props.meetings && props.meetings.data ) return props.meetings.data.find(m => m.meetingId == id) 
 	}
 
 	const rescheduleMeeting = (e) => {
@@ -195,6 +200,11 @@ const MeetingList = (props) => {
 			: null
 	}
 
+	const onSelectPage = (page) => {
+		setCurrentPage(page)
+		fetchMeetings(page)
+	}
+
 	const meetingDetailsModel = () => {
 		let meeting = getMeetingById(viewMeetingId)
 		return meeting ?
@@ -228,12 +238,6 @@ const MeetingList = (props) => {
 													MeetingActions.Reject,
 													"Reject"
 												)}
-												{/* <DropdownItem
-													href='/' tag='a'
-													onClick={e => onMeetingAction(e, viewMeetingId, MeetingActions.Reject)}
-												>
-													{t('Reject')}
-												</DropdownItem> */}
 												<DropdownItem
 													href='/' tag='a'
 													onClick={e => {
@@ -256,12 +260,6 @@ const MeetingList = (props) => {
 												MeetingActions.Cancel,
 												"Cancel"
 											)
-											// <DropdownItem
-											// 	href='/' tag='a'
-											// 	onClick={e => onMeetingAction(e, viewMeetingId, MeetingActions.Cancel)}
-											// >
-											// 	{t('Cancel')}
-											// </DropdownItem>
 										}
 									</DropdownMenu>
 								</UncontrolledButtonDropdown>
@@ -307,6 +305,7 @@ const MeetingList = (props) => {
 	};
 
 	return (
+
 		<>
 			<CardReload
 				title={t('My Meetings')}
@@ -315,7 +314,9 @@ const MeetingList = (props) => {
 			>
 				<CardBody className="meeting-table-body">
 					{
-						props.meetings.filter(m => m.status != 'accepted').length == 0 ?
+						props.meetings &&
+							props.meetings.data &&
+							props.meetings.data.length == 0 ?
 							<NotFound message={t("No more meetings found")} />
 							:
 							<Table responsive hover >
@@ -330,115 +331,92 @@ const MeetingList = (props) => {
 									</tr>
 								</thead>
 								<tbody>
-									{props.meetings && props.meetings.map((m, index) =>
-										<tr key={m.meetingId} >
-											<td>{index + 1}</td>
-											<td>
-												<span className='align-middle font-weight-bold'>
-													{m.agenda}
-												</span>
-											</td>
-											<td><DateTime dateTime={m.scheduledAt} type="date" /></td>
-											<td><DateTime dateTime={m.scheduledAt} type="time" /></td>
-											<td>
-												<Badge
-													pill
-													color={getMeetingStatusColor(m.status)}
-													className='mr-1'
-												>
-													{titleCase(m.status)}
-												</Badge>
-											</td>
-											<td>
-												<UILoader blocking={m.loading}>
-													<Row>
-														<Col sm="3">
-															<UncontrolledDropdown>
-																<DropdownToggle className='pr-1' tag='span'>
-																	<MoreVertical size={15} />
-																</DropdownToggle>
-																<DropdownMenu right>
-																	<DropdownItem
-																		tag='a' href='/' className='w-100'
-																		onClick={e => {
-																			e.preventDefault()
-																			setViewMeetingId(m.meetingId)
-																		}}
-																	>
-																		<span className='align-middle ml-50'>{t('View')}</span>
-																	</DropdownItem>
-																	{
-																		m.status == "rescheduled" &&
-																		m.user.userId == user.userId &&
-																		meetingDropDownItem(m.meetingId, MeetingActions.Accept, "Accept")
-																		// <DropdownItem
-																		// 	tag='a' href='/' className='w-100'
-																		// 	onClick={e => onMeetingAction(e, m.meetingId, MeetingActions.Accept)}
-																		// >
-																		// 	<span className='align-middle ml-50'>{t('Accept')}</span>
-																		// </DropdownItem>
-																	}
-																	{
-																		m.status == "pending" && m.user.userId != user.userId &&
-																		<>
-																			{
-																			moment(m.scheduledAt).isSameOrAfter(new Date()) &&
+									{props.meetings &&
+										props.meetings.data &&
+										props.meetings.data.map((m, index) =>
+											<tr key={m.meetingId} >
+												<td>{index + 1}</td>
+												<td>
+													<span className='align-middle font-weight-bold'>
+														{m.agenda}
+													</span>
+												</td>
+												<td><DateTime dateTime={m.scheduledAt} type="date" /></td>
+												<td><DateTime dateTime={m.scheduledAt} type="time" /></td>
+												<td>
+													<Badge
+														pill
+														color={getMeetingStatusColor(m.status)}
+														className='mr-1'
+													>
+														{titleCase(m.status)}
+													</Badge>
+												</td>
+												<td>
+													<UILoader blocking={m.loading}>
+														<Row>
+															<Col sm="3">
+																<UncontrolledDropdown>
+																	<DropdownToggle className='pr-1' tag='span'>
+																		<MoreVertical size={15} />
+																	</DropdownToggle>
+																	<DropdownMenu right>
+																		<DropdownItem
+																			tag='a' href='/' className='w-100'
+																			onClick={e => {
+																				e.preventDefault()
+																				setViewMeetingId(m.meetingId)
+																			}}
+																		>
+																			<span className='align-middle ml-50'>{t('View')}</span>
+																		</DropdownItem>
+																		{
+																			m.status == "rescheduled" &&
+																			m.user.userId == user.userId &&
 																			meetingDropDownItem(m.meetingId, MeetingActions.Accept, "Accept")
-																			}
-																			{meetingDropDownItem(m.meetingId, MeetingActions.Reject, "Reject")}
-																			{meetingDropDownItem(m.meetingId, MeetingActions.Reschedule, "Reschedule")}
-																			{/* <DropdownItem
-																				tag='a' href='/' className='w-100'
-																				onClick={e => onMeetingAction(e, m.meetingId, MeetingActions.Accept)}
-																			>
-																				<span className='align-middle ml-50'>{t('Accept')}</span>
-																			</DropdownItem>
-																			<DropdownItem
-																				tag='a' href='/' className='w-100'
-																				onClick={e => onMeetingAction(e, m.meetingId, MeetingActions.Reject)}
-																			>
-																				<span className='align-middle ml-50'>{t('Reject')}</span>
-																			</DropdownItem>
-																			<DropdownItem
-																				tag='a' href='/' className='w-100'
-																				onClick={e => {
-																					e.preventDefault()
-																					setUpdateMeetingId(m.meetingId)
-																				}}
-																			>
-																				<span className='align-middle ml-50'>{t('Reschedule')}</span>
-																			</DropdownItem> */}
-																		</>
-																	}
-																	{
-																		(m.status == 'rescheduled' || (m.status == "pending" && m.user.userId == user.userId)) &&
-																		meetingDropDownItem(m.meetingId, MeetingActions.Cancel, "Cancel")
-																		// < DropdownItem
-																		// 	tag='a' href='/' className='w-100'
-																		// 	onClick={e => onMeetingAction(e, m.meetingId, MeetingActions.Cancel)}
-																		// >
-																		// 	<span className='align-middle ml-50'>{t('Cancel')}</span>
-																		// </DropdownItem>
-																	}
-																</DropdownMenu>
-															</UncontrolledDropdown>
-														</Col>
-														{
-															m.error &&
-															<Col sm={3}>
-																<AlertCircle color="red" id={`meeting-error-${m.meetingId}`} />
-																<UncontrolledTooltip placement='top' target={`meeting-error-${m.meetingId}`}>
-																	{m.error}
-																</UncontrolledTooltip>
+
+																		}
+																		{
+																			m.status == "pending" && m.user.userId != user.userId &&
+																			<>
+																				{
+																					moment(m.scheduledAt).isSameOrAfter(new Date()) &&
+																					meetingDropDownItem(m.meetingId, MeetingActions.Accept, "Accept")
+																				}
+																				{meetingDropDownItem(m.meetingId, MeetingActions.Reject, "Reject")}
+																				{meetingDropDownItem(m.meetingId, MeetingActions.Reschedule, "Reschedule")}
+
+																			</>
+																		}
+																		{
+																			(m.status == 'rescheduled' || (m.status == "pending" && m.user.userId == user.userId)) &&
+																			meetingDropDownItem(m.meetingId, MeetingActions.Cancel, "Cancel")
+
+																		}
+																	</DropdownMenu>
+																</UncontrolledDropdown>
 															</Col>
-														}
-													</Row>
-												</UILoader>
-											</td>
-										</tr>
-									)}
+															{
+																m.error &&
+																<Col sm={3}>
+																	<AlertCircle color="red" id={`meeting-error-${m.meetingId}`} />
+																	<UncontrolledTooltip placement='top' target={`meeting-error-${m.meetingId}`}>
+																		{m.error}
+																	</UncontrolledTooltip>
+																</Col>
+															}
+														</Row>
+													</UILoader>
+												</td>
+											</tr>
+										)}
 								</tbody>
 							</Table>
+					}
+					{
+						props.meetings &&
+						props.meetings.count > 0 &&
+						<CustomPagination start={1} end={Math.ceil(props.meetings.count / 10)} onSelect={onSelectPage} />
 					}
 				</CardBody>
 			</CardReload >

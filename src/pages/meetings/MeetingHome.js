@@ -40,7 +40,7 @@ function MeetingHome(props) {
 
 	const { t } = useTranslation();
 	const getUpcomingMeetings = () => {
-		const meetingList = props.meetings || [];
+		const meetingList = props.meetings.data || [];
 		return meetingList.filter(x => moment(x.scheduledAt).isSameOrAfter(moment()) && x.status === 'accepted');
 	}
 
@@ -48,6 +48,7 @@ function MeetingHome(props) {
 
 	const [isNewMeeting, setIsNewMeeting] = useState(false)
 	const [user, setUser] = useState({})
+	const [meetingList, setMeetingList] = useState([])
 
 	const [agenda, setAgenda] = useState("")
 	const [message, setMessage] = useState("")
@@ -56,7 +57,7 @@ function MeetingHome(props) {
 
 	useEffect(() => {
 		setUser(getLoggedInUser())
-		props.getAllMeetings()
+		props.getAllMeetings({page:1,limit:10})
 	}, [])
 
 	useEffect(() => {
@@ -104,8 +105,11 @@ function MeetingHome(props) {
 
 	return (
 		<>
+		
 			{
-				props.meetings.length == 0 ?
+				props.meetings &&
+				props.meetings.data && 
+				props.meetings.data.length == 0 ?
 					<div className=" mt-3 d-flex flex-column justify-content-center align-items-center">
 						<img src={newMeetingImg} className="img w-25" />
 						<h3>
@@ -127,7 +131,8 @@ function MeetingHome(props) {
 					<Row>
 						{
 							props.meetings
-								.filter(m => m.status == 'accepted'
+							&& props.meetings.data
+							&& props.meetings.data.filter(m => m.status == 'accepted'
 									&& moment(m.scheduledAt).isSameOrAfter(moment())).length == 0 ?
 								<Col lg={12} className="mb-1">
 									<div className="d-flex  align-items-center justify-content-between">
@@ -144,7 +149,7 @@ function MeetingHome(props) {
 								:
 								<>
 									<Col lg={7}>
-										<UpcomingMeeting meeting={upcomingMeetings && upcomingMeetings[0]} />
+										<UpcomingMeeting meeting={upcomingMeetings.length > 0 && upcomingMeetings[0]} />
 									</Col>
 									<Col lg={5} style={{ maxWidth: 500 }}>
 										<UpcomingMeetings addNewMeeting={addNewMeeting} />
