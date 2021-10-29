@@ -40,7 +40,7 @@ function MeetingHome(props) {
 
 	const { t } = useTranslation();
 	const getUpcomingMeetings = () => {
-		const meetingList = props.meetings.data || [];
+		const meetingList = props.meetings || [];
 		return meetingList.filter(x => moment(x.scheduledAt).isSameOrAfter(moment()) && x.status === 'accepted');
 	}
 
@@ -57,7 +57,7 @@ function MeetingHome(props) {
 
 	useEffect(() => {
 		setUser(getLoggedInUser())
-		props.getAllMeetings({page:1,limit:10})
+		props.getAllMeetings({ page: 1, limit: 10 })
 	}, [])
 
 	useEffect(() => {
@@ -105,11 +105,9 @@ function MeetingHome(props) {
 
 	return (
 		<>
-		
+
 			{
-				props.meetings &&
-				props.meetings.data && 
-				props.meetings.data.length == 0 ?
+				props.meetings.length == 0 ?
 					<div className=" mt-3 d-flex flex-column justify-content-center align-items-center">
 						<img src={newMeetingImg} className="img w-25" />
 						<h3>
@@ -130,10 +128,8 @@ function MeetingHome(props) {
 					:
 					<Row>
 						{
-							props.meetings
-							&& props.meetings.data
-							&& props.meetings.data.filter(m => m.status == 'accepted'
-									&& moment(m.scheduledAt).isSameOrAfter(moment())).length == 0 ?
+							props.meetings.filter(m => m.status == 'accepted'
+								&& moment(m.scheduledAt).isSameOrAfter(moment())).length == 0 ?
 								<Col lg={12} className="mb-1">
 									<div className="d-flex  align-items-center justify-content-between">
 										<h3>{t('Meetings')}</h3>
@@ -255,6 +251,7 @@ function MeetingHome(props) {
 
 const mapStateToProps = (state) => {
 	const {
+		meetingsCount,
 		meetings,
 		meetingsLoading,
 		meetingsDates,
@@ -267,6 +264,7 @@ const mapStateToProps = (state) => {
 		currentTeacherError,
 	} = state.Meetings;
 	return {
+		meetingsCount,
 		meetings,
 		meetingsLoading,
 		meetingsDates,

@@ -26,7 +26,8 @@ import {
 } from './actionTypes'
 
 const initialState = {
-    meetings: {},
+    meetingsCount:null,
+    meetings: [],
     meetingListData:{},
     meetingsLoading: false,
     meetingsError: null,
@@ -46,9 +47,9 @@ const initialState = {
 
 
 const updateMeeting = (state, payload) => {
-    for (let meetingIndex in state.meetings.data) {
-        if (state.meetings.data[meetingIndex].meetingId === payload.id) {
-            state.meetings.data[meetingIndex].loading = true;
+    for (let meetingIndex in state.meetings) {
+        if (state.meetings[meetingIndex].meetingId === payload.id) {
+            state.meetings[meetingIndex].loading = true;
             break;
         }
     }
@@ -60,9 +61,9 @@ const updateMeeting = (state, payload) => {
 
 const updateMeetingSuccess = (state, payload) => {
 
-    for (let meetingIndex in state.meetings.data) {
-        if (state.meetings.data[meetingIndex].meetingId === payload.id) {
-            state.meetings.data[meetingIndex] = payload.data;
+    for (let meetingIndex in state.meetings) {
+        if (state.meetings[meetingIndex].meetingId === payload.id) {
+            state.meetings[meetingIndex] = payload.data;
             break;
         }
     }
@@ -74,10 +75,10 @@ const updateMeetingSuccess = (state, payload) => {
 
 const updateMeetingFailure = (state, payload) => {
 
-    for (let meetingIndex in state.meetings.data) {
-        if (state.meetings.data[meetingIndex].meetingId === payload.id) {
-            state.meetings.data[meetingIndex] = {
-                ...state.meetings.data[meetingIndex],
+    for (let meetingIndex in state.meetings) {
+        if (state.meetings[meetingIndex].meetingId === payload.id) {
+            state.meetings[meetingIndex] = {
+                ...state.meetings[meetingIndex],
                 loading: false,
                 error: payload.error
             };
@@ -104,7 +105,8 @@ export default (state = initialState, action) => {
             state = {
                 ...state,
                 meetingListData:{...state.meetingListData ,[action.payload.page]: action.payload.res.data},
-                meetings: action.payload.res,
+                meetings: action.payload.res.data,
+                meetingsCount: action.payload.res.count,
                 meetingsLoading: false,
                 meetingsError: null,
             }

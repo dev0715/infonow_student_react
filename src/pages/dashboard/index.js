@@ -50,12 +50,9 @@ const Dashboard = (props) => {
     }, [])
 
     const getUpcomingMeeting = () => {
-        if (props.meetings && props.meetings.data) {
-            let upcomingMeetings = props.meetings.data.filter(m => m.status == 'accepted' && moment(m.scheduledAt).isSameOrAfter(moment()))
-            if (upcomingMeetings.length == 0) return null
-            return upcomingMeetings[0]
-        }
-        return null
+        let upcomingMeetings = props.meetings.filter(m => m.status == 'accepted' && moment(m.scheduledAt).isSameOrAfter(moment()))
+        if (upcomingMeetings.length == 0) return null
+        return upcomingMeetings[0]
     }
 
     const handleLesson = (lesson) => {
@@ -73,13 +70,12 @@ const Dashboard = (props) => {
     }, [props.newTests])
 
     useEffect(() => {
-        if (props.meetings && props.meetings.data) {
-            let pendingMeetings = props.meetings.data.filter(
-                (m) =>
-                    m.status == "pending" && moment(m.scheduledAt).isSameOrAfter(moment())
-            );
-            setPendingMeetings(pendingMeetings);
-        }
+        let pendingMeetings = props.meetings.filter(
+            (m) =>
+                m.status == "pending" && moment(m.scheduledAt).isSameOrAfter(moment())
+        );
+        setPendingMeetings(pendingMeetings);
+
     }, [props.meetings]);
 
     return (
@@ -149,10 +145,10 @@ const Dashboard = (props) => {
                                         {t('Upcoming')} <br /> {t('Meetings')}
                                     </div>
                                     {
-                                        props.meetings && props.meetings.data &&
+                                        props.meetings && 
                                         <div className="count text-primary">
                                             {
-                                                props.meetings.data.filter(m => m.status == 'accepted' && moment(m.scheduledAt).isSameOrAfter(moment())).length
+                                                props.meetings.filter(m => m.status == 'accepted' && moment(m.scheduledAt).isSameOrAfter(moment())).length
                                             }
                                         </div>
                                     }

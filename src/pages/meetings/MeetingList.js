@@ -86,28 +86,26 @@ const MeetingList = (props) => {
 	}, []);
 
 	useEffect(() => {
-		if(props.meetings && props.meetings.data){
-			let meeting = props.meetings.data.find(m => m.meetingId == updateMeetingId)
-			if (meeting) {
-				if (!meeting.loading && !meeting.error) {
-					setUpdateMeetingId(null)
-					notifySuccess(t("Update Meeting"), t(`${t('Meeting')} ${meetingAction} ${t('successfully')}`))
-				} else if (!meeting.loading && meeting.error) {
-					notifyError(t("Update Meeting"), meeting.error)
-				}
-			}
-	
-			meeting = props.meetings.data.find(m => m.meetingId == viewMeetingId)
-			if (meeting) {
-				if (!meeting.loading && !meeting.error) {
-					setViewMeetingId(null)
-					notifySuccess(t("Update Meeting"), t(`${t('Meeting')} ${meetingAction} ${t('successfully')}`))
-				} else if (!meeting.loading && meeting.error) {
-					notifyError(t("Update Meeting"), meeting.error)
-				}
+		let meeting = props.meetings.find(m => m.meetingId == updateMeetingId)
+		if (meeting) {
+			if (!meeting.loading && !meeting.error) {
+				setUpdateMeetingId(null)
+				notifySuccess(t("Update Meeting"), t(`${t('Meeting')} ${meetingAction} ${t('successfully')}`))
+			} else if (!meeting.loading && meeting.error) {
+				notifyError(t("Update Meeting"), meeting.error)
 			}
 		}
-		
+
+		meeting = props.meetings.find(m => m.meetingId == viewMeetingId)
+		if (meeting) {
+			if (!meeting.loading && !meeting.error) {
+				setViewMeetingId(null)
+				notifySuccess(t("Update Meeting"), t(`${t('Meeting')} ${meetingAction} ${t('successfully')}`))
+			} else if (!meeting.loading && meeting.error) {
+				notifyError(t("Update Meeting"), meeting.error)
+			}
+		}
+
 
 	}, [props.meetings])
 
@@ -119,7 +117,7 @@ const MeetingList = (props) => {
 	}
 
 	const getMeetingById = (id) => {
-		if( props.meetings && props.meetings.data ) return props.meetings.data.find(m => m.meetingId == id) 
+		return props.meetings.find(m => m.meetingId == id)
 	}
 
 	const rescheduleMeeting = (e) => {
@@ -315,8 +313,7 @@ const MeetingList = (props) => {
 				<CardBody className="meeting-table-body">
 					{
 						props.meetings &&
-							props.meetings.data &&
-							props.meetings.data.length == 0 ?
+							props.meetings.length == 0 ?
 							<NotFound message={t("No more meetings found")} />
 							:
 							<Table responsive hover >
@@ -332,8 +329,7 @@ const MeetingList = (props) => {
 								</thead>
 								<tbody>
 									{props.meetings &&
-										props.meetings.data &&
-										props.meetings.data.map((m, index) =>
+										props.meetings.map((m, index) =>
 											<tr key={m.meetingId} >
 												<td>{index + 1}</td>
 												<td>
@@ -413,10 +409,11 @@ const MeetingList = (props) => {
 								</tbody>
 							</Table>
 					}
+
 					{
-						props.meetings &&
-						props.meetings.count > 0 &&
-						<CustomPagination start={1} end={Math.ceil(props.meetings.count / 10)} onSelect={onSelectPage} />
+
+						// props.meetingsCount > 0 &&
+						<CustomPagination start={1} end={Math.ceil(props.meetingsCount / 10)} onSelect={onSelectPage} />
 					}
 				</CardBody>
 			</CardReload >

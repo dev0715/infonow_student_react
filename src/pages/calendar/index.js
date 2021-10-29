@@ -38,7 +38,7 @@ import UILoader from '../../@core/components/ui-loader';
 import { DateTimeFunction } from '../../components/date-time'
 const CalendarComponent = (props) => {
 
-  const {t} = useTranslation()
+  const { t } = useTranslation()
   const [event, setEvent] = useState(null)
   const [leftSidebarOpen, setLeftSidebarOpen] = useState(false)
   const [selectedFilters, setSelectedFilters] = useState(filters.map(f => f.type))
@@ -46,17 +46,17 @@ const CalendarComponent = (props) => {
   const [upcomingAssignmentData, setUpcomingAssignmentData] = useState([])
 
   useEffect(() => {
-    if(props.newTests && props.newTests.data)setUpcomingTestData(props.newTests.data)
+    if (props.newTests && props.newTests.data) setUpcomingTestData(props.newTests.data)
   }, [props.newTests])
 
   useEffect(() => {
-    if(props.upcomingAssignments && props.upcomingAssignments.data) setUpcomingAssignmentData(props.upcomingAssignments.data)
+    if (props.upcomingAssignments && props.upcomingAssignments.data) setUpcomingAssignmentData(props.upcomingAssignments.data)
   }, [props.upcomingAssignments])
 
   useEffect(() => {
     props.getUpcomingTests();
     props.getNewAssignments();
-    props.getAllMeetings();
+    props.getAllMeetings({ page: 1, limit: 10 });
     props.getRecentLessons();
   }, [])
 
@@ -75,14 +75,14 @@ const CalendarComponent = (props) => {
   const eventsList = () => {
     return [
       ...props.meetings.map(mt => {
-          return {
-            type: 'meeting',
-            title: mt.agenda,
-            date: moment(mt.scheduledAt).format('YYYY-MM-DD'),
-            data: mt
-          }
-        }),
-       upcomingTestData && upcomingTestData.map(t => {
+        return {
+          type: 'meeting',
+          title: mt.agenda,
+          date: moment(mt.scheduledAt).format('YYYY-MM-DD'),
+          data: mt
+        }
+      }),
+       ...upcomingTestData.map(t => {
         return {
           type: 'test',
           title: t.test.title,
@@ -90,8 +90,8 @@ const CalendarComponent = (props) => {
           data: t
         }
       }),
-
-      upcomingAssignmentData && upcomingAssignmentData.map(a => {
+    
+      ...upcomingAssignmentData.map(a => {
         return {
           type: 'assignment',
           title: a.assignment.title,
@@ -113,6 +113,13 @@ const CalendarComponent = (props) => {
 
   const filteredEvents = () => {
     let events = eventsList()
+    // console.log("props.meetings", props.meetings);
+    // console.log("props.newTests", props.newTests.data);
+    // console.log("upcomingTestData", upcomingTestData);
+    // console.log("props.recentLessons", props.recentLessons);
+    console.log("events", events);
+    let c = events.filter(e => selectedFilters.find(f => f == e.type))
+    console.log("EVENTS", c);
     return events.filter(e => selectedFilters.find(f => f == e.type))
   }
 
@@ -142,7 +149,7 @@ const CalendarComponent = (props) => {
           color='primary'
           onClick={() => props.history.push('/meetings')}
         >
-         {t('View All')}
+          {t('View All')}
         </Button.Ripple>
         <Button.Ripple
           color='secondary'
@@ -222,7 +229,7 @@ const CalendarComponent = (props) => {
           color='primary'
           onClick={() => props.history.push("/tests")}
         >
-         {t('View All')}
+          {t('View All')}
         </Button.Ripple>
         <Button.Ripple
           color='secondary'
@@ -399,6 +406,7 @@ const mapStateToProps = (state) => {
     meetings,
     meetingsLoading,
     meetingsError,
+
     newAssignments,
     newAssignmentsLoading,
     newAssignmentsError,
