@@ -15,10 +15,10 @@ export const CHAT_API_URL = `https://chat.infonow.ro/`
 export const CHAT_SOCKET_API_URL = `https://live-chat.infonow.ro/`
 export const BLOG_API_URL = `https://cms.infonow.ro/`
 
+
+export const GOOGLE_RECAPTCHA_KEY = "6Le1reYUAAAAAHjngT35rOyqIlMXbTNAT0JjVP6y"
 export const GET_IMAGE_URL = url => url ? DOCUMENT_BASE_URL + url : DOCUMENT_BASE_URL + "/profile-pictures/default.png"
-
 export const GET_BLOG_IMAGE_URL = url => BLOG_API_URL + url
-
 export const GET_DOCUMENT_URL = url => DOCUMENT_BASE_URL + url
 
 

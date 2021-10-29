@@ -14,6 +14,8 @@ import { useEffect } from 'react';
 import GoogleSignIn from '../../../views/google-signin';
 import { useTranslation } from 'react-i18next';
 import PasswordToggle from '../../../components/password-toggle'
+import ReCAPTCHA from "react-google-recaptcha";
+import { GOOGLE_RECAPTCHA_KEY } from '../../../helpers/url_helper';
 
 const ToastContent = ({ name, role }) => (
     <Fragment>
@@ -30,6 +32,7 @@ const ToastContent = ({ name, role }) => (
 )
 
 const Login = (props) => {
+    const recaptchaRef = React.useRef();
     const {t} = useTranslation()
     const [skin, setSkin] = useSkin()
 
@@ -52,6 +55,8 @@ const Login = (props) => {
 
 
     const handleValidSubmit = (event, data) => {
+        const token = recaptchaRef.current.getValue();
+        data.reCaptchaToken = token
         props.loginUser(data, history)
     }
 
@@ -140,6 +145,16 @@ const Login = (props) => {
                             <GoogleSignIn
                                 processing={isSigningIn}
                                 processingCallBack={() => setIsSigningIn(!isSigningIn)}
+                            />
+                        </div>
+
+                        <div className='d-flex justify-content-center mt-2' >
+                            <ReCAPTCHA
+                                theme={skin}
+                                ref={recaptchaRef}
+                                size="normal"
+                                type = "image"
+                                sitekey={GOOGLE_RECAPTCHA_KEY}
                             />
                         </div>
                     </Col>
