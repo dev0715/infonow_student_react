@@ -1,5 +1,5 @@
 {
-  "Upcoming": "În viitor",
+  "Upcoming": "Urmatoarele",
   "Tests": "Teste",
   "Assignments": "Teme",
   "Incomplete Lessons": "Lecție incompletă",
@@ -232,5 +232,6 @@
   "Cannot register your support ticket at the moment": "Momentan nu vă puteți înregistra biletul de asistență",
   "Please provide a valid subject and message.": "Vă rugăm să furnizați un subiect și un mesaj valid.",
   "Subject": "Subiectul e-mailului",
-  "Message": "Mesaj"
+  "Message": "Mesaj",
+  "The address is required in order to send invoices": "Adresa este necesara pentru a trimite facturi."
 }
