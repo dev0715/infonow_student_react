@@ -17,6 +17,8 @@ import GetStartedSaga from "./../pages/get-started/store/saga"
 import ProfileSaga from "./../pages/profile/store/saga"
 import ForgotPasswordSaga from "./../pages/auth/forgot-password/store/saga"
 import ResetPasswordSaga from "./../pages/auth/reset-password/store/saga"
+import StripeSaga from "./../pages/stripe/store/saga"
+import EbookSaga from "./../pages/ebook/store/saga"
 import Feedback from './../pages/feedback/store/saga'
 
 export default function* rootSaga() {
@@ -37,6 +39,8 @@ export default function* rootSaga() {
     ProfileSaga(),
     ForgotPasswordSaga(),
     ResetPasswordSaga(),
+    StripeSaga(),
+    EbookSaga(),
     Feedback()
   ])
 }

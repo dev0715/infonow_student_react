@@ -23,6 +23,9 @@ axiosApi.defaults.headers.common['Authorization'] = authHeader()['Authorization'
 
 axiosApi.interceptors.response.use(
 	(response) => {
+		if(response.config.responseType === 'blob')
+		return response;
+		
 		DEBUG && console.log('HTTP_RESPONSE', response);
 
 		if (response.data.status) {
@@ -93,10 +96,19 @@ export async function put(url, data, config = {}) {
 		.then((response) => response.data);
 }
 
-export async function del(url, config = {}) {
+export async function del(url,data, config = {}) {
 	resetAPIAuthToken();
 	return await axiosApi
-		.delete(url, { ...config })
+		.delete(url, { ...config , data: data })
+		.then((response) => response.data);
+}
+
+export async function download(url) {
+	resetAPIAuthToken();
+	return await axiosApi
+		.get(url, { 
+			responseType: 'blob'
+		 })
 		.then((response) => response.data);
 }
 
