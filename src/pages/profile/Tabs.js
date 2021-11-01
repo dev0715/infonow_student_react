@@ -31,9 +31,9 @@ const Tabs = ({ activeTab, toggleTab }) => {
         </NavLink>
       </NavItem>
       <NavItem>
-        <NavLink active={activeTab === '4'} onClick={() => history.push('/calender')}>
+        <NavLink active={activeTab === '4'} onClick={() => history.push('/calendar')}>
           <Calendar size={18} className='mr-1' />
-          <span className='font-weight-bold'>{t('Calender')}</span>
+          <span className='font-weight-bold'>{t('Calendar')}</span>
         </NavLink>
       </NavItem>
     </Nav>

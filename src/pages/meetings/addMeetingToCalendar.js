@@ -3,14 +3,14 @@ import React, { useState, useEffect } from 'react'
 import { Button } from 'reactstrap';
 import { Bell, } from 'react-feather';
 
-import { getCurrentTimeZone, getGoogleCalenderFormattedDate } from '../../components/date-time';
+import { getCurrentTimeZone, getGoogleCalendarFormattedDate } from '../../components/date-time';
 
 import ApiCalendar from 'react-google-calendar-api';
 import { useTranslation } from 'react-i18next';
 import { notifySuccess, notifyWarning } from '../../utility/toast'
 import moment from 'moment';
 
-export const AddMeetingToCalenderButton = (props) => {
+export const AddMeetingToCalendarButton = (props) => {
 
     const { t } = useTranslation()
     const { meeting, type, className } = props
@@ -26,16 +26,16 @@ export const AddMeetingToCalenderButton = (props) => {
         })
     }, [])
 
-    const addMeetingToCalender = () => {
+    const addMeetingToCalendar = () => {
         if (!meeting) return notifyWarning(t("Meeting"),t('Could not add meeting to google calendar. Please try again'))
         const event = {
             summary: meeting.agenda,
             start: {
-                'dateTime': getGoogleCalenderFormattedDate(meeting.scheduledAt),
+                'dateTime': getGoogleCalendarFormattedDate(meeting.scheduledAt),
                 'timeZone': getCurrentTimeZone()
             },
             end: {
-                'dateTime': getGoogleCalenderFormattedDate(meeting.scheduledAt),
+                'dateTime': getGoogleCalendarFormattedDate(meeting.scheduledAt),
                 'timeZone': getCurrentTimeZone()
             },
             description: `${meeting.meetingId}`
@@ -50,7 +50,7 @@ export const AddMeetingToCalenderButton = (props) => {
             });
     }
 
-    const getCalenderEvents = () => {
+    const getCalendarEvents = () => {
 
         ApiCalendar.listEvents({
             timeMin: moment(meeting.scheduledAt).toISOString(),
@@ -66,14 +66,14 @@ export const AddMeetingToCalenderButton = (props) => {
                 setIsRemindMe(false);
                 return
             }
-            addMeetingToCalender()
+            addMeetingToCalendar()
 
         });
     }
 
     useEffect(() => {
         if (ApiCalendar.sign && isRemindMe) {
-            getCalenderEvents()
+            getCalendarEvents()
         }
     }, [isCalendarSignIn, isRemindMe])
 
