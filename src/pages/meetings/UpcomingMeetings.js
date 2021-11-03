@@ -56,8 +56,7 @@ const UpcomingMeetings = props => {
 	return (
 		<>
 			{
-				props.meetings &&
-				props.meetings.data
+				props.meetings
 				&& (
 					<CardReload
 						title="Upcoming Meetings"
@@ -66,7 +65,7 @@ const UpcomingMeetings = props => {
 					>
 						<CardBody>
 							<div className='upcoming-meeting-list'>
-								{props.meetings.data.filter(m => m.status == 'accepted'
+								{props.meetings.filter(m => m.status == 'accepted'
 									&& moment(m.scheduledAt).isSameOrAfter(moment())
 								).map(meeting =>
 									<UpcomingMeetingItem key={meeting.meetingId} meeting={meeting} />
