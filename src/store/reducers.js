@@ -18,6 +18,8 @@ import GetStarted from './../pages/get-started/store/reducer'
 import Profile from './../pages/profile/store/reducer'
 import ForgotPassword from './../pages/auth/forgot-password/store/reducer'
 import ResetPassword from './../pages/auth/reset-password/store/reducer'
+import Stripe from './../pages/stripe/store/reducer'
+import Ebook from './../pages/ebook/store/reducer'
 import Feedback from './../pages/feedback/store/reducer';
 
 const rootReducer = combineReducers({
@@ -38,6 +40,8 @@ const rootReducer = combineReducers({
   Profile,
   ForgotPassword,
   ResetPassword,
+  Stripe,
+  Ebook,
   Feedback
 });
 

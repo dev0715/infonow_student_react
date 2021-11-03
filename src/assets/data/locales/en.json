@@ -232,5 +232,6 @@
   "Cannot register your support ticket at the moment": "Cannot register your support ticket at the moment",
   "Please provide a valid subject and message.": "Please provide a valid subject and message.",
   "Subject": "Subject",
-  "Message": "Message"
+  "Message": "Message",
+  "The address is required in order to send invoices": "The address is required in order to send invoices"
 }

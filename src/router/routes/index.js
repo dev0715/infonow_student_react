@@ -189,6 +189,11 @@ const Routes = [
       newUserAccessible: true
     }
   },
+  {
+    path: '/ebooks',
+    exact: true,
+    component: lazy(() => import('../../pages/ebook'))
+  },
 ]
 
 export { GetStartedRoute, DefaultRoute, TemplateTitle, Routes }

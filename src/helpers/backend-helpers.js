@@ -1,5 +1,5 @@
-import { param } from "jquery";
-import { post, del, get, put, postForm, GetFinalUrlWithPagingParams, GetUrlWithPagingParams } from "./api_helper"
+
+import { post, del, get, put, postForm, GetUrlWithPagingParams, download } from "./api_helper"
 import * as  url from "./url_helper"
 
 
@@ -128,6 +128,21 @@ export const updatePassword = (id, data) => put(url.UPDATE_PASSWORD(id), data);
 
 //Counties
 export const getCounties = () => get(url.GET_COUNTIES)
+
+//stripe
+export const getStripeKey = () => get(url.GET_STRIPE_KEY);
+export const getPaymentPlan = () => get(url.PAYMENT_PLAN);
+
+export const deletePaymentMethod = (fingerprint) => del(url.PAYMENT_METHODS,fingerprint);
+export const getPaymentMethods = () => get(url.PAYMENT_METHODS);
+export const postPaymentMethods = (data) => post(url.PAYMENT_METHODS, data);
+export const putPaymentMethods = (data) => put(url.PAYMENT_METHODS, data);
+export const postPayment = (data) => post(url.POST_PAYMENT,data);
+
+//Ebook
+export const getEbooks = () => get(url.GET_EBOOKS)
+export const downloadEbook = ebookId => download(url.DOWNLOAD_EBOOK(ebookId))
+export const buyEbook = (ebookId, token) => download(url.BUY_EBOOK(ebookId, token))
 
 // Feedback
 export const postFeedback = (feedback) => post(url.POST_FEEDBACK, feedback);

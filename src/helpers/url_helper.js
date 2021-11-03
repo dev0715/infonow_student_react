@@ -107,5 +107,17 @@ export const UPDATE_PASSWORD = id => `${BASE_URL}/api/v1/students/${id}/password
 // Counties
 export const GET_COUNTIES = `${BASE_URL}/counties`
 
+
+//Stripe
+export const PAYMENT_METHODS =  `${BASE_URL}/api/v1/stripe/payment-methods`
+export const PAYMENT_PLAN = `${BASE_URL}/api/v1/stripe/payment-plan`
+export const GET_STRIPE_KEY =  `${BASE_URL}/api/v1/stripe/public-key`
+export const POST_PAYMENT =  `${BASE_URL}/api/v1/stripe/pay`
+
+//Ebooks
+export const GET_EBOOKS = `${BASE_URL}/api/v1/ebooks`
+export const DOWNLOAD_EBOOK = ebookId => `${BASE_URL}/api/v1/ebooks/download/${ebookId}`
+export const BUY_EBOOK = (ebookId, token) => `${BASE_URL}/api/v1/ebooks/download/${ebookId}/${token}`
+
 // Feedback
 export const POST_FEEDBACK = `${BASE_URL}/api/v1/osticket`

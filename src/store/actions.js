@@ -49,5 +49,12 @@ export * from './../pages/get-started/store/actions'
 //Profile
 export * from './../pages/profile/store/actions'
 
+
+//Ebook
+export * from './../pages/ebook/store/actions'
+
+//Stripe
+export * from './../pages/stripe/store/actions'
+
 // Feedback
 export * from './../pages/feedback/store/actions'
