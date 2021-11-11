@@ -113,13 +113,7 @@ const CalendarComponent = (props) => {
 
   const filteredEvents = () => {
     let events = eventsList()
-    // console.log("props.meetings", props.meetings);
-    // console.log("props.newTests", props.newTests.data);
-    // console.log("upcomingTestData", upcomingTestData);
-    // console.log("props.recentLessons", props.recentLessons);
-    console.log("events", events);
     let c = events.filter(e => selectedFilters.find(f => f == e.type))
-    console.log("EVENTS", c);
     return events.filter(e => selectedFilters.find(f => f == e.type))
   }
 

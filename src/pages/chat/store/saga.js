@@ -69,7 +69,6 @@ function* uploadDocHttp({ payload: { chatId, file, callback } }) {
       onUploadProgress: (progressEvent) => {
         const { loaded, total } = progressEvent;
         let percent = Math.floor((loaded * 100) / total)
-        // console.log(`${loaded}kb of ${total}kb | ${percent}%`);
         callback({ documentId: document.documentId, progress: percent })
       },
       cancelToken: document.request.token
