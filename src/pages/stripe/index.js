@@ -95,7 +95,7 @@ const CheckoutForm = (props) => {
     const [cardComplete, setCardComplete] = useState(false);
     const [processing, setProcessing] = useState(false);
     const [stripeToken, setStripeToken] = useState(null);
-
+    const [stripePaymentMethod, setStripePaymentMethod] = useState(null);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -113,29 +113,42 @@ const CheckoutForm = (props) => {
             setProcessing(true);
         }
 
-        const tokenRes = await stripe.createToken(elements.getElement(CardElement))
+        // const tokenRes = await stripe.createToken(elements.getElement(CardElement))
+
+        // setProcessing(false);
+
+        // if (tokenRes.error) {
+        //     setError(tokenRes.error);
+        // } else {
+        //     setStripeToken(tokenRes.token);
+        //     props.postPayments(tokenRes.token.id)
+        // }
+        const paymentMethodRes = await stripe.createPaymentMethod({
+            type: 'card',
+            card: elements.getElement(CardElement)
+        })
 
         setProcessing(false);
 
-        if (tokenRes.error) {
-            setError(tokenRes.error);
+        if (paymentMethodRes.error) {
+            setError(paymentMethodRes.error);
         } else {
-            setStripeToken(tokenRes.token);
-            props.postPayments(tokenRes.token.id)
+            setStripePaymentMethod(paymentMethodRes.paymentMethod.id)
+            props.postPayments(paymentMethodRes.paymentMethod.id)
         }
     };
 
     const reset = () => {
         setError(null);
         setProcessing(false);
-        setStripeToken(null);
+        // setStripeToken(null);
     };
 
     return (
         <>
             <img src={cardIllustration} className="illustration-card " />
             {
-                stripeToken ?
+                stripePaymentMethod && props.paymentMethodSuccess ?
                     <div className="Result">
                         <div className="ResultTitle" role="alert">
                             {t('Card added successfully')}

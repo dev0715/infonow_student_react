@@ -46,6 +46,7 @@ import {
 import { getShortNameForDocument } from "../../utility/Utils";
 
 import UILoader from "../../@core/components/ui-loader";
+import { getLoggedInUser } from "../../helpers/backend-helpers";
 
 const AppDocuments = (props) => {
   // ** Store Vars
@@ -59,7 +60,8 @@ const AppDocuments = (props) => {
   }, []);
 
   useEffect(() => {
-    let totalMemory = 104857600;
+    let user = getLoggedInUser() || {}
+    let totalMemory = user.storage;
     let size = 0;
     for (let d of props.documents) {
       size += d.fileSize;

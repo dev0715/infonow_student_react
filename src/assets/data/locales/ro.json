@@ -10,7 +10,7 @@
   "Profile": "Profil",
   "ChatsLogout": "Ieșire din Chat",
   "Logout": "Logout",
-  "COPYRIGHT © 2018-2021 InfoNow, All rights ReservedMade with by Efsol": "COPYRIGHT © 2018-2021 InfoNow, All rights ReservedMade with by Efsol",
+  "COPYRIGHT © 2019-2021 InfoNow, All rights ReservedMade with by Efsol": "COPYRIGHT © 2019-2021 InfoNow, All rights ReservedMade with by Efsol",
   "Meetings": "Întâlniri",
   "Lessons": "Lecții",
   "Documents": "Documente",
@@ -140,7 +140,7 @@
   "Send Reset Link":"Send Reset Link",
   "Back to Login":"Back to Login",
   "Welcome back! Please sign-in to your account":"Welcome back! Please sign-in to your account",
-  "LOGIN":"LOGIN",
+  "login":"login",
   "Password":"Password",
   "Enter Password":"Enter Password",
   "Sign in":"Sign in",
@@ -233,5 +233,6 @@
   "Please provide a valid subject and message.": "Vă rugăm să furnizați un subiect și un mesaj valid.",
   "Subject": "Subiectul e-mailului",
   "Message": "Mesaj",
-  "The address is required in order to send invoices": "Adresa este necesara pentru a trimite facturi."
+  "The address is required in order to send invoices": "Adresa este necesara pentru a trimite facturi.",
+  "Register as student":"Register as student"
 }
