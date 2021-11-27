@@ -36,7 +36,7 @@ export const AddMeetingToCalendarButton = (props) => {
                 'timeZone': getCurrentTimeZone()
             },
             end: {
-                'dateTime': getGoogleCalendarFormattedDate(meeting.scheduledAt),
+                'dateTime': getGoogleCalendarFormattedDate(moment.utc(meeting.scheduledAt).add(1, 'hour')),
                 'timeZone': getCurrentTimeZone()
             },
             description: `${meeting.meetingId}`

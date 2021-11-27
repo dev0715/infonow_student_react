@@ -41,7 +41,8 @@ function MeetingHome(props) {
 	const { t } = useTranslation();
 	const getUpcomingMeetings = () => {
 		const meetingList = props.meetings || [];
-		return meetingList.filter(x => moment(x.scheduledAt).isSameOrAfter(moment()) && x.status === 'accepted');
+		return meetingList.filter(m => m.status == 'accepted'
+								&& moment.utc(m.scheduledAt).isSameOrAfter(moment.utc().subtract(1,'hour')));
 	}
 
 	const upcomingMeetings = getUpcomingMeetings();
@@ -130,7 +131,7 @@ function MeetingHome(props) {
 					<Row>
 						{
 							props.meetings.filter(m => m.status == 'accepted'
-								&& moment.utc(m.scheduledAt).isSameOrAfter(moment.utc().subtract(30,'minutes'))).length == 0 ?
+								&& moment.utc(m.scheduledAt).isSameOrAfter(moment.utc().subtract(1,'hour'))).length == 0 ?
 								<Col lg={12} className="mb-1">
 									<div className="d-flex  align-items-center justify-content-between">
 										<h3>{t('Meetings')}</h3>

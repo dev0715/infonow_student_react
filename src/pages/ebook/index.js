@@ -195,6 +195,7 @@ const Ebook = (props) => {
                     ebook={selectedBook}
                     fetchData={fetchData}
                     isOpen={isOpenCardContainer}
+                    toggleAddNewCardModal={toggleAddNewCardModal}
                     toggleModal={toggleCardContainerModal}
                     paymentMethodsList={props.paymentMethodsList}
                 />

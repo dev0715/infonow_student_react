@@ -192,7 +192,10 @@ const Routes = [
   {
     path: '/ebooks',
     exact: true,
-    component: lazy(() => import('../../pages/ebook'))
+    component: lazy(() => import('../../pages/ebook')),
+    meta: {
+      newUserAccessible: true
+    }
   },
 ]
 

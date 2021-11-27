@@ -1,5 +1,5 @@
 import React from "react"
-import {useEffect} from "react"
+import { useEffect ,useState } from "react"
 import { Row, Col, Button } from 'reactstrap'
 
 import { connect } from 'react-redux'
@@ -29,7 +29,7 @@ const CardContainer = (props) => {
 
     const { t } = useTranslation()
     const { paymentMethodsList } = props
-
+    const [selectedCard, setSelectedCard] = useState(paymentMethodsList.map(p => p.default === true))
 
     const MySwal = withReactContent(Swal)
     const setDefaultCard = (card) => {
@@ -110,27 +110,32 @@ const CardContainer = (props) => {
                 paymentMethodsList.length > 0 &&
                 paymentMethodsList.map((p, index) =>
 
-                <Col md={6} key={`payment-cards${index}`} >
-                <Row className={`card-item ${p.default ? "active" : ""} `} >
-                    <Col md={10}>
-                        <div onClick={() => setDefaultCardPopup(p)} >
-                            <Row>
-                                <div>
-                                    <img src={getCardImage(p.type)} />
+                    <Col md={6} key={`payment-cards${index}`} >
+                        <Row className={`card-item ${p.default ? "active" : ""} `} >
+                            <Col md={10}>
+                                <div onClick={() => setDefaultCardPopup(p)} >
+                                    <Row>
+                                        <div>
+                                            <img src={getCardImage(p.type)} />
+                                        </div>
+                                        <div>
+                                            <h5> {p.brand}</h5>
+                                            <h6>{p.mask}</h6>
+                                            <p className="m-0"><small>Expiry {p.exp_month}/{p.exp_year}</small></p>
+                                        </div>
+                                        <div className="ml-3">
+                                            {(props.deletePaymentMethodLoading || props.defaultPaymentMethodLoading) &&
+                                                (p.fingerprint == selectedCard.fingerprint) &&
+                                                <><i className="las la-spinner la-spin la-2x"></i>&nbsp;&nbsp;</>}
+                                        </div>
+                                    </Row>
                                 </div>
-                                <div>
-                                    <h5> {p.brand}</h5>
-                                    <h6>{p.mask}</h6>
-                                    <p className="m-0"><small>Expiry {p.exp_month}/{p.exp_year}</small></p>
-                                </div>
-                            </Row>
-                        </div>
+                            </Col>
+                            <Col md={2}>
+                                <Button color="danger" className="btn-icon btn-delete" size="sm" onClick={() => deleteCardPopup(p)}><X size={16} /></Button>
+                            </Col>
+                        </Row>
                     </Col>
-                    <Col md={2}>
-                        <Button color="danger" className="btn-icon btn-delete" size="sm" onClick={() => deleteCardPopup(p)}><X size={16} /></Button>
-                    </Col>
-                </Row>
-            </Col>
                 )
             }
         </Row>
