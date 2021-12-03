@@ -204,6 +204,7 @@ const StripeApp = (props) => {
         }
     },[props.paymentMethodSuccess])
 
+   
 
     return (
         <>
@@ -251,6 +252,7 @@ const mapStateToProps = (state) => {
         stripePublickeyError,
 
         paymentMethod,
+        paymentMethodSuccess,
         paymentMethodError,
         paymentMethodLoading
     };
