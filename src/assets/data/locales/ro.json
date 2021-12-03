@@ -112,7 +112,7 @@
   "Setup Password":"Setează Parola",
    "Password setup successfully": "Parola a fost setată!",
   "Edit":"Editează",  
-  "Teacher":"Professoi",
+  "Teacher":"Profesor",
   "Test":"Teste",
 
 
@@ -231,7 +231,7 @@
   "Your ticket has been created successfully with ticket ID:": "Biletul dvs. a fost creat cu succes cu ID-ul biletului:",
   "Cannot register your support ticket at the moment": "Momentan nu vă puteți înregistra biletul de asistență",
   "Please provide a valid subject and message.": "Vă rugăm să furnizați un subiect și un mesaj valid.",
-  "Subject": "Subiectul e-mailului",
+  "Subject": "Subiect",
   "Message": "Mesaj",
   "The address is required in order to send invoices": "Adresa este necesara pentru a trimite facturi.",
   "Register as student":"Register as student"

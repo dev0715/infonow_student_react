@@ -41,7 +41,7 @@ const NavbarUser = props => {
       </div>
       <ul className='nav navbar-nav align-items-center ml-auto '>
         <a className="mr-2" href="https://youtu.be/eWiZzloKTx4" target="_blank">
-          <Youtube />
+          <Youtube />&nbsp;&nbsp;Tutorial
         </a>
         <LangDropdown /> 
       </ul>
