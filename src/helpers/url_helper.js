@@ -23,11 +23,11 @@ export const GET_DOCUMENT_URL = url => DOCUMENT_BASE_URL + url
 
 
 //Get Started
-
 export const GET_STARTED_CONTENT = `${BASE_URL}/api/v1/strapi/content/student_content`
 
 // Teacher History
 export const All_TEACHERS = `${BASE_URL}/api/v1/teachers/all-teachers?limit=1000&page=1`;
+// 
 export const TEACHER = `${BASE_URL}/api/v1/teachers`;
 
 // Chats
