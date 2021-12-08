@@ -3,8 +3,8 @@
 // export const DOCUMENT_BASE_URL = `${BASE_URL}/public`
 // export const MEETING_API_URL = `http://192.168.10.102:4200`
 // export const MEETING_APP_URL = `http://192.168.10.102:3002`
-// export const CHAT_API_URL = `http://192.168.10.104:3700`
-// export const CHAT_SOCKET_API_URL = `http://192.168.10.104:3701`
+// export const CHAT_API_URL = `http://192.168.10.102:3700`
+// export const CHAT_SOCKET_API_URL = `http://192.168.10.102:3701`
 // export const BLOG_API_URL = `http://192.168.10.102:1337`
 
 export const BASE_URL = `https://api.infonow.ro`
@@ -23,11 +23,11 @@ export const GET_DOCUMENT_URL = url => DOCUMENT_BASE_URL + url
 
 
 //Get Started
-
 export const GET_STARTED_CONTENT = `${BASE_URL}/api/v1/strapi/content/student_content`
 
 // Teacher History
 export const All_TEACHERS = `${BASE_URL}/api/v1/teachers/all-teachers?limit=1000&page=1`;
+// 
 export const TEACHER = `${BASE_URL}/api/v1/teachers`;
 
 // Chats

@@ -11,7 +11,7 @@
   "Profile": "Profile",
   "ChatsLogout": "ChatsLogout",
   "Logout": "Logout",
-  "COPYRIGHT © 2018-2021 InfoNow, All rights ReservedMade with by Efsol": "COPYRIGHT © 2018-2021 InfoNow, All rights ReservedMade with by Efsol",
+  "COPYRIGHT © 2019-2021 InfoNow, All rights ReservedMade with by Efsol": "COPYRIGHT © 2019-2021 InfoNow, All rights ReservedMade with by Efsol",
   "Meetings": "Meetings",
   "Lessons": "Lessons",
   "Documents": "Documents",
@@ -140,7 +140,7 @@
   "Send Reset Link":"Send Reset Link",
   "Back to Login":"Back to Login",
   "Welcome back! Please sign-in to your account":"Welcome back! Please sign-in to your account",
-  "LOGIN":"LOGIN",
+  "login":"login",
   "Password":"Password",
   "Enter Password":"Enter Password",
   "Sign in":"Sign in",
@@ -175,7 +175,7 @@
   "No more meetings found":"No more meetings found",
   "Accept":"Accept",
   "Could not add meeting to google calendar. Please try again":"Could not add meeting to google calendar. Please try again",
-  "Remind Me":"Remind Me",
+  "Remind Me":"Add to Calendar",
   "Join":"Join",
   "Start Conversation":"Start Conversation",
   "View Contact":"View Contact",
@@ -233,5 +233,6 @@
   "Please provide a valid subject and message.": "Please provide a valid subject and message.",
   "Subject": "Subject",
   "Message": "Message",
-  "The address is required in order to send invoices": "The address is required in order to send invoices"
+  "The address is required in order to send invoices": "The address is required in order to send invoices",
+  "Register as student":"Register as student"
 }

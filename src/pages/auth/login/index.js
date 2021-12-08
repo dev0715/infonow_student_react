@@ -55,8 +55,8 @@ const Login = (props) => {
 
 
     const handleValidSubmit = (event, data) => {
-        const token = recaptchaRef.current.getValue();
-        data.reCaptchaToken = token
+        // const token = recaptchaRef.current.getValue();
+        // data.reCaptchaToken = token
         props.loginUser(data, history)
     }
 
@@ -76,7 +76,7 @@ const Login = (props) => {
                 <Col className='d-flex align-items-center auth-bg px-2 p-lg-5' lg='4' sm='12'>
                     <Col className='px-xl-2 mx-auto' sm='8' md='6' lg='12'>
                         <CardTitle tag='h2' className='font-weight-bold mb-1'>
-                            {t('LOGIN')}
+                            {t('Student')} {t('login')}
                         </CardTitle>
                         <CardText className='mb-2'>{t('Welcome back! Please sign-in to your account')}</CardText>
 
@@ -148,7 +148,7 @@ const Login = (props) => {
                             />
                         </div>
 
-                        <div className='d-flex justify-content-center mt-2' >
+                        {/* <div className='d-flex justify-content-center mt-2' >
                             <ReCAPTCHA
                                 theme={skin}
                                 ref={recaptchaRef}
@@ -156,7 +156,7 @@ const Login = (props) => {
                                 type = "image"
                                 sitekey={GOOGLE_RECAPTCHA_KEY}
                             />
-                        </div>
+                        </div> */}
                     </Col>
                 </Col>
             </Row>

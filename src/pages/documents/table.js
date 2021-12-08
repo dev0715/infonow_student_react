@@ -80,7 +80,7 @@ const DataTableWithButtons = (props) => {
 
     const copyLink = (e, text) => {
         e.preventDefault()
-        // console.log("COPY_LINK", text)
+
         let input = document.createElement('input');
         input.setAttribute('value', text);
         document.body.appendChild(input);

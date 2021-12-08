@@ -7,7 +7,8 @@ import UILoader from '../../@core/components/ui-loader';
 import {
     getEbooks,
     getPaymentMethods,
-    downloadEbook
+    downloadEbook,
+    getStripePublicKey
 } from '@store/actions'
 import { DOCUMENT_BASE_URL } from '../../helpers/url_helper';
 import PreviewBookModal from './preview-book-modal';
@@ -17,20 +18,37 @@ import { useTranslation } from 'react-i18next';
 
 import { notifyError, notifySuccess, } from '../../utility/toast'
 import FileSaver from 'file-saver';
+import {
+    Elements,
+} from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import _ from 'lodash';
+import ThreeDSecureAuthenticationComponent from '../stripe/three-d-secure-popup';
 
 const Ebook = (props) => {
 
     const { t } = useTranslation()
     const { ebooks, ebooksError, ebooksLoading,
-        downloadEbookData,  downloadEbookSuccess,
+        downloadEbookData, downloadEbookSuccess,
         downloadEbookError, downloadEbookLoading } = props
+
+    const { stripePublicKey } = props
+    const [stripePromise, setStripePromise] = useState(null);
+
+    useEffect(() => {
+        if (stripePublicKey) {
+            let stripePromise = loadStripe(stripePublicKey.publicKey);
+            setStripePromise(stripePromise)
+        }
+    }, [stripePublicKey])
 
     const [isOpenPreview, setIsOpenPreview] = useState(false)
     const [isOpenCardContainer, setIsOpenCardContainer] = useState(false)
     const [isOpenAddNewCard, setIsOpenAddNewCard] = useState(false)
     const [selectedBook, setSelectedBook] = useState()
+    const [randStateChange, setRandStateChange] = useState(Math.random())
     const [previewImage, setPreviewImage] = useState(null)
-
+    const [errorResponse, setErrorResponse] = useState(null)
 
     const fetchData = () => {
         props.getEbooks()
@@ -43,16 +61,18 @@ const Ebook = (props) => {
     }
 
     const toggleAddNewCardModal = () => {
-        setSelectedBook(null)
+        // setSelectedBook(null)
         setIsOpenAddNewCard(!isOpenAddNewCard)
+        setIsOpenCardContainer(true)
     }
 
     const toggleCardContainerModal = () => {
-        setSelectedBook(null)
+        // setSelectedBook(null)
         setIsOpenCardContainer(!isOpenCardContainer)
     }
 
     const BuyBook = (ebook) => {
+        setRandStateChange(Math.random())
         setSelectedBook(ebook)
     }
 
@@ -65,7 +85,7 @@ const Ebook = (props) => {
             if (props.paymentMethodsList.length > 0) setIsOpenCardContainer(!!selectedBook)
             else setIsOpenAddNewCard(true)
         }
-    }, [selectedBook])
+    }, [selectedBook ,randStateChange])
 
     useEffect(() => {
         if (previewImage)
@@ -80,25 +100,50 @@ const Ebook = (props) => {
         if (props.paymentMethodSuccess) fetchData()
     }, [props.paymentMethodSuccess])
 
-    useEffect(() => {
-        if (downloadEbookSuccess) notifySuccess(t("Ebook"), t("Ebook downloaded successfully"))
-    }, [downloadEbookSuccess])
-
+    
     useEffect(() => {
         if (downloadEbookError) notifyError(t("Ebook"), t(downloadEbookError))
     }, [downloadEbookError])
 
-    useEffect(() => {
-        if (downloadEbookSuccess && downloadEbookData) {
-            FileSaver.saveAs(downloadEbookData)
+    const getJSON = async (blob) => {
+        try {
+            let res = await blob.text()
+            let jsonResponse = JSON.parse(res)
+            return jsonResponse;
+        } catch (error) {
+            return null;
         }
-    }, [downloadEbookSuccess, downloadEbook])
+    }
+
+    useEffect(async () => {
+        if (downloadEbookData) {
+            let responseJson = await getJSON(downloadEbookData);
+            if (!responseJson) {
+                if (downloadEbookSuccess && downloadEbookData)
+                    FileSaver.saveAs(downloadEbookData)
+            }
+            else if (responseJson && responseJson.data) {
+                console.log("responseJson", responseJson.data);
+                setErrorResponse(responseJson.data.data)
+                setIsOpenCardContainer(false)
+            } else if (responseJson && responseJson.status == 400){
+                notifyError('Ebook', responseJson.message || "Ebook download failed")
+            }
+        }
+    }, [downloadEbookSuccess, downloadEbookData])
 
 
     return (
         <>
             <UILoader blocking={ebooksLoading || downloadEbookLoading}>
-
+                {
+                    downloadEbookSuccess
+                    &&
+                    (errorResponse && errorResponse.error == "authentication_required")
+                    && <Elements stripe={stripePromise}>
+                        <ThreeDSecureAuthenticationComponent postPaymentData={errorResponse} />
+                    </Elements>
+                }
                 <Row className='match-height'>
                     {
                         ebooks &&
@@ -150,6 +195,7 @@ const Ebook = (props) => {
                     ebook={selectedBook}
                     fetchData={fetchData}
                     isOpen={isOpenCardContainer}
+                    toggleAddNewCardModal={toggleAddNewCardModal}
                     toggleModal={toggleCardContainerModal}
                     paymentMethodsList={props.paymentMethodsList}
                 />
@@ -180,7 +226,9 @@ const mapStateToProps = (state) => {
         paymentMethod,
         paymentMethodSuccess,
         paymentMethodError,
-        paymentMethodLoading
+        paymentMethodLoading,
+
+        stripePublicKey
     } = state.Stripe
 
     return {
@@ -200,7 +248,9 @@ const mapStateToProps = (state) => {
         paymentMethod,
         paymentMethodSuccess,
         paymentMethodError,
-        paymentMethodLoading
+        paymentMethodLoading,
+
+        stripePublicKey
     }
 
 }
@@ -208,7 +258,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
     getEbooks,
     getPaymentMethods,
-    downloadEbook
+    downloadEbook,
+    getStripePublicKey
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Ebook))

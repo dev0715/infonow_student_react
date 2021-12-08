@@ -27,6 +27,7 @@ const GeneralTabs = (props) => {
   const [isEditing, setIsEditing] = useState(false)
   const [avatar, setAvatar] = useState('')
   const [name, setName] = useState(props.user.name || "")
+  const [zipCode, setZipCode] = useState(props.user.zipCode || "")
   const [city, setCity] = useState(props.user.city || "")
   const [county, setCounty] = useState(props.user.county || "")
   const [country, setCountry] = useState("Romania")
@@ -66,6 +67,7 @@ const GeneralTabs = (props) => {
       setCounty(props.user.county || "")
       setCountry(props.user.country || "")
       setAddress(props.user.address || "")
+      setZipCode(props.user.zipCode || "")
     } 
   }, [props.user])
 
@@ -124,7 +126,7 @@ const GeneralTabs = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     props.updateProfileData({
-      name, about, city, county, country, address
+      name, about, city, county, country, address,zipCode
     })
   }
 
@@ -320,6 +322,23 @@ const GeneralTabs = (props) => {
                } 
             </FormGroup>
           </Col>
+          <Col md='6'>
+          {
+                <FormGroup>
+                <Label className="ml-25">{t("Cod postal")}</Label>
+                <InputGroup className='input-group-merge'>
+                <Input
+                  type="text"
+                  placeholder={t('Adauga cod postal')}
+                  value={zipCode}
+                  disabled={!isEditing}
+                  onChange={e => setZipCode(e.target.value)}
+                  required
+                />
+              </InputGroup>
+              </FormGroup>
+               } 
+          </Col>
           <Col sm='12'>
             <FormGroup >
               <Input
@@ -329,11 +348,10 @@ const GeneralTabs = (props) => {
                 value={about}
                 onChange={e => setAbout(e.target.value)}
                 disabled={!isEditing}
-                required
               />
             </FormGroup>
           </Col>
-          <p>{t('The address is required in order to send invoices.')}</p>
+          <p className='ml-2'>{t('The address is required in order to send invoices.')}</p>
           <Col className='mt-2' sm='12'>
             {
               isEditing &&

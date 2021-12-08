@@ -10,7 +10,7 @@
   "Profile": "Profil",
   "ChatsLogout": "Ieșire din Chat",
   "Logout": "Logout",
-  "COPYRIGHT © 2018-2021 InfoNow, All rights ReservedMade with by Efsol": "COPYRIGHT © 2018-2021 InfoNow, All rights ReservedMade with by Efsol",
+  "COPYRIGHT © 2019-2021 InfoNow, All rights ReservedMade with by Efsol": "COPYRIGHT © 2019-2021 InfoNow, All rights ReservedMade with by Efsol",
   "Meetings": "Întâlniri",
   "Lessons": "Lecții",
   "Documents": "Documente",
@@ -112,7 +112,7 @@
   "Setup Password":"Setează Parola",
    "Password setup successfully": "Parola a fost setată!",
   "Edit":"Editează",  
-  "Teacher":"Professoi",
+  "Teacher":"Profesor",
   "Test":"Teste",
 
 
@@ -140,7 +140,7 @@
   "Send Reset Link":"Send Reset Link",
   "Back to Login":"Back to Login",
   "Welcome back! Please sign-in to your account":"Welcome back! Please sign-in to your account",
-  "LOGIN":"LOGIN",
+  "login":"login",
   "Password":"Password",
   "Enter Password":"Enter Password",
   "Sign in":"Sign in",
@@ -175,7 +175,7 @@
   "No more meetings found":"No more meetings found",
   "Accept":"Accept",
   "Could not add meeting to google calendar. Please try again":"Could not add meeting to google calendar. Please try again",
-  "Remind Me":"Remind Me",
+  "Remind Me":"Adauga in Calendar",
   "Join":"Join",
   "Start Conversation":"Start Conversation",
   "View Contact":"View Contact",
@@ -231,7 +231,8 @@
   "Your ticket has been created successfully with ticket ID:": "Biletul dvs. a fost creat cu succes cu ID-ul biletului:",
   "Cannot register your support ticket at the moment": "Momentan nu vă puteți înregistra biletul de asistență",
   "Please provide a valid subject and message.": "Vă rugăm să furnizați un subiect și un mesaj valid.",
-  "Subject": "Subiectul e-mailului",
+  "Subject": "Subiect",
   "Message": "Mesaj",
-  "The address is required in order to send invoices": "Adresa este necesara pentru a trimite facturi."
+  "The address is required in order to send invoices": "Adresa este necesara pentru a trimite facturi.",
+  "Register as student":"Register as student"
 }

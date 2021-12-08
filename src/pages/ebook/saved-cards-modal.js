@@ -17,18 +17,23 @@ import { useTranslation } from "react-i18next";
 const SavedCardModal = (props) => {
 
     const { t } = useTranslation()
-    const { isOpen, ebook, toggleModal, paymentMethodsList, fetchData } = props
+    const { isOpen, ebook, toggleModal, paymentMethodsList, fetchData ,toggleAddNewCardModal} = props
 
-    const [isOpenAddNewCard, setIsOpenAddNewCard] = useState(false)
+    // const [isOpenAddNewCard, setIsOpenAddNewCard] = useState(false)
 
     const toggle = () => {
         toggleModal()
     }
 
-    const toggleAddNewCardModal = () => {
-        setIsOpenAddNewCard(!isOpenAddNewCard)
-    }
+   
 
+    const toggleAddNewCard = () => {
+        // console.log("CHECK TOGGLE", toggle);
+        // setIsOpenAddNewCard(toggle)
+        toggleModal()
+        toggleAddNewCardModal()
+       
+    }
 
     const payToBuyBook = () => {
         props.downloadEbook(ebook.ebookId)
@@ -43,8 +48,8 @@ const SavedCardModal = (props) => {
     return (
 
         <>
-            <UILoader blocking={props.postPaymentLoading || props.downloadEbookLoading 
-            || props.defaultPaymentMethodLoading || props.deletePaymentMethodLoading}>
+            {/* <UILoader blocking={props.postPaymentLoading || props.downloadEbookLoading 
+            || props.defaultPaymentMethodLoading || props.deletePaymentMethodLoading}> */}
                 <Modal className='modal-lg' isOpen={isOpen} toggle={toggle}>
                     <ModalHeader>Saved cards </ModalHeader>
                     <ModalBody>
@@ -53,30 +58,33 @@ const SavedCardModal = (props) => {
                             <div className="pay-subscription-container text-right">
                                 <Button.Ripple
                                     color='success'
-                                    onClick={() => payToBuyBook()}>
+                                    onClick={() => payToBuyBook()}
+                                    disabled={props.downloadEbookLoading}>
+                                    {props.downloadEbookLoading && <><i className="las la-spinner la-spin"></i>&nbsp;&nbsp;</>}
                                     {t('Pay')}
                                 </Button.Ripple>
 
                                 <Button.Ripple
                                     className="m-2"
                                     color='flat-primary'
-                                    onClick={() => setIsOpenAddNewCard(true)}>
+                                    onClick={() => toggleAddNewCard()}>
                                     {t('New Card')}
                                 </Button.Ripple>
                             </div>
                         </div>
 
                         <CardContainer
+                            fetchData={fetchData}
                             paymentMethodsList={paymentMethodsList}
                         />
 
                     </ModalBody>
-                    <StripeApp
+                    {/* <StripeApp
                         isOpenModal={isOpenAddNewCard}
-                        toggleModalState={toggleAddNewCardModal} />
+                        toggleModalState={toggleAddNewCardModal} /> */}
                 </Modal>
 
-            </UILoader>
+            {/* </UILoader> */}
         </>
 
     )

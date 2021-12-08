@@ -136,13 +136,11 @@ const SidebarLeft = props => {
   }
 
   const onNotificationChange = (e) => {
-    // console.log(e.target.checked)
     setNotificationEnabled(e.target.checked)
   }
 
   const saveAbout = (e) => {
     e.preventDefault()
-    // console.log("ABOUT___", e.target.value)
     updateAbout({ about: e.target.value })
   }
 

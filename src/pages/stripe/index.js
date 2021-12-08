@@ -15,6 +15,7 @@ import {
 } from "@stripe/react-stripe-js";
 import "./style.scss";
 import { useTranslation } from "react-i18next";
+import { notifySuccess } from "../../utility/toast";
 let cardIllustration = require('../../assets/images/credit-cards/card_illustration.png')
 let securedByStripe = require('../../assets/images/credit-cards/powered-by-stripe.svg')
 
@@ -95,7 +96,7 @@ const CheckoutForm = (props) => {
     const [cardComplete, setCardComplete] = useState(false);
     const [processing, setProcessing] = useState(false);
     const [stripeToken, setStripeToken] = useState(null);
-
+    const [stripePaymentMethod, setStripePaymentMethod] = useState(null);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -113,38 +114,36 @@ const CheckoutForm = (props) => {
             setProcessing(true);
         }
 
-        const tokenRes = await stripe.createToken(elements.getElement(CardElement))
+        const paymentMethodRes = await stripe.createPaymentMethod({
+            type: 'card',
+            card: elements.getElement(CardElement)
+        })
 
         setProcessing(false);
 
-        if (tokenRes.error) {
-            setError(tokenRes.error);
+        if (paymentMethodRes.error) {
+            setError(paymentMethodRes.error);
         } else {
-            setStripeToken(tokenRes.token);
-            props.postPayments(tokenRes.token.id)
+            setStripePaymentMethod(paymentMethodRes.paymentMethod.id)
+            props.postPayments(paymentMethodRes.paymentMethod.id)
         }
     };
 
     const reset = () => {
         setError(null);
         setProcessing(false);
-        setStripeToken(null);
+        // setStripeToken(null);
     };
 
     return (
         <>
             <img src={cardIllustration} className="illustration-card " />
             {
-                stripeToken ?
+                stripePaymentMethod && props.paymentMethodSuccess ?
                     <div className="Result">
                         <div className="ResultTitle" role="alert">
                             {t('Card added successfully')}
                         </div>
-                        {/* <div className="ResultMessage">
-                            Thanks for trying Stripe Elements. No money was charged, but we
-                            generated a PaymentMethod: {stripeToken.id}
-                        </div> */}
-                        {/* <ResetButton onClick={reset} /> */}
                     </div>
                     :
                     <form className="Form" onSubmit={handleSubmit}>
@@ -157,8 +156,7 @@ const CheckoutForm = (props) => {
                                 }}
                             />
                         </fieldset>
-                        {/* {error && <ErrorMessage>{error.message}</ErrorMessage>} */}
-                        <SubmitButton processing={processing} error={error} disabled={!stripe}>
+                        <SubmitButton processing={processing || props.paymentMethodLoading} error={error} disabled={!stripe}>
                             {t('Add Card')}
                         </SubmitButton>
                     </form>
@@ -199,6 +197,14 @@ const StripeApp = (props) => {
         props.postPaymentMethods(data)
     }
 
+    useEffect(() => {
+        if(props.paymentMethodSuccess){
+            notifySuccess(t("Card"),t("Card added successfully"))
+            toggleModalState()
+        }
+    },[props.paymentMethodSuccess])
+
+   
 
     return (
         <>
@@ -214,7 +220,7 @@ const StripeApp = (props) => {
                                 stripe &&
                                 <div className="AppWrapper">
                                     <Elements stripe={stripe} options={ELEMENTS_OPTIONS}>
-                                        <CheckoutForm postPayments={postPayments} />
+                                        <CheckoutForm postPayments={postPayments} paymentMethodLoading={props.paymentMethodLoading} />
                                     </Elements>
                                     <div className='secured-by-stripe'>
                                         <img src={securedByStripe} />
@@ -246,6 +252,7 @@ const mapStateToProps = (state) => {
         stripePublickeyError,
 
         paymentMethod,
+        paymentMethodSuccess,
         paymentMethodError,
         paymentMethodLoading
     };
