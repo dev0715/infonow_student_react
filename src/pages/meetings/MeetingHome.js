@@ -145,7 +145,7 @@ function MeetingHome(props) {
 								:
 								<>
 									<Col lg={7}>
-										<UpcomingMeeting meeting={upcomingMeetings.length > 0 && upcomingMeetings[0]} />
+										<UpcomingMeeting meeting={upcomingMeetings.length > 0 && upcomingMeetings[upcomingMeetings.length - 1]} />
 									</Col>
 									<Col lg={5} style={{ maxWidth: 500 }}>
 										<UpcomingMeetings addNewMeeting={addNewMeeting} />
